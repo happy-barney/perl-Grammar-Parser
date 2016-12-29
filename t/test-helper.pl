@@ -9,7 +9,20 @@ use Carp::Always;
 use Data::Printer -colored => 0;
 use Ref::Util;
 
+use Context::Singleton;
 use Test::YAFT;
+
+sub context {
+	my ($title, $test) = @_;
+
+	frame { subtest $title => $test }
+}
+
+sub describe {
+	my ($title, $test) = @_;
+
+	frame { subtest $title => $test };
+}
 
 sub describe_package ($&) {
 	my ($package, $code) = @_;
