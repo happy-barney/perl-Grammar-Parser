@@ -1,7 +1,32 @@
 
 * Grammar::Parser [0/13]
-  - [ ] Lexer
-  - [ ] Grammar [0/16]
+  - [-] Lexer [4/22]
+	- [ ] documentation
+	- [ ] tutorial
+	- [X] should do longest match
+	- [X] should recognize insignificant patterns
+	- [X] should return token object
+	- [X] should throw "not found exception"
+	- [ ] should return unrequested insignificant tokens
+    - [ ] should return final token when no more data available
+	- [ ] should support "lookup tokens"
+	  - Lexer::Lookup wrapper ?
+	- [ ] test / benchmark support - lexer_tokenize
+    - [ ] Lexer - next_token should accept "accepted map" instead of list
+    - [ ] Lexer - next_token should return insignificant tokens (configurable)
+	- [ ] Lexer - Lexer::Match::Longest
+	- [ ] Lexer - Lexer::Match::Unique
+	- [ ] final token - reaching this token means end of data
+	- [ ] should support zero length lookups
+	- [ ] Lexer::Stream - throw 'more data required'
+	- [ ] Lexer::Stream - test stream parsing
+	- [ ] test test-helper-lexer / Test::Tester positive tests
+	- [ ] test test-helper-lexer / Test::Tester negative tests
+	- [ ] Lexer::Instance
+	  - lexer constains how (rules, regexes, token builder, ...)
+	  - instance contains what (data, ...)
+	- [ ] xt - test memory leaks
+  - [ ] Grammar [0/17]
 	- [ ] documentation
 	- [ ] tutorial
 	- [ ] import/include/use/extend mechanism
@@ -32,4 +57,3 @@
   - [ ] Grammar - ::Import::<other grammars>
   - [ ] Example
 	- PPR as Grammar + ::Export::Regex
-
