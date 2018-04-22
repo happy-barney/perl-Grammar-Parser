@@ -16,6 +16,12 @@ package Grammar::Parser::Grammar v1.0.0 {
 
 	use namespace::clean;
 
+	sub BUILD {
+		my ($self) = @_;
+
+		eval "require ${\ $self->lexer_class };";
+	}
+
 	has grammar     => (
 		is          => 'ro',
 		required    => 1,
@@ -34,6 +40,11 @@ package Grammar::Parser::Grammar v1.0.0 {
 	has empty       => (
 		is          => 'ro',
 		default     => sub { +[] },
+	);
+
+	has lexer_class => (
+		is          => 'ro',
+		default     => sub { 'Grammar::Parser::Lexer::Match::Unique' },
 	);
 
 	has _list_patterns => (
@@ -151,6 +162,7 @@ package Grammar::Parser::Grammar v1.0.0 {
 		$params{empty}         //= $self->empty;
 		$params{start}         //= $self->start;
 		$params{insignificant} //= $self->insignificant;
+		$params{lexer_class}   //= $self->lexer_class;
 
 		$self->new (%params);
 	}
@@ -204,9 +216,26 @@ package Grammar::Parser::Grammar v1.0.0 {
 
 		return @{ $self->_list_nonterminals };
 	}
-}
 
-1;
+	sub lexer {
+		my ($self) = @_;
+
+		my $rules = Clone::clone $self->grammar;
+		$rules->{$_} = $self->_empty_rule for @{ $self->empty };
+
+		delete $rules->{$_}
+			for grep is_arrayref ($rules->{$_}) && is_arrayref ($rules->{$_}[0]),
+			keys %$rules;
+
+		return $self->lexer_class->new (
+			rules => $rules,
+			insignificant => $self->insignificant,
+		);
+	}
+
+	1;
+
+}
 
 __END__
 
@@ -267,6 +296,13 @@ Will behave like
 
 	rule := insignificant* foo insignificant* bar insignificant*
 
+=item lexer_class
+
+	# Default
+	lexer_class => 'Grammar::Parser::Lexer::Match::Unique',
+
+Lexer implementation class.
+
 =back
 
 =head2 clone
@@ -277,6 +313,10 @@ current instance as source of default values.
 =head2 effective
 
 Optimized grammar. Currently only unused rules are eliminated.
+
+=head2 lexer
+
+Build new C<lexer_class> instance.
 
 =head2 list_terminals
 
