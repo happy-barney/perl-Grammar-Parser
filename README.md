@@ -1,47 +1,36 @@
+# NAME
 
-= Work In Progress
+Grammar::Parser - Unified grammar API
 
-This repostory holds development of Grammar::Parser and CSI tools.
+# VERSION
 
-== [Grammar::Parser][tree/dev-grammar-parser]
+version 1.0.0
 
-Evolved from [SQL::Admin][../perl-SQL-Admin] aims to provide
-- unified grammar, lexer, and rule actions definition
-- multiple backend support (Marpa, YAPP, regex, ...)
-- grammar introspection (static analysis, debugging, ...)
+# DESCRIPTION
 
-== CSI
+This module started its life as part of [SQL::Admin](https://metacpan.org/pod/SQL%3A%3AAdmin) after having
+maintenance issues with [Parse::RecDescent](https://metacpan.org/pod/Parse%3A%3ARecDescent) grammars.
 
-CSI stands for source code investigation hinting your code is a crime scene to
-be investigated.
+- it should support multiple backends using unified definition
 
-CSI aims to be language independent, starting with Java support.
+    There are plenty of grammar parsing modules around, each one with its own callbacks,
+    grammar definition, features, lifecycle, performance, ...
 
-TODO
-- [ ] critic (static analysis)
-- [ ] tidy
-- [ ] language transformation / refactoring
+    Having unified API makes easier to change backends (regardless of reason).
 
-Similar tools:
-- [Babble][https://metacpan.org/pod/Babble]
-- [Code::ART][https://metacpan.org/pod/Babble]
+- support related grammars / grammar inheritance
 
-== [CSI::Grammar][tree/dev-csi-grammar]
+    Every SQL database has its own dialect based on one of SQL standards.
+    Even every version of same product has different subset.
 
-Inspired by raku's Grammar, provides intermediate glue between Grammar::Parser
-and CSI needs.
+    Maintaining their grammars and/or adding new one will be real pain without
+    possibility to reuse common parts.
 
-TODOs:
-- [ ] C/XS compilation
-- [ ] IDE/editor language support
-  - [ ] emacs / raku-mode
-  - [ ] emacs / perl-mode
+# AUTHOR
 
-== [CSI::Language::Java][tree/dev-csi-java]
+Branislav Zahradník <barney@cpan.org>
 
-Proof of concept language implementation.
+# COPYRIGHT AND LICENCE
 
-Why Java?
-- simple grammar
-- very noisy language => lot of noisy code (record holder so far: 1.1 MB java file)
-- lot of noisy code suggests lot of shitty code (lot of use cases for CSI)
+This file is part of [Grammar::Parser](https://metacpan.org/pod/Grammar%3A%3AParser) distribution.
+It can be distributed and/or modified under Artistic license 2.0
