@@ -423,6 +423,19 @@ package Grammar::Parser::Lexer v1.0.0 {
 		my $accepted = $self->_build_accepted_next_token (@accepted);
 		my $allowed  = $self->_build_allowed_next_token ($accepted);
 
+		my $priority_token = 'PRIORITY_TOKEN';
+		if (exists $accepted->{$priority_token}) {
+			my $value = $self->_build_next_token_value (
+				name		=> $priority_token,
+				match		=> '',
+				line		=> $self->_line,
+				column      => $self->_column,
+				significant => 0,
+				captures	=> { },
+			);
+			return [ $priority_token, $value ];
+		}
+
 		while (1) {
 			my $token = $self->_lookup_next_token ($allowed);
 
