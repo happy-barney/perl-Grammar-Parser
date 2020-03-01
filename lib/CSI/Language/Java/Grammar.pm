@@ -41,6 +41,46 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[],
 		;
 
+	insignificant token whitespaces         => dom => '::Token::Whitespace',
+		qr/(?>
+			\s+
+		)/sx;
+
+	insignificant token comment_c           => dom => '::Token::Comment::C',
+		qr/(?>
+			\/\*
+			(?! \* [^*] )
+			.*?
+			\*\/
+		)/sx;
+
+	insignificant token comment_cpp         => dom => '::Token::Comment::Cpp',
+		qr/(?>
+			\/\/
+			\V*
+		)/sx;
+
+	insignificant token comment_javadoc     => dom => '::Token::Comment::Javadoc',
+		qr/(?>
+			\/\*
+			(?= \* [^*] )
+			.*?
+			\*\/
+		)/sx;
+
+	token ANNOTATION                        => dom => '::Token::Annotation'      => '@';
+	token BRACE_CLOSE                       => dom => '::Token::Brace::Close'    => '}';
+	token BRACE_OPEN                        => dom => '::Token::Brace::Open'     => '{';
+	token BRACKET_CLOSE                     => dom => '::Token::Bracket::Close'  => ']';
+	token BRACKET_OPEN                      => dom => '::Token::Bracket::Open'   => '[';
+	token COMMA                             => dom => '::Token::Comma'           => ',';
+	token DOUBLE_COLON                      => dom => '::Token::Double::Colon'   => '::';
+	token DOT                               => dom => '::Token::Dot'             => qr/ \. (?! [.[:digit:]] )/sx;
+	token ELIPSIS                           => dom => '::Token::Elipsis'         => '...';
+	token PAREN_CLOSE                       => dom => '::Token::Paren::Close'    => ')';
+	token PAREN_OPEN                        => dom => '::Token::Paren::Open'     => '(';
+	token SEMICOLON                         => dom => '::Token::Semicolon'       => ';';
+
 	1;
 };
 
@@ -96,37 +136,6 @@ __END__
 				| (?<octal_escape> (?: (?= [0-7]) [0-3]? [0-7]{1,2} ))
 				| (?: u+ (?<hex_escape> [[:xdigit:]]{4} ))
 			)
-		)/sx;
-	}
-
-	sub whitespaces                 :TOKEN :INSIGNIFICANT {
-		qr/(?>
-			\s+
-		)/sx;
-	}
-
-	sub comment_c                   :TOKEN :INSIGNIFICANT {
-		qr/(?>
-			\/\*
-			(?! \* [^*] )
-			.*?
-			\*\/
-		)/sx;
-	}
-
-	sub comment_cpp                 :TOKEN :INSIGNIFICANT {
-		qr/(?>
-			\/\/
-			\V*
-		)/sx;
-	}
-
-	sub comment_javadoc             :TOKEN :INSIGNIFICANT {
-		qr/(?>
-			\/\*
-			(?= \* [^*] )
-			.*?
-			\*\/
 		)/sx;
 	}
 
@@ -440,46 +449,6 @@ __END__
 		qr/ (?> \b null           \b ) /sx;
 	}
 
-	sub SEMICOLON                   :TOKEN {
-		';'
-	}
-
-	sub DOT                         :TOKEN {
-		'.'
-	}
-
-	sub BRACE_OPEN                  :TOKEN {
-		'{'
-	}
-
-	sub BRACE_CLOSE                 :TOKEN {
-		'}'
-	}
-
-	sub PAREN_OPEN                  :TOKEN {
-		'('
-	}
-
-	sub PAREN_CLOSE                 :TOKEN {
-		')'
-	}
-
-	sub BRACKET_OPEN                :TOKEN {
-		'['
-	}
-
-	sub BRACKET_CLOSE               :TOKEN {
-		']'
-	}
-
-	sub COMMA                       :TOKEN {
-		','
-	}
-
-	sub AT                          :TOKEN {
-		'@'
-	}
-
 	sub TYPE_PARAMETER_LIST_OPEN    :TOKEN {
 		'<'
 	}
@@ -488,16 +457,8 @@ __END__
 		'>'
 	}
 
-	sub DOUBLE_COLON                :TOKEN {
-		'::'
-	}
-
 	sub LAMBDA                      :TOKEN {
 		'->'
-	}
-
-	sub ELIPSIS                     :TOKEN {
-		'...'
 	}
 
 	sub COLON                       :TOKEN {

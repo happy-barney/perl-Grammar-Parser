@@ -11,12 +11,13 @@ BEGIN { require "test-helper-csi.pl" }
 use CSI::Language::Java::Grammar;
 require Ref::Util;
 
-proclaim 'csi-language' => 'CSI::Language::Java::Grammar';
+proclaim 'csi-dom-namespace' => 'CSI::Language::Java';
+proclaim 'csi-language'      => 'CSI::Language::Java::Grammar';
 
 sub expect_token {
 	my ($token, $value) = @_;
 
-	+{ $token => defined $value ? methods (value => $value) : ignore };
+	+{ build_csi_class ($token) => defined $value ? methods (value => $value) : ignore };
 }
 
 sub expect_element {
@@ -58,6 +59,21 @@ sub expect_dom_token {
 
 	$expectation;
 }
+
+######################################################################
+
+sub expect_token_annotation             { expect_token '::Token::Annotation'            => '@' }
+sub expect_token_brace_close            { expect_token '::Token::Brace::Close'          => '}' }
+sub expect_token_brace_open             { expect_token '::Token::Brace::Open'           => '{' }
+sub expect_token_bracket_close          { expect_token '::Token::Bracket::Close'        => ']' }
+sub expect_token_bracket_open           { expect_token '::Token::Bracket::Open'         => '[' }
+sub expect_token_comma                  { expect_token '::Token::Comma'                 => ',' }
+sub expect_token_dot                    { expect_token '::Token::Dot'                   => '.' }
+sub expect_token_double_colon           { expect_token '::Token::Double::Colon'         => '::' }
+sub expect_token_elipsis                { expect_token '::Token::Elipsis'               => '...' }
+sub expect_token_paren_close            { expect_token '::Token::Paren::Close'          => ')' }
+sub expect_token_paren_open             { expect_token '::Token::Paren::Open'           => '(' }
+sub expect_token_semicolon              { expect_token '::Token::Semicolon'             => ';' }
 
 1;
 
