@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 8;
+plan tests => 9;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -861,6 +861,84 @@ subtest "expect_reference"              => sub {
 			build_csi_token ('::Identifier' => 'var'),
 		),
 		;
+
+	done_testing;
+};
+
+subtest "expect_import_declaration"     => sub {
+	plan tests => 4;
+
+	is "expect_import_declaration / import" =>
+		expect => expect_import_declaration (
+			[qw[ foo bar ]],
+		),
+		got    => build_csi_element ('::Import::Declaration' => (
+			build_csi_token ('::Token::Word::Import' => 'import'),
+			build_csi_element ('::Reference' => (
+				build_csi_token ('::Identifier' => 'foo'),
+				build_csi_token ('::Token::Dot' => '.'),
+				build_csi_token ('::Identifier' => 'bar'),
+			)),
+			build_csi_token ('::Token::Semicolon' => ';'),
+		)),
+		;
+
+	is "expect_import_declaration / static import" =>
+		expect => expect_import_declaration (
+			'static',
+			[qw[ foo bar ]],
+		),
+		got    => build_csi_element ('::Import::Declaration' => (
+			build_csi_token ('::Token::Word::Import' => 'import'),
+			build_csi_token ('::Token::Word::Static' => 'static'),
+			build_csi_element ('::Reference' => (
+				build_csi_token ('::Identifier' => 'foo'),
+				build_csi_token ('::Token::Dot' => '.'),
+				build_csi_token ('::Identifier' => 'bar'),
+			)),
+			build_csi_token ('::Token::Semicolon' => ';'),
+		)),
+		;
+
+	is "expect_import_declaration / type import" =>
+		expect => expect_import_declaration (
+			[qw[ foo bar ]],
+			'*',
+		),
+		got    => build_csi_element ('::Import::Declaration' => (
+			build_csi_token ('::Token::Word::Import' => 'import'),
+			build_csi_element ('::Reference' => (
+				build_csi_token ('::Identifier' => 'foo'),
+				build_csi_token ('::Token::Dot' => '.'),
+				build_csi_token ('::Identifier' => 'bar'),
+			)),
+			build_csi_token ('::Token::Dot' => '.'),
+			build_csi_token ('::Token::Import::Type' => '*'),
+			build_csi_token ('::Token::Semicolon' => ';'),
+		)),
+		;
+
+	is "expect_import_declaration / static type import" =>
+		expect => expect_import_declaration (
+			'static',
+			[qw[ foo bar ]],
+			'*',
+		),
+		got    => build_csi_element ('::Import::Declaration' => (
+			build_csi_token ('::Token::Word::Import' => 'import'),
+			build_csi_token ('::Token::Word::Static' => 'static'),
+			build_csi_element ('::Reference' => (
+				build_csi_token ('::Identifier' => 'foo'),
+				build_csi_token ('::Token::Dot' => '.'),
+				build_csi_token ('::Identifier' => 'bar'),
+			)),
+			build_csi_token ('::Token::Dot' => '.'),
+			build_csi_token ('::Token::Import::Type' => '*'),
+			build_csi_token ('::Token::Semicolon' => ';'),
+		)),
+		;
+
+	done_testing;
 };
 
 subtest "expect_package_declaration"    => sub {

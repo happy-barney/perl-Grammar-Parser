@@ -410,6 +410,23 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  allowed_identifier  ]],
 		;
 
+	rule  import_declaration                => dom => '::Import::Declaration',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-7.html#jls-ImportDeclaration
+		[qw[  import  static  reference  DOT  import_type  SEMICOLON  ]],
+		[qw[  import  static  reference                    SEMICOLON  ]],
+		[qw[  import          reference  DOT  import_type  SEMICOLON  ]],
+		[qw[  import          reference                    SEMICOLON  ]],
+		;
+
+	rule  import_declarations               =>
+		[qw[  import_declaration  import_declarations  ]],
+		[qw[  import_declaration                       ]],
+		;
+
+	rule  import_type                       => dom => '::Token::Import::Type',
+		[qw[  TOKEN_ASTERISK  ]],
+		;
+
 	rule  label_name                        => dom => '::Label::Name',
 		[qw[  allowed_identifier  ]],
 		;
@@ -1388,28 +1405,6 @@ __END__
 	sub if_then_statement           :RULE :ACTION_DEFAULT {
 		[
 			[qw[ IF PAREN_OPEN expression PAREN_CLOSE statement ]],
-		];
-	}
-
-	sub import_all                  :RULE :ACTION_SYMBOL {
-		[
-			[qw[ DOT MULTIPLY ]],
-		];
-	}
-
-	sub import_declaration_list     :RULE :ACTION_LIST {
-		[
-			[qw[ import_declaration                         ]],
-			[qw[ import_declaration import_declaration_list ]],
-		];
-	}
-
-	sub import_declaration          :RULE :ACTION_DEFAULT {
-		[
-			[qw[ IMPORT STATIC qualified_identifier import_all SEMICOLON ]],
-			[qw[ IMPORT STATIC qualified_identifier            SEMICOLON ]],
-			[qw[ IMPORT        qualified_identifier            SEMICOLON ]],
-			[qw[ IMPORT        qualified_identifier import_all SEMICOLON ]],
 		];
 	}
 

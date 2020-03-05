@@ -659,21 +659,9 @@
 		[qw[ IF PAREN_OPEN Expression PAREN_CLOSE Statement ]],
 		;
 
-	rule ImportDeclaration           =>
-		[qw[     SingleTypeImportDeclaration ]],
-		[qw[   TypeImportOnDemandDeclaration ]],
-		[qw[   SingleStaticImportDeclaration ]],
-		[qw[ StaticImportOnDemandDeclaration ]],
-		;
-
-	rule ImportDeclaration_list_1    =>
-		[qw[ ImportDeclaration                          ]],
-		[qw[ ImportDeclaration ImportDeclaration_list_1 ]],
-		;
-
 	rule ImportDeclaration_list_2    =>
-		[qw[ ImportDeclaration                          ]],
-		[qw[ ImportDeclaration ImportDeclaration_list_2 ]],
+		[qw[ import_declaration                          ]],
+		[qw[ import_declaration ImportDeclaration_list_2 ]],
 		;
 
 	rule InclusiveOrExpression       =>
@@ -1007,14 +995,14 @@
 		;
 
 	rule ordinary_compilation_unit     =>
-		[qw[  package_declaration  ImportDeclaration_list_1   TypeDeclaration_list_1   ]],
-		[qw[                       ImportDeclaration_list_1   TypeDeclaration_list_1   ]],
-		[qw[  package_declaration                             TypeDeclaration_list_1   ]],
-		[qw[                                                  TypeDeclaration_list_1   ]],
-		[qw[  package_declaration  ImportDeclaration_list_1                            ]],
-		[qw[                       ImportDeclaration_list_1                            ]],
-		[qw[  package_declaration                                                      ]],
-		[qw[                                                                           ]],
+		[qw[  package_declaration  import_declarations  TypeDeclaration_list_1   ]],
+		[qw[                       import_declarations  TypeDeclaration_list_1   ]],
+		[qw[  package_declaration                       TypeDeclaration_list_1   ]],
+		[qw[                                            TypeDeclaration_list_1   ]],
+		[qw[  package_declaration  import_declarations                           ]],
+		[qw[                       import_declarations                           ]],
+		[qw[  package_declaration                                                ]],
+		[qw[                                                                     ]],
 		;
 
 	rule package_declaration          =>
@@ -1152,14 +1140,6 @@
 		[qw[ AT TypeName PAREN_OPEN ElementValue PAREN_CLOSE ]],
 		;
 
-	rule SingleStaticImportDeclaration=>
-		[qw[ IMPORT STATIC TypeName DOT Identifier SEMICOLON ]],
-		;
-
-	rule SingleTypeImportDeclaration =>
-		[qw[ IMPORT TypeName SEMICOLON ]],
-		;
-
 	rule Statement                   =>
 		[qw[ StatementWithoutTrailingSubstatement ]],
 		[qw[                     LabeledStatement ]],
@@ -1209,10 +1189,6 @@
 		[qw[ SynchronizedStatement ]],
 		[qw[        ThrowStatement ]],
 		[qw[          TryStatement ]],
-		;
-
-	rule StaticImportOnDemandDeclaration=>
-		[qw[ IMPORT STATIC TypeName DOT MULTIPLY SEMICOLON ]],
 		;
 
 	rule StaticInitializer           =>
@@ -1336,10 +1312,6 @@
 	rule TypeDeclaration_list_1      =>
 		[qw[ TypeDeclaration                        ]],
 		[qw[ TypeDeclaration TypeDeclaration_list_1 ]],
-		;
-
-	rule TypeImportOnDemandDeclaration=>
-		[qw[ IMPORT reference DOT MULTIPLY SEMICOLON ]],
 		;
 
 	rule TypeName                    =>
