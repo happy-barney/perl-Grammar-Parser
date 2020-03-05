@@ -220,6 +220,31 @@ sub expect_identifier                   {
 	expect_token '::Identifier' => @_
 }
 
+sub expect_import_declaration           {
+	my @static = $_[0] eq 'static'
+		? (expect_word_static)
+		: ()
+		;
+
+	my @import_type = $_[-1] eq '*'
+		? (expect_token_dot, expect_token ('::Token::Import::Type' => '*'))
+		: ()
+		;
+
+	shift if @static;
+	pop   if @import_type;
+
+	my ($reference) = @_;
+
+	expect_element ('::Import::Declaration' => (
+		expect_word_import,
+		@static,
+		expect_reference (@$reference),
+		@import_type,
+		expect_token_semicolon,
+	));
+}
+
 sub expect_label_name                   {
 	expect_token '::Label::Name' => @_
 }
@@ -259,6 +284,10 @@ sub expect_reference                    {
 		if Ref::Util::is_plain_arrayref $list_spec[0];
 
 	expect_qualified_identifier '::Reference' => @list_spec;
+}
+
+sub expect_type_identifier              {
+	expect_token ('::Type::Identifier' => @_)
 }
 
 sub expect_variable_name                {
