@@ -495,6 +495,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  extends  class_type  ]],
 		;
 
+	rule  class_implements                  => dom => 'CSI::Language::Java::Class::Implements',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-8.html#jls-Superinterfaces
+		[qw[  implements  class_types  ]],
+		;
+
 	rule  class_literal                     => dom => 'CSI::Language::Java::Literal::Class',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-ClassLiteral
 		[qw[  type_reference  class_literal_dims  DOT  class  ]],
@@ -551,6 +556,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[                               class_type_identifier  ]],
 		[qw[  class_type_identifiers  DOT  class_type_identifier  ]],
 		[qw[  class_type_identifiers  DOT        type_identifier  ]],
+		;
+
+	rule  class_types                       =>
+		[qw[  class_type  COMMA  class_types  ]],
+		[qw[  class_type                      ]],
 		;
 
 	rule  compilation_unit                  =>
@@ -1632,19 +1642,6 @@ __END__
 		];
 	}
 
-	sub interface_type              :RULE :ACTION_ALIAS {
-		[
-			[qw[ class_type ]],
-		];
-	}
-
-	sub interface_type_list         :RULE :ACTION_LIST {
-		[
-			[qw[ interface_type                            ]],
-			[qw[ interface_type COMMA interface_type_list  ]],
-		];
-	}
-
 	sub labeled_statement           :RULE :ACTION_DEFAULT {
 		[
 			[qw[ identifier COLON statement ]],
@@ -2103,12 +2100,6 @@ __END__
 	sub static_initializer          :RULE :ACTION_DEFAULT {
 		[
 			[qw[ STATIC block ]],
-		]
-	}
-
-	sub superinterfaces             :RULE :ACTION_DEFAULT {
-		[
-			[qw[ IMPLEMENTS interface_type_list ]],
 		]
 	}
 
