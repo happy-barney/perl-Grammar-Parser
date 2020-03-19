@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 10;
+plan tests => 11;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -814,6 +814,23 @@ subtest "expect_annotation"             => sub {
 			build_csi_token ('::Token::Paren::Open'  => '(' ),
 			build_csi_token ('::Token::Paren::Close' => ')'),
 		),
+		;
+
+	done_testing;
+};
+
+subtest "expect_literal_class"          => sub {
+	plan tests => 1;
+
+	is "expect_literal_class / primitive type" =>
+		expect => expect_literal_class (expect_type_int),
+		got    => build_csi_element ('::Literal::Class' => (
+			build_csi_element ('::Type::Primitive' => (
+				build_csi_token ('::Token::Word::Int' => 'int'),
+			)),
+			build_csi_token ('::Token::Dot' => '.'),
+			build_csi_token ('::Token::Word::Class' => 'class'),
+		)),
 		;
 
 	done_testing;

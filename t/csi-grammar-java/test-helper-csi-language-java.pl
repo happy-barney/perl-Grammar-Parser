@@ -17,7 +17,9 @@ proclaim 'csi-language'      => 'CSI::Language::Java::Grammar';
 sub expect_element;
 sub expect_token;
 sub expect_token_annotation;
+sub expect_token_dot;
 sub expect_word;
+sub expect_word_class;
 sub expect_word_false;
 sub expect_word_null;
 sub expect_word_true;
@@ -106,6 +108,14 @@ sub expect_literal_false                { expect_element '::Literal::Boolean::Fa
 sub expect_literal_null                 { expect_element '::Literal::Null',           expect_word_null   }
 sub expect_literal_true                 { expect_element '::Literal::Boolean::True',  expect_word_true   }
 sub expect_literal_character            { expect_dom_token '::Literal::Character'        => @_ }
+sub expect_literal_class                {
+	expect_element '::Literal::Class' =>
+		@_,
+		expect_token_dot,
+		expect_word_class,
+		;
+}
+
 sub expect_literal_string               { expect_dom_token '::Literal::String'           => @_ }
 sub expect_literal_floating_decimal     { expect_dom_token '::Number::Float::Decimal'    => @_ }
 sub expect_literal_floating_hex         { expect_dom_token '::Number::Float::Hex'        => @_ }
