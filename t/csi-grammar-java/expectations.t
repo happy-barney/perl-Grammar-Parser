@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 7;
+plan tests => 8;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -860,6 +860,47 @@ subtest "expect_reference"              => sub {
 			build_csi_token ('::Token::Dot' => '.'),
 			build_csi_token ('::Identifier' => 'var'),
 		),
+		;
+};
+
+subtest "expect_package_declaration"    => sub {
+	plan tests => 2;
+
+	is "expect_package_declaration / with just package name" =>
+		expect => expect_package_declaration (
+			[qw[ foo bar ]],
+		),
+		got    => build_csi_element ('::Package::Declaration' => (
+			build_csi_token ('::Token::Word::Package' => 'package'),
+			build_csi_element ('::Package::Name' => (
+				build_csi_token ('::Identifier' => 'foo'),
+				build_csi_token ('::Token::Dot' => '.'),
+				build_csi_token ('::Identifier' => 'bar'),
+			)),
+			build_csi_token ('::Token::Semicolon' => ';'),
+		)),
+		;
+
+	is "expect_package_declaration / with annotations" =>
+		expect => expect_package_declaration (
+			[qw[ foo bar ]],
+			expect_annotation ([qw[ foo ]]),
+		),
+		got    => build_csi_element ('::Package::Declaration' => (
+			build_csi_element ('::Annotation' => (
+				build_csi_token ('::Token::Annotation' => '@'),
+				build_csi_element ('::Reference' => (
+					build_csi_token ('::Identifier' => 'foo'),
+				)),
+			)),
+			build_csi_token ('::Token::Word::Package' => 'package'),
+			build_csi_element ('::Package::Name' => (
+				build_csi_token ('::Identifier' => 'foo'),
+				build_csi_token ('::Token::Dot' => '.'),
+				build_csi_token ('::Identifier' => 'bar'),
+			)),
+			build_csi_token ('::Token::Semicolon' => ';'),
+		)),
 		;
 
 	done_testing;
