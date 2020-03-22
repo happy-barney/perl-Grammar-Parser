@@ -21,6 +21,11 @@ sub expect_word_false;
 sub expect_word_null;
 sub expect_word_true;
 
+sub expect_identifier;
+sub expect_qualified_identifier;
+
+######################################################################
+
 sub _list_with_separator                {
 	my $separator = [];
 	my $transform = sub { @_ };
@@ -221,6 +226,21 @@ sub expect_label_name                   {
 
 sub expect_label_reference              {
 	expect_token '::Label::Reference' => @_
+}
+
+sub expect_package_declaration          {
+	my ($name, @modifiers) = @_;
+
+	expect_element ('::Package::Declaration' => (
+		@modifiers,
+		expect_word_package,
+		expect_package_name (@$name),
+		expect_token_semicolon,
+	));
+}
+
+sub expect_package_name                 {
+	expect_qualified_identifier '::Package::Name' => @_
 }
 
 sub expect_qualified_identifier         {

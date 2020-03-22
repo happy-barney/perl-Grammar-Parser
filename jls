@@ -295,8 +295,8 @@
 		[qw[ ClassOrInterfaceType DOT               type_identifier                  ]],
 		;
 
-	rule CompilationUnit             =>
-		[qw[ OrdinaryCompilationUnit ]],
+	rule compilation_unit             =>
+		[qw[ ordinary_compilation_unit ]],
 		[qw[  ModularCompilationUnit ]],
 		;
 
@@ -635,11 +635,6 @@
 	rule FormalParameter_list_1      =>
 		[qw[ FormalParameter                               ]],
 		[qw[ FormalParameter COMMA  FormalParameter_list_1 ]],
-		;
-
-	rule Identifier_list_1           =>
-		[qw[ Identifier                        ]],
-		[qw[ Identifier DOT  Identifier_list_1 ]],
 		;
 
 	rule Identifier_list_2           =>
@@ -1011,29 +1006,29 @@
 		[qw[ FloatingPointType ]],
 		;
 
-	rule OrdinaryCompilationUnit     =>
-		[qw[   PackageDeclaration   ImportDeclaration_list_1   TypeDeclaration_list_1   ]],
-		[qw[                        ImportDeclaration_list_1   TypeDeclaration_list_1   ]],
-		[qw[   PackageDeclaration                              TypeDeclaration_list_1   ]],
-		[qw[                                                   TypeDeclaration_list_1   ]],
-		[qw[   PackageDeclaration   ImportDeclaration_list_1                            ]],
-		[qw[                        ImportDeclaration_list_1                            ]],
-		[qw[   PackageDeclaration                                                       ]],
-		[qw[                                                                            ]],
+	rule ordinary_compilation_unit     =>
+		[qw[  package_declaration  ImportDeclaration_list_1   TypeDeclaration_list_1   ]],
+		[qw[                       ImportDeclaration_list_1   TypeDeclaration_list_1   ]],
+		[qw[  package_declaration                             TypeDeclaration_list_1   ]],
+		[qw[                                                  TypeDeclaration_list_1   ]],
+		[qw[  package_declaration  ImportDeclaration_list_1                            ]],
+		[qw[                       ImportDeclaration_list_1                            ]],
+		[qw[  package_declaration                                                      ]],
+		[qw[                                                                           ]],
 		;
 
-	rule PackageDeclaration          =>
-		[qw[   PackageModifier_list_1  PACKAGE Identifier_list_1 SEMICOLON ]],
-		[qw[                           PACKAGE Identifier_list_1 SEMICOLON ]],
+	rule package_declaration          =>
+		[qw[  package_modifiers  PACKAGE  package_name  SEMICOLON  ]],
+		[qw[                     PACKAGE  package_name  SEMICOLON  ]],
 		;
 
-	rule PackageModifier             =>
+	rule package_modifier             =>
 		[qw[ Annotation ]],
 		;
 
-	rule PackageModifier_list_1      =>
-		[qw[ PackageModifier                        ]],
-		[qw[ PackageModifier PackageModifier_list_1 ]],
+	rule package_modifiers      =>
+		[qw[  package_modifier                     ]],
+		[qw[  package_modifier  package_modifiers  ]],
 		;
 
 	rule PostDecrementExpression     =>
