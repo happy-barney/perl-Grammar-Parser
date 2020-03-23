@@ -636,6 +636,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  lambda_expression       ]],
 		;
 
+	rule  expression_group                  =>
+		[qw[  PAREN_OPEN  statement_expression  PAREN_CLOSE  ]],
+		;
+
 	rule  field_modifier                    => dom => 'CSI::Language::Java::Modifier',
 		[qw[  annotation  ]],
 		[qw[  private     ]],
@@ -865,6 +869,12 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  reference_type                    =>
 		[qw[  array_type       ]],
 		[qw[  class_type       ]],
+		;
+
+	rule  statement_expression              =>
+		[qw[  assignment                          ]],
+		[qw[  instance_creation_expression        ]],
+		[qw[  expression                          ]],
 		;
 
 	rule  type_argument                     =>
@@ -2098,18 +2108,6 @@ __END__
 			[qw[                  if_then_else_statement ]],
 			[qw[                         while_statement ]],
 			[qw[                           for_statement ]],
-		]
-	}
-
-	sub statement_expression        :RULE :ACTION_PASS_THROUGH {
-		[
-			[qw[                         assignment ]],
-			[qw[           pre_increment_expression ]],
-			[qw[           pre_decrement_expression ]],
-			[qw[          post_increment_expression ]],
-			[qw[          post_decrement_expression ]],
-			[qw[                  method_invocation ]],
-			[qw[ class_instance_creation_expression ]],
 		]
 	}
 
