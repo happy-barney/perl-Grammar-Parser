@@ -10,7 +10,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expression';
 
-plan tests => 11;
+plan tests => 12;
 
 test_rule "primary expression / literal / null" => (
 	data => 'null',
@@ -93,6 +93,16 @@ test_rule "postfix expression / decrement" => (
 		expect_element ('::Expression::Postfix' => (
 			expect_reference ('foo'),
 			expect_operator_decrement,
+		)),
+	],
+);
+
+test_rule "expression / prefix expression" => (
+	data => '--foo',
+	expect => [
+		expect_element ('::Expression::Prefix' => (
+			expect_operator_decrement,
+			expect_reference ('foo'),
 		)),
 	],
 );
