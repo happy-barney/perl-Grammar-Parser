@@ -197,9 +197,17 @@ test_rule "prefix expression / associativity / multiple reference casts" => (
 	],
 );
 
-test_rule "prefix expression / associativity / reference cast vs grouping" => (
+test_rule "prefix expression / associativity / should not mix reference cast and grouping" => (
 	data => '(string) + foo',
-	throws => 1,
+	expect => [
+		expect_element ('CSI::Language::Java::Expression::Additive' => (
+			expect_token_paren_open,
+			expect_reference ('string'),
+			expect_token_paren_close,
+			expect_operator_addition,
+			expect_reference ('foo'),
+		)),
+	],
 );
 
 test_rule "prefix expression / associativity" => (
