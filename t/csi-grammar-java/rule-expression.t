@@ -10,7 +10,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expression';
 
-plan tests => 16;
+plan tests => 17;
 
 test_rule "primary expression / literal / null" => (
 	data => 'null',
@@ -146,6 +146,17 @@ test_rule "expression / relational expression" => (
 		expect_element ('::Expression::Relational' => (
 			expect_reference ('foo'),
 			expect_operator_greater_than,
+			expect_reference ('bar'),
+		)),
+	],
+);
+
+test_rule "expression / equality expression" => (
+	data => 'foo == bar',
+	expect => [
+		expect_element ('::Expression::Equality' => (
+			expect_reference ('foo'),
+			expect_operator_equality,
 			expect_reference ('bar'),
 		)),
 	],
