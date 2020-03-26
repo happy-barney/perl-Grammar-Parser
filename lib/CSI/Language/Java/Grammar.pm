@@ -757,8 +757,8 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  expression                        =>
-		[qw[  binary_or_expression  ]],
-		[qw[  binary_or_element     ]],
+		[qw[  logical_and_expression  ]],
+		[qw[  logical_and_element     ]],
 		[qw[  ternary_expression     ]],
 		[qw[  lambda_expression      ]],
 		;
@@ -904,6 +904,21 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  literal_null                      => dom => '::Literal::Null',
 		[qw[  null  ]],
+		;
+
+	rule  logical_and_element               =>
+		[qw[  binary_or_element     ]],
+		[qw[  binary_or_expression  ]],
+		;
+
+	rule  logical_and_elements              =>
+		[qw[  logical_and_element  LOGICAL_AND  logical_and_elements  ]],
+		[qw[  logical_and_element  LOGICAL_AND  logical_and_element   ]],
+		;
+
+	rule  logical_and_expression            => dom => '::Expression::Logical::And',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-ConditionalAndExpression
+		[qw[  logical_and_elements  ]],
 		;
 
 	rule  marker_annotation                 =>
@@ -1570,13 +1585,6 @@ __END__
 			[qw[ class_or_interface_type DOT annotation_list type_identifier                   ]],
 			[qw[ class_or_interface_type DOT                 type_identifier type_arguments    ]],
 			[qw[ class_or_interface_type DOT                 type_identifier                   ]],
-		];
-	}
-
-	sub conditional_and_expression  :RULE :ACTION_LIST {
-		[
-			[qw[ inclusive_or_expression                                        ]],
-			[qw[ inclusive_or_expression LOGICAL_AND conditional_and_expression ]],
 		];
 	}
 
