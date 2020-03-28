@@ -489,6 +489,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  PAREN_OPEN               PAREN_CLOSE  ]],
 		;
 
+	rule  array_access                      => dom => '::Array::Access',
+		[qw[  primary_no_new_array  BRACKET_OPEN  expression  BRACKET_CLOSE  ]],
+		;
+
 	rule  array_creation_dims               =>
 		[qw[  dim_expressions  dims                     ]],
 		[qw[  dim_expressions                           ]],
@@ -511,6 +515,45 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  array_type                        => dom => '::Type::Array',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-8.html#jls-UnannArrayType
 		[qw[  data_type  dim  ]],
+		;
+
+	rule  assignment                        => dom => '::Expression::Assignment',
+		# TODO: assignment chain as a list
+		[qw[  left_hand_side  assignment_operands  ]],
+		;
+
+	rule  assignment_element                =>
+		[qw[  lambda_expression      ]],
+		[qw[  ternary_element     ]],
+		[qw[  ternary_expression  ]],
+		;
+
+	rule  assignment_expression             =>
+		[qw[  assignment ]],
+		;
+
+	rule  assignment_operand                =>
+		[qw[ assignment_operator  assignment_element  ]],
+		;
+
+	rule  assignment_operands               =>
+		[qw[  assignment_operand  assignment_operands  ]],
+		[qw[  assignment_operand                       ]],
+		;
+
+	rule  assignment_operator               =>
+		[qw[  ASSIGN                      ]],
+		[qw[  ASSIGN_ADDITION             ]],
+		[qw[  ASSIGN_BINARY_AND           ]],
+		[qw[  ASSIGN_BINARY_OR            ]],
+		[qw[  ASSIGN_BINARY_SHIFT_LEFT    ]],
+		[qw[  ASSIGN_BINARY_SHIFT_RIGHT   ]],
+		[qw[  ASSIGN_BINARY_USHIFT_RIGHT  ]],
+		[qw[  ASSIGN_BINARY_XOR           ]],
+		[qw[  ASSIGN_DIVISION             ]],
+		[qw[  ASSIGN_MODULUS              ]],
+		[qw[  ASSIGN_MULTIPLICATION       ]],
+		[qw[  ASSIGN_SUBTRACTION          ]],
 		;
 
 	rule  binary_and_element                =>
@@ -802,9 +845,8 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  expression                        =>
-		[qw[  ternary_element        ]],
-		[qw[  ternary_expression     ]],
-		[qw[  lambda_expression      ]],
+		[qw[  assignment_element     ]],
+		[qw[  assignment_expression  ]],
 		;
 
 	rule  expression_group                  =>
@@ -814,6 +856,12 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  expressions                       =>
 		[qw[  expression  COMMA  expressions  ]],
 		[qw[  expression                      ]],
+		;
+
+	rule  field_access                      => dom => '::Field::Access',
+		[qw[  reference  DOT  super  DOT  field_name  ]],
+		[qw[                  super  DOT  field_name  ]],
+		[qw[  primary_no_reference   DOT  field_name  ]],
 		;
 
 	rule  field_modifier                    => dom => '::Modifier',
@@ -830,6 +878,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  field_modifiers                   =>
 		[qw[  field_modifier  field_modifiers  ]],
 		[qw[  field_modifier                   ]],
+		;
+
+	rule  field_name                        => dom => '::Field::Name',
+		[qw[  identifier  ]],
 		;
 
 	rule  identifier                        => dom => '::Identifier',
@@ -967,10 +1019,9 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  left_hand_side                    =>
-		[qw[  array_access     ]],
-		#[qw[  field_access     ]],
-		#[qw[  identifier       ]],
-		[qw[  reference        ]],
+		[qw[  array_access  ]],
+		[qw[  field_access  ]],
+		[qw[  reference     ]],
 		;
 
 	rule  literal                           =>
@@ -1187,11 +1238,12 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  primary_no_reference              =>
-		[qw[  literal            ]],
+		[qw[  array_access       ]],
 		[qw[  class_literal      ]],
 		[qw[  expression_group   ]],
+		[qw[  field_access       ]],
 		[qw[  instance_creation  ]],
-		[qw[  array_access       ]],
+		[qw[  literal            ]],
 		[qw[  method_invocation  ]],
 		[qw[  method_reference   ]],
 		[qw[  qualified_this     ]],
@@ -1263,7 +1315,6 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  statement_expression              =>
-		[qw[  assignment                          ]],
 		[qw[  instance_creation_expression        ]],
 		[qw[  expression                          ]],
 		;
@@ -1506,34 +1557,10 @@ __END__
 		];
 	}
 
-	sub assignment                  :RULE :ACTION_DEFAULT {
-		[
-			[qw[ left_hand_side assignment_operator expression ]],
-		];
-	}
-
 	sub assignment_expression       :RULE :ACTION_DEFAULT {
 		[
 			[qw[ conditional_expression ]],
 			[qw[             assignment ]],
-		];
-	}
-
-	sub assignment_operator         :RULE :ACTION_PASS_THROUGH {
-		[
-
-			[qw[ ASSIGN                      ]],
-			[qw[ ASSIGN_ADD                  ]],
-			[qw[ ASSIGN_AND                  ]],
-			[qw[ ASSIGN_DIVIDE               ]],
-			[qw[ ASSIGN_LEFT_SHIFT           ]],
-			[qw[ ASSIGN_MODULO               ]],
-			[qw[ ASSIGN_MULTIPLY             ]],
-			[qw[ ASSIGN_OR                   ]],
-			[qw[ ASSIGN_RIGHT_SHIFT          ]],
-			[qw[ ASSIGN_SUB                  ]],
-			[qw[ ASSIGN_UNSIGNED_RIGHT_SHIFT ]],
-			[qw[ ASSIGN_XOR                  ]],
 		];
 	}
 
@@ -1946,14 +1973,6 @@ __END__
 		];
 	}
 
-	sub field_access                :RULE :ACTION_DEFAULT {
-		[
-			[qw[             primary DOT identifier ]],
-			[qw[               SUPER DOT identifier ]],
-			[qw[ type_name DOT SUPER DOT identifier ]],
-		];
-	}
-
 	sub field_declaration           :RULE :ACTION_DEFAULT {
 		[
 			[qw[   field_modifier_list  unann_type variable_declarator_list SEMICOLON ]],
@@ -2110,14 +2129,6 @@ __END__
 			[qw[ PAREN_OPEN  identifier_list        PAREN_CLOSE ]],
 			[qw[ PAREN_OPEN                         PAREN_CLOSE ]],
 			[qw[                                     identifier ]],
-		];
-	}
-
-	sub left_hand_side              :RULE :ACTION_DEFAULT {
-		[
-			[qw[ expression_name ]],
-			[qw[    field_access ]],
-			[qw[    array_access ]],
 		];
 	}
 
