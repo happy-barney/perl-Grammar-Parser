@@ -10,7 +10,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'class_declaration';
 
-plan tests => 3;
+plan tests => 4;
 
 test_rule "empty public static abstract class" => (
 	data => <<'EODATA',
@@ -59,6 +59,26 @@ EODATA
 				expect_element ('::Field::Name' => (
 					expect_identifier ('bar'),
 				)),
+				expect_token_semicolon,
+			)),
+			expect_token_brace_close,
+		)),
+	)),
+);
+
+test_rule "class with empty declaration" => (
+	data => <<'EODATA',
+public class Foo {
+	;
+}
+EODATA
+	expect => expect_element ('::Class::Declaration' => (
+		expect_modifier_public,
+		expect_word_class,
+		expect_type_name ('Foo'),
+		expect_element ('::Class::Body' => (
+			expect_token_brace_open,
+			expect_element ('::Empty::Declaration' => (
 				expect_token_semicolon,
 			)),
 			expect_token_brace_close,

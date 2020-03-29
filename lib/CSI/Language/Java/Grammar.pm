@@ -826,6 +826,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  dim        ]],
 		;
 
+	rule  empty_declaration                 => dom => '::Empty::Declaration',
+		[qw[ SEMICOLON ]],
+		;
+
 	rule  enum_body                         => dom => '::Enum::Body',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-8.html#jls-EnumBody
 		[qw[  BRACE_OPEN  enum_constants  COMMA  enum_body_declarations  BRACE_CLOSE  ]],
