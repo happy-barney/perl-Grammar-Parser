@@ -659,6 +659,18 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  BRACE_OPEN                           BRACE_CLOSE  ]],
 		;
 
+	rule  class_body_declaration            =>
+		[qw[  class_member_declaration  ]],
+		[qw[  constructor_declaration   ]],
+		[qw[  instance_initializer      ]],
+		[qw[  static_initializer        ]],
+		;
+
+	rule  class_body_declarations           =>
+		[qw[  class_body_declaration  class_body_declarations  ]],
+		[qw[  class_body_declaration                           ]],
+		;
+
 	rule  class_declaration                 => dom => 'CSI::Language::Java::Class::Declaration',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-8.html#jls-NormalClassDeclaration
 		[qw[  class_modifiers  class  type_name  type_parameters  class_extends  class_implements  class_body  ]],
@@ -705,6 +717,16 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  class_literal_dims                =>
 		[qw[  class_literal_dim  class_literal_dims  ]],
 		[qw[  class_literal_dim                      ]],
+		;
+
+	rule  class_member_declaration          =>
+		[qw[  annotation_declaration   ]],
+		[qw[  class_declaration        ]],
+		[qw[  empty_declaration        ]],
+		[qw[  enum_declaration         ]],
+		[qw[  field_declaration        ]],
+		[qw[  interface_declaration    ]],
+		[qw[  method_declaration       ]],
 		;
 
 	rule  class_modifier                    => dom => 'CSI::Language::Java::Modifier',
@@ -866,6 +888,14 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  reference  DOT  super  DOT  field_name  ]],
 		[qw[                  super  DOT  field_name  ]],
 		[qw[  primary_no_reference   DOT  field_name  ]],
+		;
+
+	rule  field_declaration                 => dom => 'CSI::Language::Java::Field::Declaration',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-8.html#jls-FieldDeclaration
+		[qw[   field_modifiers  data_type  field_name  ASSIGN  variable_initializer  SEMICOLON  ]],
+		[qw[   field_modifiers  data_type  field_name                                SEMICOLON  ]],
+		[qw[                    data_type  field_name  ASSIGN  variable_initializer  SEMICOLON  ]],
+		[qw[                    data_type  field_name                                SEMICOLON  ]],
 		;
 
 	rule  field_modifier                    => dom => 'CSI::Language::Java::Modifier',
@@ -1684,16 +1714,6 @@ __END__
 		];
 	}
 
-	sub class_member_declaration    :RULE :ACTION_PASS_THROUGH {
-		[
-			[qw[     field_declaration ]],
-			[qw[    method_declaration ]],
-			[qw[     class_declaration ]],
-			[qw[ interface_declaration ]],
-			[qw[             SEMICOLON ]],
-		];
-	}
-
 	sub class_or_interface_type     :RULE :ACTION_PASS_THROUGH {
 		[
 			[qw[     class_type ]],
@@ -1974,13 +1994,6 @@ __END__
 	sub expression_statement        :RULE :ACTION_DEFAULT {
 		[
 			[qw[ statement_expression SEMICOLON ]],
-		];
-	}
-
-	sub field_declaration           :RULE :ACTION_DEFAULT {
-		[
-			[qw[   field_modifier_list  unann_type variable_declarator_list SEMICOLON ]],
-			[qw[                        unann_type variable_declarator_list SEMICOLON ]],
 		];
 	}
 
