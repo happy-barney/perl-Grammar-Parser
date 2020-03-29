@@ -716,13 +716,18 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  class_member_declaration          =>
-		[qw[  annotation_declaration   ]],
-		[qw[  class_declaration        ]],
-		[qw[  empty_declaration        ]],
-		[qw[  enum_declaration         ]],
-		[qw[  field_declaration        ]],
-		[qw[  interface_declaration    ]],
-		[qw[  method_declaration       ]],
+		[qw[  annotation_declaration    ]],
+		[qw[  class_declaration         ]],
+		[qw[  empty_declaration         ]],
+		[qw[  enum_declaration          ]],
+		[qw[  field_declaration         ]],
+		[qw[  interface_declaration     ]],
+		[qw[  class_method_declaration  ]],
+		;
+
+	rule  class_method_declaration          => dom => '::Method::Declaration',
+		[qw[  method_modifiers  method_declaration  ]],
+		[qw[                    method_declaration  ]],
 		;
 
 	rule  class_modifier                    => dom => '::Modifier',
@@ -870,6 +875,15 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  CMP_INEQUALITY  ]],
 		;
 
+	rule  exception_type                    =>
+		[qw[  class_type  ]],
+		;
+
+	rule  exception_types                   =>
+		[qw[  exception_type  COMMA  exception_types  ]],
+		[qw[  exception_type                          ]],
+		;
+
 	rule  expression                        =>
 		[qw[  assignment_element     ]],
 		[qw[  assignment_expression  ]],
@@ -916,6 +930,18 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  field_name                        => dom => '::Field::Name',
 		[qw[  identifier  ]],
+		;
+
+	rule  formal_parameter                  => dom => '::Parameter',
+		[qw[   variable_modifiers  data_type  ELIPSIS  variable_name  ]],
+		[qw[   variable_modifiers  data_type           variable_name  ]],
+		[qw[                       data_type  ELIPSIS  variable_name  ]],
+		[qw[                       data_type           variable_name  ]],
+		;
+
+	rule  formal_parameters                 =>
+		[qw[  formal_parameter                            ]],
+		[qw[  formal_parameter  COMMA  formal_parameters  ]],
 		;
 
 	rule  identifier                        => dom => '::Identifier',
@@ -1122,6 +1148,22 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  ANNOTATION  type_reference  ]],
 		;
 
+	rule  method_body                       => dom => '::Method::Body',
+		[qw[      block  ]],
+		[qw[  SEMICOLON  ]],
+		;
+
+	rule  method_declaration                =>
+		[qw[  method_declarator  throws_clause  method_body  ]],
+		[qw[  method_declarator                 method_body  ]],
+		;
+
+	rule  method_declarator                 =>
+		[qw[  type_parameters  annotations  method_result  method_name  parameters  ]],
+		[qw[  type_parameters               method_result  method_name  parameters  ]],
+		[qw[                                method_result  method_name  parameters  ]],
+		;
+
 	rule  method_invocation                 => dom => '::Method::Invocation',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-MethodInvocation
 		[qw[  invocant  DOT  type_arguments  method_name  arguments  ]],
@@ -1164,6 +1206,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  class_type              DOUBLE_COLON  type_arguments  new          ]],
 		[qw[  class_type              DOUBLE_COLON                  new          ]],
 		[qw[  array_type              DOUBLE_COLON                  new          ]],
+		;
+
+	rule  method_result                     => dom => '::Method::Result',
+		[qw[  data_type  ]],
+		[qw[       void  ]],
 		;
 
 	rule  multiplicative_element            =>
@@ -1217,6 +1264,13 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  package_name                      => dom => '::Package::Name',
 		[qw[  qualified_identifier  ]],
+		;
+
+	rule  parameters                        => dom => '::List::Parameters',
+		[qw[  PAREN_OPEN  receiver_parameter  COMMA  formal_parameters  PAREN_CLOSE  ]],
+		[qw[  PAREN_OPEN  receiver_parameter  COMMA                     PAREN_CLOSE  ]],
+		[qw[  PAREN_OPEN                             formal_parameters  PAREN_CLOSE  ]],
+		[qw[  PAREN_OPEN                                                PAREN_CLOSE  ]],
 		;
 
 	rule  postfix_element                   =>
@@ -1360,6 +1414,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  ternary_expression                => dom => '::Expression::Ternary',
 		[qw[  ternary_element  QUESTION_MARK  expression  COLON  expression  ]],
+		;
+
+	rule  throws_clause                     => dom => '::Method::Throws',
+		[qw[  throws  exception_types  ]],
 		;
 
 	rule  type_argument                     =>
@@ -2169,50 +2227,6 @@ __END__
 		];
 	}
 
-	sub method_body                 :RULE :ACTION_PASS_THROUGH {
-		[
-			[qw[     block ]],
-			[qw[ SEMICOLON ]],
-		];
-	}
-
-	sub method_declaration          :RULE :ACTION_DEFAULT {
-		[
-			[qw[   method_modifier_list  method_header method_body ]],
-			[qw[                         method_header method_body ]],
-		];
-	}
-
-	sub method_declarator           :RULE :ACTION_DEFAULT {
-		[
-			[qw[ identifier PAREN_OPEN                                                    PAREN_CLOSE         ]],
-			[qw[ identifier PAREN_OPEN                                                    PAREN_CLOSE  dims   ]],
-			[qw[ identifier PAREN_OPEN                             formal_parameter_list  PAREN_CLOSE         ]],
-			[qw[ identifier PAREN_OPEN                             formal_parameter_list  PAREN_CLOSE  dims   ]],
-			[qw[ identifier PAREN_OPEN  receiver_parameter COMMA                          PAREN_CLOSE         ]],
-			[qw[ identifier PAREN_OPEN  receiver_parameter COMMA                          PAREN_CLOSE  dims   ]],
-			[qw[ identifier PAREN_OPEN  receiver_parameter COMMA   formal_parameter_list  PAREN_CLOSE         ]],
-			[qw[ identifier PAREN_OPEN  receiver_parameter COMMA   formal_parameter_list  PAREN_CLOSE  dims   ]],
-		];
-	}
-
-	sub method_header               :RULE :ACTION_DEFAULT {
-		[
-			[qw[                                   result method_declarator  throws   ]],
-			[qw[                                   result method_declarator           ]],
-			[qw[ type_parameters  annotation_list  result method_declarator  throws   ]],
-			[qw[ type_parameters  annotation_list  result method_declarator           ]],
-			[qw[ type_parameters                   result method_declarator  throws   ]],
-			[qw[ type_parameters                   result method_declarator           ]],
-		];
-	}
-
-	sub method_name                 :RULE :ACTION_ALIAS {
-		[
-			[qw[ identifier ]],
-		];
-	}
-
 	sub modular_compilation_unit    :RULE :ACTION_DEFAULT {
 		[
 			[qw[   import_declaration_list  module_declaration ]],
@@ -2457,12 +2471,6 @@ __END__
 	sub throw_statement             :RULE :ACTION_DEFAULT {
 		[
 			[qw[ THROW expression SEMICOLON ]],
-		]
-	}
-
-	sub throws                      :RULE :ACTION_DEFAULT {
-		[
-			[qw[ THROWS exception_type_list ]],
 		]
 	}
 
