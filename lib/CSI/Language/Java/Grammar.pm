@@ -992,6 +992,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[                new  instance_reference  arguments              ]],
 		;
 
+	rule  instance_initializer              => dom => '::Instance::Initializer',
+		[qw[  block  ]],
+		;
+
 	rule  instance_reference                =>
 		# TODO annotated reference
 		[qw[  type_arguments  reference  type_arguments  ]],
@@ -1443,6 +1447,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  expression                          ]],
 		;
 
+	rule  static_initializer                => dom => '::Instance::Initializer::Static',
+		[qw[  STATIC  block  ]],
+		;
+
 	rule  ternary_element                   =>
 		[qw[  logical_or_expression  ]],
 		[qw[  logical_or_element     ]],
@@ -1781,22 +1789,6 @@ __END__
 		[
 			[qw[ catch_clause          ]],
 			[qw[ catch_clause  catches ]],
-		];
-	}
-
-	sub class_body_declaration      :RULE :ACTION_PASS_THROUGH {
-		[
-			[qw[ class_member_declaration ]],
-			[qw[     instance_initializer ]],
-			[qw[       static_initializer ]],
-			[qw[  constructor_declaration ]],
-		];
-	}
-
-	sub class_body_declaration_list :RULE :ACTION_LIST {
-		[
-			[qw[ class_body_declaration                             ]],
-			[qw[ class_body_declaration class_body_declaration_list ]],
 		];
 	}
 
@@ -2139,12 +2131,6 @@ __END__
 		];
 	}
 
-	sub instance_initializer        :RULE :ACTION_DEFAULT {
-		[
-			[qw[ block ]],
-		];
-	}
-
 	sub labeled_statement           :RULE :ACTION_DEFAULT {
 		[
 			[qw[ identifier COLON statement ]],
@@ -2391,12 +2377,6 @@ __END__
 			[qw[ synchronized_statement ]],
 			[qw[        throw_statement ]],
 			[qw[          try_statement ]],
-		]
-	}
-
-	sub static_initializer          :RULE :ACTION_DEFAULT {
-		[
-			[qw[ STATIC block ]],
 		]
 	}
 
