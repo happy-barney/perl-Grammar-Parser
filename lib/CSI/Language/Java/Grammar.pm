@@ -854,6 +854,13 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  dim        ]],
 		;
 
+	rule  element_value                     =>
+		[qw[  annotation                       ]],
+		[qw[  element_value_array_initializer  ]],
+		[qw[  ternary_element                  ]],
+		[qw[  ternary_expression               ]],
+		;
+
 	rule  empty_declaration                 => dom => 'CSI::Language::Java::Empty::Declaration',
 		[qw[ SEMICOLON ]],
 		;
@@ -868,6 +875,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  BRACE_OPEN                  COMMA                          BRACE_CLOSE  ]],
 		[qw[  BRACE_OPEN                         enum_body_declarations  BRACE_CLOSE  ]],
 		[qw[  BRACE_OPEN                                                 BRACE_CLOSE  ]],
+		;
+
+	rule  enum_body_declarations            =>
+		[qw[  SEMICOLON  class_body_declarations  ]],
+		[qw[  SEMICOLON                           ]],
 		;
 
 	rule  enum_constant                     => dom => 'CSI::Language::Java::Enum::Constant',
@@ -1481,6 +1493,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  CMP_LESS_THAN_OR_EQUAL     ]],
 		[qw[  CMP_GREATER_THAN           ]],
 		[qw[  CMP_GREATER_THAN_OR_EQUAL  ]],
+		;
+
+	rule  single_element_annotation         =>
+		[qw[  ANNOTATION  reference  PAREN_OPEN  element_value  PAREN_CLOSE  ]],
 		;
 
 	rule  statement_expression              =>
