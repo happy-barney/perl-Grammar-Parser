@@ -1884,6 +1884,14 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  var        ]],
 		;
 
+	rule  while_statement                   => dom => 'CSI::Language::Java::Statement::While',
+		[qw[  while  condition_clause  statement  ]],
+		;
+
+	rule  while_statement_no_short_if       => dom => 'CSI::Language::Java::Statement::While',
+		[qw[  while  condition_clause  statement_no_short_if  ]],
+		;
+
 	1;
 };
 
@@ -2579,18 +2587,6 @@ __END__
 		[
 			[qw[ variable_declarator                                ]],
 			[qw[ variable_declarator COMMA variable_declarator_list ]],
-		]
-	}
-
-	sub while_statement             :RULE :ACTION_DEFAULT {
-		[
-			[qw[ WHILE PAREN_OPEN expression PAREN_CLOSE statement ]],
-		]
-	}
-
-	sub while_statement_no_short_if :RULE :ACTION_DEFAULT {
-		[
-			[qw[ WHILE PAREN_OPEN expression PAREN_CLOSE statement_no_short_if ]],
 		]
 	}
 
