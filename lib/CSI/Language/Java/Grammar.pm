@@ -805,6 +805,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  modular_compilation_unit   ]],
 		;
 
+	rule  condition_clause                  => dom => '::Clause::Condition',
+		[qw[  PAREN_OPEN  expression  PAREN_CLOSE  ]],
+		;
+
 	rule  constant_expression               => dom => '::Expression::Constant',
 		[qw[  expression  ]],
 		;
@@ -884,7 +888,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  do_statement                      => dom => '::Statement::Do',
-		[qw[  do  statement  while  PAREN_OPEN  expression  PAREN_CLOSE  SEMICOLON  ]],
+		[qw[  do  statement  while  condition_clause  SEMICOLON  ]],
 		;
 
 	rule  element_value                     =>
@@ -1050,6 +1054,19 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  identifier                        => dom => '::Identifier',
 		[qw[  allowed_identifier  ]],
+		;
+
+	rule  if_prologue                       =>
+		[qw[  if  condition_clause  ]],
+		;
+
+	rule  if_statement                      => dom => '::Statement::If',
+		[qw[  if_prologue  statement_no_short_if  else  statement  ]],
+		[qw[  if_prologue  statement                               ]],
+		;
+
+	rule  if_statement_no_short_if          => dom => '::Statement::If',
+		[qw[  if_prologue  statement_no_short_if  else  statement_no_short_if  ]],
 		;
 
 	rule  import_declaration                => dom => '::Import::Declaration',
@@ -1574,6 +1591,14 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  statement_expression              =>
 		[qw[  instance_creation_expression        ]],
 		[qw[  expression                          ]],
+		;
+
+	rule  statement_no_short_if             =>
+		[qw[  for_statement_no_short_if       ]],
+		[qw[  if_statement_no_short_if        ]],
+		[qw[  labeled_statement_no_short_if   ]],
+		[qw[  statement_without_substatement  ]],
+		[qw[  while_statement_no_short_if     ]],
 		;
 
 	rule  statement_without_substatement    =>
