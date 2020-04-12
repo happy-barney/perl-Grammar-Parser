@@ -1196,6 +1196,14 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  allowed_identifier  ]],
 		;
 
+	rule  labeled_statement                 => dom => 'CSI::Language::Java::Statement::Labeled',
+		[qw[  label_name  COLON  statement  ]],
+		;
+
+	rule  labeled_statement_no_short_if     => dom => 'CSI::Language::Java::Statement::Labeled',
+		[qw[  label_name  COLON  statement_no_short_if  ]],
+		;
+
 	rule  lambda_body                       =>
 		[qw[  statement_expression  ]],
 		[qw[  block                 ]],
@@ -2255,18 +2263,6 @@ __END__
 	sub if_then_statement           :RULE :ACTION_DEFAULT {
 		[
 			[qw[ IF PAREN_OPEN expression PAREN_CLOSE statement ]],
-		];
-	}
-
-	sub labeled_statement           :RULE :ACTION_DEFAULT {
-		[
-			[qw[ identifier COLON statement ]],
-		];
-	}
-
-	sub labeled_statement_no_short_if:RULE :ACTION_DEFAULT {
-		[
-			[qw[ identifier COLON statement_no_short_if ]],
 		];
 	}
 
