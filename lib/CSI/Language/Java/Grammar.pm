@@ -809,6 +809,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  PAREN_OPEN  expression  PAREN_CLOSE  ]],
 		;
 
+	rule  constant_declaration              => dom => '::Constant::Declaration' =>
+		[qw[  constant_modifiers  data_type  variable_declarators  SEMICOLON  ]],
+		[qw[                      data_type  variable_declarators  SEMICOLON  ]],
+		;
+
 	rule  constant_expression               => dom => '::Expression::Constant',
 		[qw[  expression  ]],
 		;
@@ -2104,13 +2109,6 @@ __END__
 			[qw[ class_or_interface_type DOT annotation_list type_identifier                   ]],
 			[qw[ class_or_interface_type DOT                 type_identifier type_arguments    ]],
 			[qw[ class_or_interface_type DOT                 type_identifier                   ]],
-		];
-	}
-
-	sub constant_declaration        :RULE :ACTION_DEFAULT {
-		[
-			[qw[   constant_modifier_list  unann_type variable_declarator_list SEMICOLON ]],
-			[qw[                           unann_type variable_declarator_list SEMICOLON ]],
 		];
 	}
 
