@@ -10,7 +10,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'field_declaration';
 
-plan tests => 3;
+plan tests => 4;
 
 test_rule "uninitialized field" => (
 	data => 'private static final int field;',
@@ -19,8 +19,10 @@ test_rule "uninitialized field" => (
 		expect_modifier_static,
 		expect_modifier_final,
 		expect_type_int,
-		expect_element ('::Field::Name' => (
-			expect_identifier ('field'),
+		expect_element ('::Variable::Declarator' => (
+			expect_element ('::Variable::ID' => (
+				expect_variable_name ('field'),
+			)),
 		)),
 		expect_token_semicolon,
 	)),
@@ -33,11 +35,32 @@ test_rule "initialized field" => (
 		expect_modifier_static,
 		expect_modifier_final,
 		expect_type_string,
-		expect_element ('::Field::Name' => (
-			expect_identifier ('field'),
+		expect_element ('::Variable::Declarator' => (
+			expect_element ('::Variable::ID' => (
+				expect_variable_name ('field'),
+			)),
+			expect_token ('::Operator::Assign' => '='),
+			expect_literal_string ('foo'),
 		)),
-		expect_token ('::Operator::Assign' => '='),
-		expect_literal_string ('foo'),
+		expect_token_semicolon,
+	)),
+);
+
+test_rule "multiple fields field" => (
+	data => 'String foo, bar;',
+	expect => expect_element ('::Field::Declaration' => (
+		expect_type_string,
+		expect_element ('::Variable::Declarator' => (
+			expect_element ('::Variable::ID' => (
+				expect_variable_name ('foo'),
+			)),
+		)),
+		expect_token_comma,
+		expect_element ('::Variable::Declarator' => (
+			expect_element ('::Variable::ID' => (
+				expect_variable_name ('bar'),
+			)),
+		)),
 		expect_token_semicolon,
 	)),
 );
