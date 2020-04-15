@@ -10,7 +10,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expression';
 
-plan tests => 25;
+plan tests => 26;
 
 test_rule "primary expression / literal / null" => (
 	data => 'null',
@@ -249,6 +249,30 @@ test_rule "lambda expression" => (
 			parameters => expect_lambda_parameters,
 			expect_block,
 		),
+	],
+);
+
+test_rule "ternary expression" => (
+	data => 'foo == null ? null : foo.method()',
+	expect => [
+		expect_element ('::Expression::Ternary' => (
+			expect_element ('::Expression::Equality' => (
+				expect_reference ('foo'),
+				expect_operator_equality,
+				expect_literal_null,
+			)),
+			expect_token_question_mark,
+			expect_literal_null,
+			expect_token_colon,
+			expect_element ('::Method::Invocation' => (
+				expect_element ('::Method::Invocant' => (
+					expect_reference (qw[ foo ]),
+				)),
+				expect_token_dot,
+				expect_method_name ('method'),
+				expect_arguments,
+			)),
+		)),
 	],
 );
 
