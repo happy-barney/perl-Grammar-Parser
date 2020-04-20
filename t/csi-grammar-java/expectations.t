@@ -989,14 +989,12 @@ subtest "expect_package_declaration"    => sub {
 };
 
 subtest "expect_type_class"             => sub {
-	#plan tests => 3;
+	plan tests => 1;
 
 	is "expect_type_class / short type name" =>
 		expect => expect_type_class ([qw[ Map ]]),
 		got    => build_csi_element ('::Type::Class' => (
-			build_csi_element ('::Reference' => (
-				build_csi_token ('::Identifier' => 'Map'),
-			)),
+			build_csi_token ('::Identifier' => 'Map'),
 		)),
 		;
 
