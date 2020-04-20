@@ -399,15 +399,82 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  single_element_annotation  ]],
 		;
 
+	rule  annotation_element_modifier       => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation  ]],
+		[qw[  public      ]],
+		[qw[  abstract    ]],
+		;
+
+	rule  annotation_element_modifiers      =>
+		[qw[  annotation_element_modifier  annotation_element_modifiers  ]],
+		[qw[  annotation_element_modifier                                ]],
+		;
+
 	rule  annotations                       =>
 		[qw[  annotation  annotations  ]],
 		[qw[  annotation               ]],
+		;
+
+	rule  class_modifier                    => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation  ]],
+		[qw[  private     ]],
+		[qw[  protected   ]],
+		[qw[  public      ]],
+		[qw[  abstract    ]],
+		[qw[  final       ]],
+		[qw[  static      ]],
+		[qw[  strictfp    ]],
+		;
+
+	rule  class_modifiers                   =>
+		[qw[  class_modifier  class_modifiers  ]],
+		[qw[  class_modifier                   ]],
 		;
 
 	rule  compilation_unit                  =>
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-7.html#jls-CompilationUnit
 		[qw[  ordinary_compilation_unit  ]],
 		[qw[  modular_compilation_unit   ]],
+		;
+
+	rule  constant_modifier                 => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation  ]],
+		[qw[  public      ]],
+		[qw[  final       ]],
+		[qw[  static      ]],
+		;
+
+	rule  constant_modifiers                =>
+		[qw[  constant_modifier  constant_modifiers  ]],
+		[qw[  constant_modifier                      ]],
+		;
+
+	rule  constructor_modifier              => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation  ]],
+		[qw[  private     ]],
+		[qw[  protected   ]],
+		[qw[  public      ]],
+		;
+
+	rule  constructor_modifiers             =>
+		[qw[  constructor_modifier  constructor_modifiers  ]],
+		[qw[  constructor_modifier                         ]],
+		;
+
+	rule  field_modifier                    => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation  ]],
+		[qw[  private     ]],
+		[qw[  protected   ]],
+		[qw[  public      ]],
+		[qw[  final       ]],
+		[qw[  static      ]],
+		[qw[  transient   ]],
+		[qw[  volatile    ]],
+		;
+
+	rule  field_modifiers                   =>
+		[qw[  field_modifier  field_modifiers  ]],
+		[qw[  field_modifier                   ]],
 		;
 
 	rule  identifier                        => dom => 'CSI::Language::Java::Identifier',
@@ -429,6 +496,36 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  import_type                       => dom => 'CSI::Language::Java::Token::Import::Type',
 		[qw[  TOKEN_ASTERISK  ]],
+		;
+
+	rule  interface_method_modifier         => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation  ]],
+		[qw[  public      ]],
+		[qw[  private     ]],
+		[qw[  abstract    ]],
+		[qw[  default     ]],
+		[qw[  static      ]],
+		[qw[  strictfp    ]],
+		;
+
+	rule  interface_method_modifiers        =>
+		[qw[  interface_method_modifier                              ]],
+		[qw[  interface_method_modifier  interface_method_modifiers  ]],
+		;
+
+	rule  interface_modifier                => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation ]],
+		[qw[  public     ]],
+		[qw[  protected  ]],
+		[qw[  private    ]],
+		[qw[  abstract   ]],
+		[qw[  static     ]],
+		[qw[  strictfp   ]],
+		;
+
+	rule  interface_modifiers               =>
+		[qw[  interface_modifier  interface_modifiers  ]],
+		[qw[  interface_modifier                       ]],
 		;
 
 	rule  label_name                        => dom => 'CSI::Language::Java::Label::Name',
@@ -473,6 +570,24 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  ANNOTATION  type_reference  ]],
 		;
 
+	rule  method_modifier                   => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation    ]],
+		[qw[  private       ]],
+		[qw[  protected     ]],
+		[qw[  public        ]],
+		[qw[  abstract      ]],
+		[qw[  final         ]],
+		[qw[  native        ]],
+		[qw[  static        ]],
+		[qw[  strictfp      ]],
+		[qw[  synchronized  ]],
+		;
+
+	rule  method_modifiers                  =>
+		[qw[  method_modifier  method_modifiers  ]],
+		[qw[  method_modifier                    ]],
+		;
+
 	rule  ordinary_compilation_unit         =>
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-7.html#jls-OrdinaryCompilationUnit
 		[qw[  package_declaration  import_declarations  type_declarations  ]],
@@ -489,7 +604,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[                     package  package_name  SEMICOLON  ]],
 		;
 
-	rule  package_modifier                  =>
+	rule  package_modifier                  => dom => 'CSI::Language::Java::Modifier',
 		[qw[  annotation  ]],
 		;
 
@@ -528,6 +643,16 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  type_reference                    => dom => 'CSI::Language::Java::Reference',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-6.html#jls-TypeName
 		[qw[  qualified_type_identifier  ]],
+		;
+
+	rule  variable_modifier                 => dom => 'CSI::Language::Java::Modifier',
+		[qw[  annotation  ]],
+		[qw[  final       ]],
+		;
+
+	rule  variable_modifiers                =>
+		[qw[  variable_modifier  variable_modifiers  ]],
+		[qw[  variable_modifier                      ]],
 		;
 
 	rule  variable_name                     => dom => 'CSI::Language::Java::Variable::Name',
@@ -864,26 +989,6 @@ __END__
 		];
 	}
 
-	sub class_modifier              :RULE :ACTION_DEFAULT {
-		[
-			[qw[ annotation ]],
-			[qw[ PUBLIC     ]],
-			[qw[ PROTECTED  ]],
-			[qw[ PRIVATE    ]],
-			[qw[ ABSTRACT   ]],
-			[qw[ STATIC     ]],
-			[qw[ FINAL      ]],
-			[qw[ STRICTFP   ]],
-		];
-	}
-
-	sub class_modifier_list         :RULE :ACTION_LIST {
-		[
-			[qw[ class_modifier                     ]],
-			[qw[ class_modifier class_modifier_list ]],
-		];
-	}
-
 	sub class_or_interface_type     :RULE :ACTION_PASS_THROUGH {
 		[
 			[qw[     class_type ]],
@@ -964,22 +1069,6 @@ __END__
 		];
 	}
 
-	sub constant_modifier           :RULE :ACTION_DEFAULT {
-		[
-			[qw[ annotation ]],
-			[qw[ PUBLIC     ]],
-			[qw[ STATIC     ]],
-			[qw[ FINAL      ]],
-		];
-	}
-
-	sub constant_modifier_list      :RULE :ACTION_LIST {
-		[
-			[qw[ constant_modifier                        ]],
-			[qw[ constant_modifier constant_modifier_list ]],
-		];
-	}
-
 	sub constructor_body            :RULE :ACTION_DEFAULT {
 		[
 			[qw[ BRACE_OPEN  explicit_constructor_invocation   block_statements  BRACE_CLOSE ]],
@@ -1008,22 +1097,6 @@ __END__
 			[qw[                    simple_type_name PAREN_OPEN  receiver_parameter COMMA                          PAREN_CLOSE ]],
 			[qw[   type_parameters  simple_type_name PAREN_OPEN                                                    PAREN_CLOSE ]],
 			[qw[                    simple_type_name PAREN_OPEN                                                    PAREN_CLOSE ]],
-		];
-	}
-
-	sub constructor_modifier        :RULE :ACTION_DEFAULT {
-		[
-			[qw[ annotation ]],
-			[qw[ PUBLIC ]],
-			[qw[ PROTECTED ]],
-			[qw[ PRIVATE ]],
-		];
-	}
-
-	sub constructor_modifier_list   :RULE :ACTION_LIST {
-		[
-			[qw[ constructor_modifier                           ]],
-			[qw[ constructor_modifier constructor_modifier_list ]],
 		];
 	}
 
@@ -1306,26 +1379,6 @@ __END__
 		];
 	}
 
-	sub field_modifier              :RULE :ACTION_DEFAULT {
-		[
-			[qw[ annotation ]],
-			[qw[ PUBLIC     ]],
-			[qw[ PROTECTED  ]],
-			[qw[ PRIVATE    ]],
-			[qw[ STATIC     ]],
-			[qw[ FINAL      ]],
-			[qw[ TRANSIENT  ]],
-			[qw[ VOLATILE   ]],
-		];
-	}
-
-	sub field_modifier_list         :RULE :ACTION_LIST {
-		[
-			[qw[ field_modifier                     ]],
-			[qw[ field_modifier field_modifier_list ]],
-		];
-	}
-
 	sub finally                     :RULE :ACTION_DEFAULT {
 		[
 			[qw[ FINALLY block ]],
@@ -1470,44 +1523,6 @@ __END__
 		[
 			[qw[   interface_method_modifier_list  method_header method_body ]],
 			[qw[                                   method_header method_body ]],
-		];
-	}
-
-	sub interface_method_modifier   :RULE :ACTION_DEFAULT {
-		[
-			[qw[ annotation ]],
-			[qw[ PUBLIC ]],
-			[qw[ PRIVATE ]],
-			[qw[ ABSTRACT ]],
-			[qw[ DEFAULT ]],
-			[qw[ STATIC ]],
-			[qw[ STRICTFP ]],
-		];
-	}
-
-	sub interface_method_modifier_list:RULE :ACTION_LIST {
-		[
-			[qw[ interface_method_modifier                                ]],
-			[qw[ interface_method_modifier interface_method_modifier_list ]],
-		];
-	}
-
-	sub interface_modifier          :RULE :ACTION_DEFAULT {
-		[
-			[qw[ annotation ]],
-			[qw[ PUBLIC ]],
-			[qw[ PROTECTED ]],
-			[qw[ PRIVATE ]],
-			[qw[ ABSTRACT ]],
-			[qw[ STATIC ]],
-			[qw[ STRICTFP ]],
-		];
-	}
-
-	sub interface_modifier_list     :RULE :ACTION_LIST {
-		[
-			[qw[ interface_modifier                         ]],
-			[qw[ interface_modifier interface_modifier_list ]],
 		];
 	}
 
@@ -1670,28 +1685,6 @@ __END__
 			[qw[ type_name DOT SUPER DOT                  method_name PAREN_OPEN  argument_list  PAREN_CLOSE ]],
 			[qw[ type_name DOT SUPER DOT  type_arguments  method_name PAREN_OPEN                 PAREN_CLOSE ]],
 			[qw[ type_name DOT SUPER DOT                  method_name PAREN_OPEN                 PAREN_CLOSE ]],
-		];
-	}
-
-	sub method_modifier             :RULE :ACTION_DEFAULT {
-		[
-			[qw[ annotation ]],
-			[qw[ PUBLIC ]],
-			[qw[ PROTECTED ]],
-			[qw[ PRIVATE ]],
-			[qw[ ABSTRACT ]],
-			[qw[ STATIC ]],
-			[qw[ FINAL ]],
-			[qw[ SYNCHRONIZED ]],
-			[qw[ NATIVE ]],
-			[qw[ STRICTFP ]],
-		],
-	}
-
-	sub method_modifier_list        :RULE :ACTION_LIST {
-		[
-			[qw[ method_modifier                      ]],
-			[qw[ method_modifier method_modifier_list ]],
 		];
 	}
 
@@ -2388,20 +2381,6 @@ __END__
 		[
 			[qw[ variable_initializer                                 ]],
 			[qw[ variable_initializer COMMA variable_initializer_list ]],
-		]
-	}
-
-	sub variable_modifier           :RULE :ACTION_PASS_THROUGH {
-		[
-			[qw[ annotation ]],
-			[qw[      FINAL ]],
-		]
-	}
-
-	sub variable_modifier_list      :RULE :ACTION_LIST {
-		[
-			[qw[ variable_modifier                        ]],
-			[qw[ variable_modifier variable_modifier_list ]],
 		]
 	}
 
