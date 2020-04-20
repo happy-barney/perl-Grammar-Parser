@@ -962,13 +962,17 @@ subtest "expect_package_declaration"    => sub {
 	is "expect_package_declaration / with annotations" =>
 		expect => expect_package_declaration (
 			[qw[ foo bar ]],
-			expect_annotation ([qw[ foo ]]),
+			expect_modifiers (
+				expect_annotation ([qw[ foo ]]),
+			),
 		),
 		got    => build_csi_element ('::Package::Declaration' => (
-			build_csi_element ('::Annotation' => (
-				build_csi_token ('::Token::Annotation' => '@'),
-				build_csi_element ('::Reference' => (
-					build_csi_token ('::Identifier' => 'foo'),
+			build_csi_element ('::Modifier' => (
+				build_csi_element ('::Annotation' => (
+					build_csi_token ('::Token::Annotation' => '@'),
+					build_csi_element ('::Reference' => (
+						build_csi_token ('::Identifier' => 'foo'),
+					)),
 				)),
 			)),
 			build_csi_token ('::Token::Word::Package' => 'package'),
