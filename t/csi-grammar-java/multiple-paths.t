@@ -9,7 +9,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 5;
+plan tests => 6;
 
 test_rule "block statement / cast in non-unary expression" => (
 	rule => 'block_statement',
@@ -39,6 +39,14 @@ test_rule "expression / binary and expression treated vs cast operator" => (
 	rule => 'expression',
 	data => <<'EODATA',
 (x & y) + ((x ^ y) >> 1)
+EODATA
+	expect => ignore,
+);
+
+test_rule "expression / cast lambda" => (
+	rule => 'expression',
+	data => <<'EODATA',
+(Predicate) r -> r instanceof AbstractBuild
 EODATA
 	expect => ignore,
 );
