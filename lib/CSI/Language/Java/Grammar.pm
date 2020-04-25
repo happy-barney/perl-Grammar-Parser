@@ -72,6 +72,19 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			\*\/
 		)/sx;
 
+	token ANNOTATION                        => dom => 'CSI::Language::Java::Token::Annotation'      => '@';
+	token BRACE_CLOSE                       => dom => 'CSI::Language::Java::Token::Brace::Close'    => '}';
+	token BRACE_OPEN                        => dom => 'CSI::Language::Java::Token::Brace::Open'     => '{';
+	token BRACKET_CLOSE                     => dom => 'CSI::Language::Java::Token::Bracket::Close'  => ']';
+	token BRACKET_OPEN                      => dom => 'CSI::Language::Java::Token::Bracket::Open'   => '[';
+	token COMMA                             => dom => 'CSI::Language::Java::Token::Comma'           => ',';
+	token DOUBLE_COLON                      => dom => 'CSI::Language::Java::Token::Double::Colon'   => '::';
+	token DOT                               => dom => 'CSI::Language::Java::Token::Dot'             => qr/ \. (?! [.[:digit:]] )/sx;
+	token ELIPSIS                           => dom => 'CSI::Language::Java::Token::Elipsis'         => '...';
+	token PAREN_CLOSE                       => dom => 'CSI::Language::Java::Token::Paren::Close'    => ')';
+	token PAREN_OPEN                        => dom => 'CSI::Language::Java::Token::Paren::Open'     => '(';
+	token SEMICOLON                         => dom => 'CSI::Language::Java::Token::Semicolon'       => ';';
+
 	1;
 };
 
@@ -440,46 +453,6 @@ __END__
 		qr/ (?> \b null           \b ) /sx;
 	}
 
-	sub SEMICOLON                   :TOKEN {
-		';'
-	}
-
-	sub DOT                         :TOKEN {
-		'.'
-	}
-
-	sub BRACE_OPEN                  :TOKEN {
-		'{'
-	}
-
-	sub BRACE_CLOSE                 :TOKEN {
-		'}'
-	}
-
-	sub PAREN_OPEN                  :TOKEN {
-		'('
-	}
-
-	sub PAREN_CLOSE                 :TOKEN {
-		')'
-	}
-
-	sub BRACKET_OPEN                :TOKEN {
-		'['
-	}
-
-	sub BRACKET_CLOSE               :TOKEN {
-		']'
-	}
-
-	sub COMMA                       :TOKEN {
-		','
-	}
-
-	sub AT                          :TOKEN {
-		'@'
-	}
-
 	sub TYPE_PARAMETER_LIST_OPEN    :TOKEN {
 		'<'
 	}
@@ -488,16 +461,8 @@ __END__
 		'>'
 	}
 
-	sub DOUBLE_COLON                :TOKEN {
-		'::'
-	}
-
 	sub LAMBDA                      :TOKEN {
 		'->'
-	}
-
-	sub ELIPSIS                     :TOKEN {
-		'...'
 	}
 
 	sub COLON                       :TOKEN {
