@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 3;
+plan tests => 4;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -296,6 +296,372 @@ subtest "separators"                    => sub {
 		expectation => expect_token_semicolon,
 		match       => build_csi_token ('::Token::Semicolon' => ';'),
 		;
+
+	done_testing;
+};
+
+subtest "words"                         => sub {
+	plan tests => 5;
+
+	subtest "literal / null" => sub {
+		plan tests => 1;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.10.7";
+
+		is_expectation 'expectation expect_word_null',
+			expectation => expect_word_null,
+			match       => build_csi_token ('::Token::Word::Null' => 'null'),
+			;
+
+		done_testing;
+	};
+
+	subtest "literal / boolean" => sub {
+		plan tests => 2;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.10.3";
+
+		is_expectation 'expectation expect_word_false',
+			expectation => expect_word_false,
+			match       => build_csi_token ('::Token::Word::False' => 'false'),
+			;
+
+		is_expectation 'expectation expect_word_true',
+			expectation => expect_word_true,
+			match       => build_csi_token ('::Token::Word::True' => 'true'),
+			;
+
+		done_testing;
+	};
+
+	subtest "reserved words / module declaration" => sub {
+		plan tests => 10;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.9";
+
+		is_expectation 'expectation expect_word_exports',
+			expectation => expect_word_exports,
+			match       => build_csi_token ('::Token::Word::Exports' => 'exports'),
+			;
+
+		is_expectation 'expectation expect_word_module',
+			expectation => expect_word_module,
+			match       => build_csi_token ('::Token::Word::Module' => 'module'),
+			;
+
+		is_expectation 'expectation expect_word_open',
+			expectation => expect_word_open,
+			match       => build_csi_token ('::Token::Word::Open' => 'open'),
+			;
+
+		is_expectation 'expectation expect_word_opens',
+			expectation => expect_word_opens,
+			match       => build_csi_token ('::Token::Word::Opens' => 'opens'),
+			;
+
+		is_expectation 'expectation expect_word_provides',
+			expectation => expect_word_provides,
+			match       => build_csi_token ('::Token::Word::Provides' => 'provides'),
+			;
+
+		is_expectation 'expectation expect_word_requires',
+			expectation => expect_word_requires,
+			match       => build_csi_token ('::Token::Word::Requires' => 'requires'),
+			;
+
+		is_expectation 'expectation expect_word_to',
+			expectation => expect_word_to,
+			match       => build_csi_token ('::Token::Word::To' => 'to'),
+			;
+
+		is_expectation 'expectation expect_word_transitive',
+			expectation => expect_word_transitive,
+			match       => build_csi_token ('::Token::Word::Transitive' => 'transitive'),
+			;
+
+		is_expectation 'expectation expect_word_uses',
+			expectation => expect_word_uses,
+			match       => build_csi_token ('::Token::Word::Uses' => 'uses'),
+			;
+
+		is_expectation 'expectation expect_word_with',
+			expectation => expect_word_with,
+			match       => build_csi_token ('::Token::Word::With' => 'with'),
+			;
+
+		done_testing;
+	};
+
+	subtest "identifiers with special meaning" => sub {
+		plan tests => 1;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.9";
+
+		is_expectation 'expectation expect_word_var',
+			expectation => expect_word_var,
+			match       => build_csi_token ('::Token::Word::Var' => 'var'),
+			;
+
+		done_testing;
+	};
+
+	subtest "keywords" => sub {
+		plan tests => 51;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.9";
+
+		is_expectation 'expectation expect_word_abstract',
+			expectation => expect_word_abstract,
+			match       => build_csi_token ('::Token::Word::Abstract' => 'abstract'),
+			;
+
+		is_expectation 'expectation expect_word_assert',
+			expectation => expect_word_assert,
+			match       => build_csi_token ('::Token::Word::Assert' => 'assert'),
+			;
+
+		is_expectation 'expectation expect_word_boolean',
+			expectation => expect_word_boolean,
+			match       => build_csi_token ('::Token::Word::Boolean' => 'boolean'),
+			;
+
+		is_expectation 'expectation expect_word_break',
+			expectation => expect_word_break,
+			match       => build_csi_token ('::Token::Word::Break' => 'break'),
+			;
+
+		is_expectation 'expectation expect_word_byte',
+			expectation => expect_word_byte,
+			match       => build_csi_token ('::Token::Word::Byte' => 'byte'),
+			;
+
+		is_expectation 'expectation expect_word_case',
+			expectation => expect_word_case,
+			match       => build_csi_token ('::Token::Word::Case' => 'case'),
+			;
+
+		is_expectation 'expectation expect_word_catch',
+			expectation => expect_word_catch,
+			match       => build_csi_token ('::Token::Word::Catch' => 'catch'),
+			;
+
+		is_expectation 'expectation expect_word_char',
+			expectation => expect_word_char,
+			match       => build_csi_token ('::Token::Word::Char' => 'char'),
+			;
+
+		is_expectation 'expectation expect_word_class',
+			expectation => expect_word_class,
+			match       => build_csi_token ('::Token::Word::Class' => 'class'),
+			;
+
+		is_expectation 'expectation expect_word_const',
+			expectation => expect_word_const,
+			match       => build_csi_token ('::Token::Word::Const' => 'const'),
+		;
+
+		is_expectation 'expectation expect_word_continue',
+			expectation => expect_word_continue,
+			match       => build_csi_token ('::Token::Word::Continue' => 'continue'),
+			;
+
+		is_expectation 'expectation expect_word_default',
+			expectation => expect_word_default,
+			match       => build_csi_token ('::Token::Word::Default' => 'default'),
+			;
+
+		is_expectation 'expectation expect_word_do',
+			expectation => expect_word_do,
+			match       => build_csi_token ('::Token::Word::Do' => 'do'),
+			;
+
+		is_expectation 'expectation expect_word_double',
+			expectation => expect_word_double,
+			match       => build_csi_token ('::Token::Word::Double' => 'double'),
+			;
+
+		is_expectation 'expectation expect_word_else',
+			expectation => expect_word_else,
+			match       => build_csi_token ('::Token::Word::Else' => 'else'),
+			;
+
+		is_expectation 'expectation expect_word_enum',
+			expectation => expect_word_enum,
+			match       => build_csi_token ('::Token::Word::Enum' => 'enum'),
+			;
+
+		is_expectation 'expectation expect_word_extends',
+			expectation => expect_word_extends,
+			match       => build_csi_token ('::Token::Word::Extends' => 'extends'),
+			;
+
+		is_expectation 'expectation expect_word_final',
+			expectation => expect_word_final,
+			match       => build_csi_token ('::Token::Word::Final' => 'final'),
+			;
+
+		is_expectation 'expectation expect_word_finally',
+			expectation => expect_word_finally,
+			match       => build_csi_token ('::Token::Word::Finally' => 'finally'),
+			;
+
+		is_expectation 'expectation expect_word_float',
+			expectation => expect_word_float,
+			match       => build_csi_token ('::Token::Word::Float' => 'float'),
+			;
+
+		is_expectation 'expectation expect_word_for',
+			expectation => expect_word_for,
+			match       => build_csi_token ('::Token::Word::For' => 'for'),
+			;
+
+		is_expectation 'expectation expect_word_if',
+			expectation => expect_word_if,
+			match       => build_csi_token ('::Token::Word::If' => 'if'),
+			;
+
+		is_expectation 'expectation expect_word_goto',
+			expectation => expect_word_goto,
+			match       => build_csi_token ('::Token::Word::Goto' => 'goto'),
+			;
+
+		is_expectation 'expectation expect_word_implements',
+			expectation => expect_word_implements,
+			match       => build_csi_token ('::Token::Word::Implements' => 'implements'),
+			;
+
+		is_expectation 'expectation expect_word_import',
+			expectation => expect_word_import,
+			match       => build_csi_token ('::Token::Word::Import' => 'import'),
+			;
+
+		is_expectation 'expectation expect_word_instanceof',
+			expectation => expect_word_instanceof,
+			match       => build_csi_token ('::Token::Word::Instanceof' => 'instanceof'),
+			;
+
+		is_expectation 'expectation expect_word_int',
+			expectation => expect_word_int,
+			match       => build_csi_token ('::Token::Word::Int' => 'int'),
+			;
+
+		is_expectation 'expectation expect_word_interface',
+			expectation => expect_word_interface,
+			match       => build_csi_token ('::Token::Word::Interface' => 'interface'),
+			;
+
+		is_expectation 'expectation expect_word_long',
+			expectation => expect_word_long,
+			match       => build_csi_token ('::Token::Word::Long' => 'long'),
+			;
+
+		is_expectation 'expectation expect_word_native',
+			expectation => expect_word_native,
+			match       => build_csi_token ('::Token::Word::Native' => 'native'),
+			;
+
+		is_expectation 'expectation expect_word_new',
+			expectation => expect_word_new,
+			match       => build_csi_token ('::Token::Word::New' => 'new'),
+			;
+
+		is_expectation 'expectation expect_word_package',
+			expectation => expect_word_package,
+			match       => build_csi_token ('::Token::Word::Package' => 'package'),
+			;
+
+		is_expectation 'expectation expect_word_private',
+			expectation => expect_word_private,
+			match       => build_csi_token ('::Token::Word::Private' => 'private'),
+			;
+
+		is_expectation 'expectation expect_word_protected',
+			expectation => expect_word_protected,
+			match       => build_csi_token ('::Token::Word::Protected' => 'protected'),
+			;
+
+		is_expectation 'expectation expect_word_public',
+			expectation => expect_word_public,
+			match       => build_csi_token ('::Token::Word::Public' => 'public'),
+			;
+
+		is_expectation 'expectation expect_word_return',
+			expectation => expect_word_return,
+			match       => build_csi_token ('::Token::Word::Return' => 'return'),
+			;
+
+		is_expectation 'expectation expect_word_short',
+			expectation => expect_word_short,
+			match       => build_csi_token ('::Token::Word::Short' => 'short'),
+			;
+
+		is_expectation 'expectation expect_word_static',
+			expectation => expect_word_static,
+			match       => build_csi_token ('::Token::Word::Static' => 'static'),
+			;
+
+		is_expectation 'expectation expect_word_strictfp',
+			expectation => expect_word_strictfp,
+			match       => build_csi_token ('::Token::Word::Strictfp' => 'strictfp'),
+			;
+
+		is_expectation 'expectation expect_word_super',
+			expectation => expect_word_super,
+			match       => build_csi_token ('::Token::Word::Super' => 'super'),
+			;
+
+		is_expectation 'expectation expect_word_switch',
+			expectation => expect_word_switch,
+			match       => build_csi_token ('::Token::Word::Switch' => 'switch'),
+			;
+
+		is_expectation 'expectation expect_word_synchronized',
+			expectation => expect_word_synchronized,
+			match       => build_csi_token ('::Token::Word::Synchronized' => 'synchronized'),
+			;
+
+		is_expectation 'expectation expect_word_this',
+			expectation => expect_word_this,
+			match       => build_csi_token ('::Token::Word::This' => 'this'),
+			;
+
+		is_expectation 'expectation expect_word_throw',
+			expectation => expect_word_throw,
+			match       => build_csi_token ('::Token::Word::Throw' => 'throw'),
+			;
+
+		is_expectation 'expectation expect_word_throws',
+			expectation => expect_word_throws,
+			match       => build_csi_token ('::Token::Word::Throws' => 'throws'),
+			;
+
+		is_expectation 'expectation expect_word_transient',
+			expectation => expect_word_transient,
+			match       => build_csi_token ('::Token::Word::Transient' => 'transient'),
+			;
+
+		is_expectation 'expectation expect_word_try',
+			expectation => expect_word_try,
+			match       => build_csi_token ('::Token::Word::Try' => 'try'),
+			;
+
+		is_expectation 'expectation expect_word_void',
+			expectation => expect_word_void,
+			match       => build_csi_token ('::Token::Word::Void' => 'void'),
+			;
+
+		is_expectation 'expectation expect_word_volatile',
+			expectation => expect_word_volatile,
+			match       => build_csi_token ('::Token::Word::Volatile' => 'volatile'),
+			;
+
+		is_expectation 'expectation expect_word_while',
+			expectation => expect_word_while,
+			match       => build_csi_token ('::Token::Word::While' => 'while'),
+			;
+
+		is_expectation 'expectation expect_word_underscore',
+			expectation => expect_word_underscore,
+			match       => build_csi_token ('::Token::Word::_' => '_'),
+			;
+
+		done_testing;
+	};
 
 	done_testing;
 };
