@@ -9,7 +9,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 4;
+plan tests => 5;
 
 subtest "insignificant tokens"          => sub {
 	plan tests => 4;
@@ -275,7 +275,7 @@ subtest "operators"                     => sub {
 	done_testing;
 };
 
-subtest "separators"                => sub {
+subtest "separators"                    => sub {
 	plan tests => 12;
 	note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.11";
 
@@ -338,6 +338,116 @@ subtest "separators"                => sub {
 		data => ';',
 		expect_token => 'SEMICOLON',
 		;
+
+	done_testing;
+};
+
+subtest "words"                         => sub {
+	plan tests => 5;
+
+	subtest "literal / null" => sub {
+		plan tests => 1;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.10.7";
+
+		test_token "null" => expect_token => 'NULL';
+
+		done_testing;
+	};
+
+	subtest "literal / boolean" => sub {
+		plan tests => 2;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.10.3";
+
+		test_token "false" => expect_token => 'FALSE';
+		test_token "true"  => expect_token => 'TRUE';
+
+		done_testing;
+	};
+
+	subtest "reserved words / module declaration" => sub {
+		plan tests => 10;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.9";
+
+		test_token "exports"    => expect_token => 'EXPORTS';
+		test_token "module"     => expect_token => 'MODULE';
+		test_token "open"       => expect_token => 'OPEN';
+		test_token "opens"      => expect_token => 'OPENS';
+		test_token "provides"   => expect_token => 'PROVIDES';
+		test_token "requires"   => expect_token => 'REQUIRES';
+		test_token "to"         => expect_token => 'TO';
+		test_token "transitive" => expect_token => 'TRANSITIVE';
+		test_token "uses"       => expect_token => 'USES';
+		test_token "with"       => expect_token => 'WITH';
+
+		done_testing;
+	};
+
+	subtest "identifiers with special meaning" => sub {
+		plan tests => 1;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.9";
+
+		test_token "var" => expect_token => 'VAR';
+
+		done_testing;
+	};
+
+	subtest "keywords" => sub {
+		plan tests => 51;
+		note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.9";
+
+		test_token "abstract"     => expect_token => 'ABSTRACT';
+		test_token "assert"       => expect_token => 'ASSERT';
+		test_token "boolean"      => expect_token => 'BOOLEAN';
+		test_token "break"        => expect_token => 'BREAK';
+		test_token "byte"         => expect_token => 'BYTE';
+		test_token "case"         => expect_token => 'CASE';
+		test_token "catch"        => expect_token => 'CATCH';
+		test_token "char"         => expect_token => 'CHAR';
+		test_token "class"        => expect_token => 'CLASS';
+		test_token "const"        => expect_token => 'CONST';
+		test_token "continue"     => expect_token => 'CONTINUE';
+		test_token "default"      => expect_token => 'DEFAULT';
+		test_token "do"           => expect_token => 'DO';
+		test_token "double"       => expect_token => 'DOUBLE';
+		test_token "else"         => expect_token => 'ELSE';
+		test_token "enum"         => expect_token => 'ENUM';
+		test_token "extends"      => expect_token => 'EXTENDS';
+		test_token "final"        => expect_token => 'FINAL';
+		test_token "finally"      => expect_token => 'FINALLY';
+		test_token "float"        => expect_token => 'FLOAT';
+		test_token "for"          => expect_token => 'FOR';
+		test_token "if"           => expect_token => 'IF';
+		test_token "goto"         => expect_token => 'GOTO';
+		test_token "implements"   => expect_token => 'IMPLEMENTS';
+		test_token "import"       => expect_token => 'IMPORT';
+		test_token "instanceof"   => expect_token => 'INSTANCEOF';
+		test_token "int"          => expect_token => 'INT';
+		test_token "interface"    => expect_token => 'INTERFACE';
+		test_token "long"         => expect_token => 'LONG';
+		test_token "native"       => expect_token => 'NATIVE';
+		test_token "new"          => expect_token => 'NEW';
+		test_token "package"      => expect_token => 'PACKAGE';
+		test_token "private"      => expect_token => 'PRIVATE';
+		test_token "protected"    => expect_token => 'PROTECTED';
+		test_token "public"       => expect_token => 'PUBLIC';
+		test_token "return"       => expect_token => 'RETURN';
+		test_token "short"        => expect_token => 'SHORT';
+		test_token "static"       => expect_token => 'STATIC';
+		test_token "strictfp"     => expect_token => 'STRICTFP';
+		test_token "super"        => expect_token => 'SUPER';
+		test_token "switch"       => expect_token => 'SWITCH';
+		test_token "synchronized" => expect_token => 'SYNCHRONIZED';
+		test_token "this"         => expect_token => 'THIS';
+		test_token "throw"        => expect_token => 'THROW';
+		test_token "throws"       => expect_token => 'THROWS';
+		test_token "transient"    => expect_token => 'TRANSIENT';
+		test_token "try"          => expect_token => 'TRY';
+		test_token "void"         => expect_token => 'VOID';
+		test_token "volatile"     => expect_token => 'VOLATILE';
+		test_token "while"        => expect_token => 'WHILE';
+		test_token "underscore"   => data => '_', expect_token => '_';
+		done_testing;
+	};
 
 	done_testing;
 };
