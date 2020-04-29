@@ -10,7 +10,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expression';
 
-plan tests => 18;
+plan tests => 19;
 
 test_rule "primary expression / literal / null" => (
 	data => 'null',
@@ -168,6 +168,17 @@ test_rule "expression / binary and expression" => (
 		expect_element ('::Expression::Binary::And' => (
 			expect_reference ('foo'),
 			expect_operator_binary_and,
+			expect_reference ('bar'),
+		)),
+	],
+);
+
+test_rule "expression / binary xor expression" => (
+	data => 'foo ^ bar',
+	expect => [
+		expect_element ('::Expression::Binary::Xor' => (
+			expect_reference ('foo'),
+			expect_operator_binary_xor,
 			expect_reference ('bar'),
 		)),
 	],
