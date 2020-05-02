@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 4;
+plan tests => 5;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -233,7 +233,7 @@ subtest "operators"                     => sub {
 	done_testing;
 };
 
-subtest "separators"                    => sub {
+subtest "separators"                => sub {
 	plan tests => 12;
 	note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.11";
 
@@ -300,7 +300,7 @@ subtest "separators"                    => sub {
 	done_testing;
 };
 
-subtest "words"                         => sub {
+subtest "words"                     => sub {
 	plan tests => 5;
 
 	subtest "literal / null" => sub {
@@ -662,6 +662,71 @@ subtest "words"                         => sub {
 
 		done_testing;
 	};
+
+	done_testing;
+};
+
+subtest "literals"                  => sub {
+	plan tests => 10;
+
+	is_expectation "expect_literal_false" =>
+		expectation => expect_literal_false,
+		match       => build_csi_element (
+			'::Literal::Boolean::False',
+			build_csi_token ('::Token::Word::False' => 'false'),
+		),
+		;
+
+	is_expectation "expect_literal_true" =>
+		expectation => expect_literal_true,
+		match       => build_csi_element (
+			'::Literal::Boolean::True',
+			build_csi_token ('::Token::Word::True' => 'true'),
+		),
+		;
+
+	is_expectation "expect_literal_null" =>
+		expectation => expect_literal_null,
+		match       => build_csi_element (
+			'::Literal::Null',
+			build_csi_token ('::Token::Word::Null' => 'null'),
+		),
+		;
+
+	is_expectation "expect_literal_string" =>
+		expectation => expect_literal_string ('foo'),
+		match       => build_csi_token ('LITERAL_STRING' => 'foo'),
+		;
+
+	is_expectation "expect_literal_character" =>
+		expectation => expect_literal_character ('f'),
+		match       => build_csi_token ('LITERAL_CHARACTER' => 'f'),
+		;
+
+	is_expectation "expect_literal_integral_binary" =>
+		expectation => expect_literal_integral_binary ('0b0'),
+		match       => build_csi_token ('LITERAL_INTEGRAL_BINARY' => '0b0'),
+		;
+
+	is_expectation "expect_literal_integral_decimal" =>
+		expectation => expect_literal_integral_decimal ('0'),
+		match       => build_csi_token ('LITERAL_INTEGRAL_DECIMAL' => '0'),
+		;
+
+	is_expectation "expect_literal_integral_hex" =>
+		expectation => expect_literal_integral_hex ('0x0'),
+		match       => build_csi_token ('LITERAL_INTEGRAL_HEX' => '0x0'),
+		;
+
+	is_expectation "expect_literal_integral_octal" =>
+		expectation => expect_literal_integral_octal ('06'),
+		match       => build_csi_token ('LITERAL_INTEGRAL_OCTAL' => '06'),
+		;
+
+	is_expectation "expect_literal_floating_decimal" =>
+		expectation => expect_literal_floating_decimal ('.0'),
+		match       => build_csi_token ('LITERAL_FLOAT_DECIMAL' => '.0'),
+		;
 
 	done_testing;
 };
