@@ -9,7 +9,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 4;
+plan tests => 5;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -687,6 +687,88 @@ subtest "words"                         => sub {
 
 		done_testing;
 	};
+
+	done_testing;
+};
+
+subtest "literals"          => sub {
+	plan tests => 10;
+
+	is "expect_literal_false" =>
+		expect => expect_literal_false,
+		got    => {
+			'CSI::Language::Java::Literal::Boolean::False' => [
+				{ 'CSI::Language::Java::Token::Word::False' => 'false' },
+			],
+		},
+		;
+
+	is "expect_literal_true" =>
+		expect => expect_literal_true,
+		got    => {
+			'CSI::Language::Java::Literal::Boolean::True' => [
+				{ 'CSI::Language::Java::Token::Word::True' => 'true' },
+			],
+		},
+		;
+
+	is "expect_literal_null" =>
+		expect => expect_literal_null,
+		got    => {
+			'CSI::Language::Java::Literal::Null' => [
+				{ 'CSI::Language::Java::Token::Word::Null' => 'null' },
+			],
+		},
+		;
+
+	is "expect_literal_string" =>
+		expect => expect_literal_string ('foo'),
+		got    => {
+			'LITERAL_STRING' => "foo",
+		},
+		;
+
+	is "expect_literal_character" =>
+		expect => expect_literal_character ('f'),
+		got    => {
+			'LITERAL_CHARACTER' => "f",
+		},
+		;
+
+	it "expect_literal_integral_binary" =>
+		expect => expect_literal_integral_binary ('0b0'),
+		got => {
+			'LITERAL_INTEGRAL_BINARY' => '0b0',
+		},
+		;
+
+	is "expect_literal_integral_decimal" =>
+		expect => expect_literal_integral_decimal ('0'),
+		got    => {
+			'LITERAL_INTEGRAL_DECIMAL' => "0",
+		},
+		;
+
+	it "expect_literal_integral_hex" =>
+		expect => expect_literal_integral_hex ('0x0'),
+		got => {
+			'LITERAL_INTEGRAL_HEX' => '0x0',
+		},
+		;
+
+	it "expect_literal_integral_octal" =>
+		expect => expect_literal_integral_octal ('06'),
+		got => {
+			'LITERAL_INTEGRAL_OCTAL' => '06',
+		},
+		;
+
+	it "expect_literal_floating_decimal" =>
+		expect => expect_literal_floating_decimal ('.0'),
+		got => {
+			'LITERAL_FLOAT_DECIMAL' => '.0',
+		},
+		;
 
 	done_testing;
 };
