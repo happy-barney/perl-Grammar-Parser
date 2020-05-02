@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 6;
+plan tests => 7;
 
 subtest "identifier"                => sub {
 	plan tests => 4;
@@ -60,6 +60,357 @@ subtest "insignificant tokens"      => sub {
 		with_data => "/** /*\n */",
 		expect_token => 'comment_javadoc',
 	);
+
+	done_testing;
+};
+
+subtest "literals"                  => sub {
+	plan tests => 6;
+
+	note 'https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-15.8.1';
+
+	test_token "literals / lexical / null" =>
+		with_data => 'null',
+		expect_token => 'NULL',
+		;
+
+	subtest "literals / lexical / boolean" => sub {
+		plan tests => 2;
+
+		test_token "literals / lexical / boolean / true" =>
+			with_data => 'true',
+			expect_token => 'TRUE',
+			;
+
+		test_token "literals / lexical / boolean / false" =>
+			with_data => 'false',
+			expect_token => 'FALSE',
+			;
+
+		done_testing;
+	};
+
+	subtest "literals / lexical / character" => sub {
+		plan tests => 8;
+
+		test_token 'literals / lexical / character / character' =>
+			with_data => q/'c'/,
+			expect_token => 'LITERAL_CHARACTER',
+			;
+
+		test_token 'literals / lexical / character / escape \\b' =>
+			with_data => q/'\b'/,
+			expect_token => 'LITERAL_CHARACTER',
+			;
+
+		test_token 'literals / lexical / character / escape \\t' =>
+			with_data => q/'\t'/,
+			expect_token => 'LITERAL_CHARACTER',
+			;
+
+		test_token 'literals / lexical / character / escape \\r' =>
+			with_data => q/'\r'/,
+			expect_token => 'LITERAL_CHARACTER',
+			;
+
+		test_token 'literals / lexical / character / escape \\n' =>
+			with_data => q/'\n'/,
+			expect_token => 'LITERAL_CHARACTER',
+			;
+
+		test_token 'literals / lexical / character / escape \\\'' =>
+			with_data => q/'\''/,
+			expect_token => 'LITERAL_CHARACTER',
+			;
+
+		test_token 'literals / lexical / character / escape \\"' =>
+			with_data => q/'\"'/,
+			expect_token => 'LITERAL_CHARACTER',
+			;
+
+		test_token 'literals / lexical / character / unicode escape' =>
+			with_data => q/'\u20ac'/,
+			expect_token => 'LITERAL_CHARACTER',
+			;
+
+		done_testing;
+	};
+
+	subtest "literals / lexical / string" => sub {
+		plan tests => 9;
+
+		test_token 'literals / lexical / string / empty' =>
+			with_data => q/""/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / string / some string' =>
+			with_data => q/"some string"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / string / escape \\b' =>
+			with_data => q/"\b"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / string / escape \\t' =>
+			with_data => q/"\t"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / string / escape \\r' =>
+			with_data => q/"\r"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / string / escape \\n' =>
+			with_data => q/"\n"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / string / escape \\\'' =>
+			with_data => q/"\'"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / string / escape \\"' =>
+			with_data => q/"\""/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / string / unicode escape' =>
+			with_data => q/"\u20ac"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		done_testing;
+	};
+
+	subtest "literals / lexical / integral" => sub {
+		plan tests => 4;
+		note 'https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-IntegerLiteral';
+		subtest  'literals / lexical / integral / decimal' => sub {
+			plan tests => 6;
+
+			test_token 'literals / lexical / integral / decimal / 0' =>
+				with_data => '0',
+				expect_token => 'LITERAL_INTEGRAL_DECIMAL',
+				;
+
+			test_token 'literals / lexical / integral / decimal / 0 / long' =>
+				with_data => '0L',
+				expect_token => 'LITERAL_INTEGRAL_DECIMAL',
+				;
+
+			test_token 'literals / lexical / integral / decimal / number' =>
+				with_data => '123',
+				expect_token => 'LITERAL_INTEGRAL_DECIMAL',
+				;
+
+			test_token 'literals / lexical / integral / decimal / number / long' =>
+				with_data => '123',
+				expect_token => 'LITERAL_INTEGRAL_DECIMAL',
+				;
+
+			test_token 'literals / lexical / integral / decimal / number with underlines' =>
+				with_data => '1_2__3__4_5',
+				expect_token => 'LITERAL_INTEGRAL_DECIMAL',
+				;
+
+			test_token 'literals / lexical / integral / decimal / number with underlines / long' =>
+				with_data => '1_2__3__4_5l',
+				expect_token => 'LITERAL_INTEGRAL_DECIMAL',
+				;
+
+			done_testing;
+		};
+
+		subtest  'literals / lexical / integral / hex' => sub {
+			plan tests => 6;
+
+			test_token 'literals / lexical / integral / hex / 0' =>
+				with_data => '0x0',
+				expect_token => 'LITERAL_INTEGRAL_HEX',
+				;
+
+			test_token 'literals / lexical / integral / hex / 0 / long' =>
+				with_data => '0x0L',
+				expect_token => 'LITERAL_INTEGRAL_HEX',
+				;
+
+			test_token 'literals / lexical / integral / hex / number' =>
+				with_data => '0x123abc',
+				expect_token => 'LITERAL_INTEGRAL_HEX',
+				;
+
+			test_token 'literals / lexical / integral / hex / number / long' =>
+				with_data => '0x123abc',
+				expect_token => 'LITERAL_INTEGRAL_HEX',
+				;
+
+			test_token 'literals / lexical / integral / hex / number with underlines' =>
+				with_data => '0x1_2__3__4_5def',
+				expect_token => 'LITERAL_INTEGRAL_HEX',
+				;
+
+			test_token 'literals / lexical / integral / hex / number with underlines / long' =>
+				with_data => '0x1_2__3__4_5defl',
+				expect_token => 'LITERAL_INTEGRAL_HEX',
+				;
+
+			done_testing;
+		};
+
+		subtest  'literals / lexical / integral / octal' => sub {
+			plan tests => 6;
+
+			test_token 'literals / lexical / integral / octal / 0' =>
+				with_data => '00',
+				expect_token => 'LITERAL_INTEGRAL_OCTAL',
+				;
+
+			test_token 'literals / lexical / integral / octal / 0 / long' =>
+				with_data => '00L',
+				expect_token => 'LITERAL_INTEGRAL_OCTAL',
+				;
+
+			test_token 'literals / lexical / integral / octal / number' =>
+				with_data => '0123',
+				expect_token => 'LITERAL_INTEGRAL_OCTAL',
+				;
+
+			test_token 'literals / lexical / integral / octal / number / long' =>
+				with_data => '0123l',
+				expect_token => 'LITERAL_INTEGRAL_OCTAL',
+				;
+
+			test_token 'literals / lexical / integral / octal / number with underlines' =>
+				with_data => '01_2__3__4_5',
+				expect_token => 'LITERAL_INTEGRAL_OCTAL',
+				;
+
+			test_token 'literals / lexical / integral / octal / number with underlines / long' =>
+				with_data => '01_2__3__4_5l',
+				expect_token => 'LITERAL_INTEGRAL_OCTAL',
+				;
+
+			done_testing;
+		};
+
+		subtest  'literals / lexical / integral / binary' => sub {
+			plan tests => 6;
+
+			test_token 'literals / lexical / integral / binary / 0' =>
+				with_data => '0b0',
+				expect_token => 'LITERAL_INTEGRAL_BINARY',
+				;
+
+			test_token 'literals / lexical / integral / binary / 0 / long' =>
+				with_data => '0b0L',
+				expect_token => 'LITERAL_INTEGRAL_BINARY',
+				;
+
+			test_token 'literals / lexical / integral / binary / number' =>
+				with_data => '0b101',
+				expect_token => 'LITERAL_INTEGRAL_BINARY',
+				;
+
+			test_token 'literals / lexical / integral / binary / number / long' =>
+				with_data => '0b101l',
+				expect_token => 'LITERAL_INTEGRAL_BINARY',
+				;
+
+			test_token 'literals / lexical / integral / binary / number with underlines' =>
+				with_data => '0b1_0__1__0_1',
+				expect_token => 'LITERAL_INTEGRAL_BINARY',
+				;
+
+			test_token 'literals / lexical / integral / binary / number with underlines / long' =>
+				with_data => '0b1_0__1__0_1l',
+				expect_token => 'LITERAL_INTEGRAL_BINARY',
+				;
+
+			done_testing;
+		};
+
+		done_testing;
+	};
+
+	subtest "literals / lexical / floating" => sub {
+		plan tests => 2;
+		note 'https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-FloatingPointLiteral';
+		subtest  'literals / lexical / floating / decimal' => sub {
+			my @literal_floating_decimal = (
+				'10.',
+				'10.10',
+				'.10',
+				'1_0.1_0',
+				'10e10',
+				'10e+10',
+				'10e-10',
+				'10.e10',
+				'10.e+10',
+				'10.e-10',
+				'.10e10',
+				'.10e+10',
+				'.10e-10',
+				'10.10e10',
+				'10.10e+10',
+				'10.10e-10',
+				'1_0.1_0e-1_0',
+			);
+
+			plan tests => 2 + 3 * scalar @literal_floating_decimal;
+
+			test_token 'literals / lexical / floating / decimal / 0f' =>
+				with_data => '0f',
+				expect_token => 'LITERAL_FLOAT_DECIMAL',
+				;
+
+			test_token 'literals / lexical / floating / decimal / 0d' =>
+				with_data => '0d',
+				expect_token => 'LITERAL_FLOAT_DECIMAL',
+				;
+
+			for my $literal (@literal_floating_decimal) {
+				for my $suffix ('', 'f', 'd') {
+					test_token "literals / lexical / floating / decimal / $literal$suffix" =>
+						with_data => "$literal$suffix",
+						expect_token => 'LITERAL_FLOAT_DECIMAL',
+						;
+				}
+			}
+
+			done_testing;
+		};
+
+		subtest  'literals / lexical / floating / hex' => sub {
+			my @literal_floating_hex = (
+				'0xa0p10',
+				'0xa0p+10',
+				'0xa0p-10',
+				'0xa0.p10',
+				'0x.a0p10',
+				'0xa_0.a_0p1_0',
+			);
+
+			plan tests => 3 * scalar @literal_floating_hex;
+
+			for my $literal (@literal_floating_hex) {
+				for my $suffix ('', 'f', 'd') {
+					test_token "literals / lexical / floating / hex / $literal$suffix" =>
+						with_data => "$literal$suffix",
+						expect_token => 'LITERAL_FLOAT_HEX',
+						;
+				}
+			}
+
+			done_testing;
+		};
+
+		done_testing;
+	};
 
 	done_testing;
 };
