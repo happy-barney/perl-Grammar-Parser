@@ -18,7 +18,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	sub word {
 		my ($keyword, @opts) = @_;
 		$keyword = ucfirst lc $keyword;
-		my $re = qr/ (?> \b ${\ lc $keyword } \b ) /sx;
+		my $re = qr/ (?> \b ${\ lc $keyword } (?! (??{ 'Identifier_Character' }) ) ) /sx;
 
 		my @dom   = (dom => "::Token::Word::$keyword");
 		my @proto = (proto => 'Prohibited_Identifier');
@@ -65,6 +65,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[],
 		;
 
+	regex Identifier_Character              => qr/(?>
+		[_\p{Letter}\p{Letter_Number}\p{Digit}\p{Currency_Symbol}]
+	)/sx;
+
 	insignificant token whitespaces         => dom => '::Token::Whitespace',
 		qr/(?>
 			\s+
@@ -91,6 +95,13 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			.*?
 			\*\/
 		)/sx;
+
+	token IDENTIFIER                        =>
+        qr/(?>
+			(?! \p{Digit} )
+			(?! (??{ 'Prohibited_Identifier' }) (?! (??{ 'Identifier_Character' }) ) )
+			(?<value> (??{ 'Identifier_Character' })+ )
+		) /sx;
 
 	token ANNOTATION                        => dom => '::Token::Annotation'      => '@';
 	token BRACE_CLOSE                       => dom => '::Token::Brace::Close'    => '}';
@@ -259,10 +270,6 @@ __END__
 		/sx;
 	}
 
-	sub Identifier_Character        :REGEX {
-		qr/[_\p{Letter}\p{Letter_Number}\p{Digit}\p{Currency_Symbol}]/sx;
-	}
-
 	sub Escape_Sequence             :REGEX {
 		qr/(?>
 			\\
@@ -301,28 +308,6 @@ __END__
 			(?<value> (?: [^\"\\] | (??{ 'Escape_Sequence' }) )* )
 			\"
 		)/sx;
-
-	sub IDENTIFIER                  :TOKEN :ACTION_LITERAL_VALUE {
-        qr/(?>
-			(?!  \p{Digit} )
-			(?!  (??{ 'Keyword' }) )
-			(?!  (??{ 'Literal_Boolean' }) )
-			(?!  (??{ 'Literal_Null' }) )
-			(?<value> (??{ 'Identifier_Character' })+ )
-		) /sx;
-	}
-
-	sub type_identifier             :TOKEN :ACTION_LITERAL_VALUE {
-        qr/(?>
-			(?!  \p{Digit} )
-			(?!  (??{ 'Keyword' }) )
-			(?!  (??{ 'Literal_Boolean' }) )
-			(?!  (??{ 'Literal_Null' }) )
-			(?!  (??{ 'VAR' }) )
-			(?<value> (??{ 'Identifier_Character' })+ )
-		) /sx;
-	}
-
 
 	sub TYPE_PARAMETER_LIST_OPEN    :TOKEN {
 		'<'

@@ -8,7 +8,33 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 5;
+plan tests => 6;
+
+subtest "identifier"                => sub {
+	plan tests => 4;
+
+	test_token 'identifier / identifer' => (
+		with_data => 'foo',
+		expect_token => 'IDENTIFIER',
+	);
+
+	test_token 'identifier / identifer with currency symbol' => (
+		with_data => '$foo',
+		expect_token => 'IDENTIFIER',
+	);
+
+	test_token 'identifier / identifier starting with keyword' => (
+		with_data => 'do_someting',
+		expect_token => 'IDENTIFIER',
+	);
+
+	test_token 'identifier / identifier starting with keyword with currency symbol' => (
+		with_data => 'do$',
+		expect_token => 'IDENTIFIER',
+	);
+
+	done_testing;
+};
 
 subtest "insignificant tokens"      => sub {
 	plan tests => 4;
