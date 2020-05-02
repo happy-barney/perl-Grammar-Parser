@@ -445,20 +445,6 @@ package CSI::Language::Java::Grammar v1.0.0 {
 };
 
 __END__
-	sub TYPE_PARAMETER_LIST_OPEN    :TOKEN {
-		'<'
-	}
-
-	sub TYPE_PARAMETER_LIST_CLOSE   :TOKEN {
-		'>'
-	}
-
-	1;
-};
-
-1;
-
-__END__
 	sub additional_bound            :RULE :ACTION_LIST {
 		[
 			[qw[  AND  interface_type                    ]],
