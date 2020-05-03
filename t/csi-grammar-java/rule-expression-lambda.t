@@ -11,7 +11,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expression';
 
-plan tests => 7;
+plan tests => 10;
 
 test_rule "lambda expression / expression lambda" => (
 	data => '() -> null',
@@ -89,7 +89,7 @@ test_rule "lambda expression / with binary expression" => (
 	],
 );
 
-not 1 and test_rule "lambda expression / precedence / casted lambda with binary expression" => (
+test_rule "lambda expression / precedence / casted lambda with binary expression" => (
 	data => '(Foo) a -> a > 1',
 	expect => [
 		expect_element ('CSI::Language::Java::Expression::Cast' => (
@@ -112,6 +112,17 @@ not 1 and test_rule "lambda expression / precedence / casted lambda with binary 
 	],
 );
 
+test_rule "lambda expression / with method call" => (
+	data => ' (config, now) -> supplier.metricValue(now)',
+	expect => ignore,
+);
+
+test_rule "lambda expression / casted with method call" => (
+	data => '(Cast) (config, now) -> supplier.metricValue(now)',
+	expect => ignore,
+);
+
+#(Gauge<T>) (config, now) -> supplier.metricValue(now)
 had_no_warnings;
 
 done_testing;
