@@ -178,6 +178,21 @@ sub expect_word_void                    { expect_word '::Token::Word::Void'     
 sub expect_word_volatile                { expect_word '::Token::Word::Volatile'     }
 sub expect_word_while                   { expect_word '::Token::Word::While'        }
 sub expect_word_with                    { expect_word '::Token::Word::With'         }
+sub expect_identifier                   {
+	expect_token '::Identifier' => @_
+}
+
+sub expect_label_name                   {
+	expect_token '::Label::Name' => @_
+}
+
+sub expect_label_reference              {
+	expect_token '::Label::Reference' => @_
+}
+
+sub expect_variable_name                {
+	expect_token '::Variable::Name' => @_
+}
 
 1;
 

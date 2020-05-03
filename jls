@@ -45,19 +45,19 @@
 		;
 
 	rule AnnotationTypeDeclaration   =>
-		[qw[   InterfaceModifier_list_2  AT INTERFACE TypeIdentifier AnnotationTypeBody ]],
-		[qw[                             AT INTERFACE TypeIdentifier AnnotationTypeBody ]],
+		[qw[   InterfaceModifier_list_2  AT INTERFACE type_identifier AnnotationTypeBody ]],
+		[qw[                             AT INTERFACE type_identifier AnnotationTypeBody ]],
 		;
 
 	rule AnnotationTypeElementDeclaration=>
-		[qw[   AnnotationTypeElementModifier_list_1  UnannType Identifier PAREN_OPEN PAREN_CLOSE  Dims   DefaultValue  SEMICOLON ]],
-		[qw[                                         UnannType Identifier PAREN_OPEN PAREN_CLOSE  Dims   DefaultValue  SEMICOLON ]],
-		[qw[   AnnotationTypeElementModifier_list_1  UnannType Identifier PAREN_OPEN PAREN_CLOSE         DefaultValue  SEMICOLON ]],
-		[qw[                                         UnannType Identifier PAREN_OPEN PAREN_CLOSE         DefaultValue  SEMICOLON ]],
-		[qw[   AnnotationTypeElementModifier_list_1  UnannType Identifier PAREN_OPEN PAREN_CLOSE  Dims                 SEMICOLON ]],
-		[qw[                                         UnannType Identifier PAREN_OPEN PAREN_CLOSE  Dims                 SEMICOLON ]],
-		[qw[   AnnotationTypeElementModifier_list_1  UnannType Identifier PAREN_OPEN PAREN_CLOSE                       SEMICOLON ]],
-		[qw[                                         UnannType Identifier PAREN_OPEN PAREN_CLOSE                       SEMICOLON ]],
+		[qw[   AnnotationTypeElementModifier_list_1  UnannType variable_name PAREN_OPEN PAREN_CLOSE  Dims   DefaultValue  SEMICOLON ]],
+		[qw[                                         UnannType variable_name PAREN_OPEN PAREN_CLOSE  Dims   DefaultValue  SEMICOLON ]],
+		[qw[   AnnotationTypeElementModifier_list_1  UnannType variable_name PAREN_OPEN PAREN_CLOSE         DefaultValue  SEMICOLON ]],
+		[qw[                                         UnannType variable_name PAREN_OPEN PAREN_CLOSE         DefaultValue  SEMICOLON ]],
+		[qw[   AnnotationTypeElementModifier_list_1  UnannType variable_name PAREN_OPEN PAREN_CLOSE  Dims                 SEMICOLON ]],
+		[qw[                                         UnannType variable_name PAREN_OPEN PAREN_CLOSE  Dims                 SEMICOLON ]],
+		[qw[   AnnotationTypeElementModifier_list_1  UnannType variable_name PAREN_OPEN PAREN_CLOSE                       SEMICOLON ]],
+		[qw[                                         UnannType variable_name PAREN_OPEN PAREN_CLOSE                       SEMICOLON ]],
 		;
 
 	rule AnnotationTypeElementModifier=>
@@ -267,7 +267,7 @@
 		;
 
 	rule BreakStatement              =>
-		[qw[ BREAK  Identifier  SEMICOLON ]],
+		[qw[ BREAK  label_reference  SEMICOLON ]],
 		[qw[ BREAK              SEMICOLON ]],
 		;
 
@@ -382,18 +382,18 @@
 		;
 
 	rule ClassType                   =>
-		[qw[                           Annotation_list_11  TypeIdentifier  TypeArguments   ]],
-		[qw[                                               TypeIdentifier  TypeArguments   ]],
-		[qw[                           Annotation_list_11  TypeIdentifier                  ]],
-		[qw[                                               TypeIdentifier                  ]],
-		[qw[          PackageName DOT  Annotation_list_12  TypeIdentifier  TypeArguments   ]],
-		[qw[          PackageName DOT                      TypeIdentifier  TypeArguments   ]],
-		[qw[          PackageName DOT  Annotation_list_12  TypeIdentifier                  ]],
-		[qw[          PackageName DOT                      TypeIdentifier                  ]],
-		[qw[ ClassOrInterfaceType DOT  Annotation_list_13  TypeIdentifier  TypeArguments   ]],
-		[qw[ ClassOrInterfaceType DOT                      TypeIdentifier  TypeArguments   ]],
-		[qw[ ClassOrInterfaceType DOT  Annotation_list_13  TypeIdentifier                  ]],
-		[qw[ ClassOrInterfaceType DOT                      TypeIdentifier                  ]],
+		[qw[                           Annotation_list_11  type_identifier  TypeArguments   ]],
+		[qw[                                               type_identifier  TypeArguments   ]],
+		[qw[                           Annotation_list_11  type_identifier                  ]],
+		[qw[                                               type_identifier                  ]],
+		[qw[          PackageName DOT  Annotation_list_12  type_identifier  TypeArguments   ]],
+		[qw[          PackageName DOT                      type_identifier  TypeArguments   ]],
+		[qw[          PackageName DOT  Annotation_list_12  type_identifier                  ]],
+		[qw[          PackageName DOT                      type_identifier                  ]],
+		[qw[ ClassOrInterfaceType DOT  Annotation_list_13  type_identifier  TypeArguments   ]],
+		[qw[ ClassOrInterfaceType DOT                      type_identifier  TypeArguments   ]],
+		[qw[ ClassOrInterfaceType DOT  Annotation_list_13  type_identifier                  ]],
+		[qw[ ClassOrInterfaceType DOT                      type_identifier                  ]],
 		;
 
 	rule CompilationUnit             =>
@@ -452,14 +452,14 @@
 		;
 
 	rule ConstructorDeclarator       =>
-		[qw[   TypeParameters  SimpleTypeName PAREN_OPEN  ReceiverParameter COMMA   FormalParameterList  PAREN_CLOSE ]],
-		[qw[                   SimpleTypeName PAREN_OPEN  ReceiverParameter COMMA   FormalParameterList  PAREN_CLOSE ]],
-		[qw[   TypeParameters  SimpleTypeName PAREN_OPEN                            FormalParameterList  PAREN_CLOSE ]],
-		[qw[                   SimpleTypeName PAREN_OPEN                            FormalParameterList  PAREN_CLOSE ]],
-		[qw[   TypeParameters  SimpleTypeName PAREN_OPEN  ReceiverParameter COMMA                        PAREN_CLOSE ]],
-		[qw[                   SimpleTypeName PAREN_OPEN  ReceiverParameter COMMA                        PAREN_CLOSE ]],
-		[qw[   TypeParameters  SimpleTypeName PAREN_OPEN                                                 PAREN_CLOSE ]],
-		[qw[                   SimpleTypeName PAREN_OPEN                                                 PAREN_CLOSE ]],
+		[qw[   TypeParameters  type_identifier PAREN_OPEN  ReceiverParameter COMMA   FormalParameterList  PAREN_CLOSE ]],
+		[qw[                   type_identifier PAREN_OPEN  ReceiverParameter COMMA   FormalParameterList  PAREN_CLOSE ]],
+		[qw[   TypeParameters  type_identifier PAREN_OPEN                            FormalParameterList  PAREN_CLOSE ]],
+		[qw[                   type_identifier PAREN_OPEN                            FormalParameterList  PAREN_CLOSE ]],
+		[qw[   TypeParameters  type_identifier PAREN_OPEN  ReceiverParameter COMMA                        PAREN_CLOSE ]],
+		[qw[                   type_identifier PAREN_OPEN  ReceiverParameter COMMA                        PAREN_CLOSE ]],
+		[qw[   TypeParameters  type_identifier PAREN_OPEN                                                 PAREN_CLOSE ]],
+		[qw[                   type_identifier PAREN_OPEN                                                 PAREN_CLOSE ]],
 		;
 
 	rule ConstructorModifier         =>
@@ -473,7 +473,7 @@
 		;
 
 	rule ContinueStatement           =>
-		[qw[ CONTINUE  Identifier  SEMICOLON ]],
+		[qw[ CONTINUE  label_reference  SEMICOLON ]],
 		[qw[ CONTINUE              SEMICOLON ]],
 		;
 
@@ -524,7 +524,7 @@
 		;
 
 	rule ElementValuePair            =>
-		[qw[ Identifier ASSIGN ElementValue ]],
+		[qw[ variable_name ASSIGN ElementValue ]],
 		;
 
 	rule ElementValuePairList        =>
@@ -605,10 +605,10 @@
 		;
 
 	rule EnumDeclaration             =>
-		[qw[   ClassModifier_list_2  ENUM TypeIdentifier  Superinterfaces  EnumBody ]],
-		[qw[                         ENUM TypeIdentifier  Superinterfaces  EnumBody ]],
-		[qw[   ClassModifier_list_2  ENUM TypeIdentifier                   EnumBody ]],
-		[qw[                         ENUM TypeIdentifier                   EnumBody ]],
+		[qw[   ClassModifier_list_2  ENUM type_identifier  Superinterfaces  EnumBody ]],
+		[qw[                         ENUM type_identifier  Superinterfaces  EnumBody ]],
+		[qw[   ClassModifier_list_2  ENUM type_identifier                   EnumBody ]],
+		[qw[                         ENUM type_identifier                   EnumBody ]],
 		;
 
 	rule EqualityExpression          =>
@@ -870,11 +870,11 @@
 		;
 
 	rule LabeledStatement            =>
-		[qw[ Identifier COLON Statement ]],
+		[qw[ label_name COLON Statement ]],
 		;
 
 	rule LabeledStatementNoShortIf   =>
-		[qw[ Identifier COLON StatementNoShortIf ]],
+		[qw[ label_name COLON StatementNoShortIf ]],
 		;
 
 	rule LambdaBody                  =>
@@ -910,7 +910,7 @@
 	rule LambdaParameters            =>
 		[qw[ PAREN_OPEN  LambdaParameterList  PAREN_CLOSE ]],
 		[qw[ PAREN_OPEN                       PAREN_CLOSE ]],
-		[qw[                                   Identifier ]],
+		[qw[                                   variable_name ]],
 		;
 
 	rule LeftHandSide                =>
@@ -1092,33 +1092,33 @@
 		;
 
 	rule NormalClassDeclaration      =>
-		[qw[   ClassModifier_list_1  CLASS TypeIdentifier  TypeParameters   Superclass   Superinterfaces  ClassBody ]],
-		[qw[                         CLASS TypeIdentifier  TypeParameters   Superclass   Superinterfaces  ClassBody ]],
-		[qw[   ClassModifier_list_1  CLASS TypeIdentifier                   Superclass   Superinterfaces  ClassBody ]],
-		[qw[                         CLASS TypeIdentifier                   Superclass   Superinterfaces  ClassBody ]],
-		[qw[   ClassModifier_list_1  CLASS TypeIdentifier  TypeParameters                Superinterfaces  ClassBody ]],
-		[qw[                         CLASS TypeIdentifier  TypeParameters                Superinterfaces  ClassBody ]],
-		[qw[   ClassModifier_list_1  CLASS TypeIdentifier                                Superinterfaces  ClassBody ]],
-		[qw[                         CLASS TypeIdentifier                                Superinterfaces  ClassBody ]],
-		[qw[   ClassModifier_list_1  CLASS TypeIdentifier  TypeParameters   Superclass                    ClassBody ]],
-		[qw[                         CLASS TypeIdentifier  TypeParameters   Superclass                    ClassBody ]],
-		[qw[   ClassModifier_list_1  CLASS TypeIdentifier                   Superclass                    ClassBody ]],
-		[qw[                         CLASS TypeIdentifier                   Superclass                    ClassBody ]],
-		[qw[   ClassModifier_list_1  CLASS TypeIdentifier  TypeParameters                                 ClassBody ]],
-		[qw[                         CLASS TypeIdentifier  TypeParameters                                 ClassBody ]],
-		[qw[   ClassModifier_list_1  CLASS TypeIdentifier                                                 ClassBody ]],
-		[qw[                         CLASS TypeIdentifier                                                 ClassBody ]],
+		[qw[   ClassModifier_list_1  CLASS type_identifier  TypeParameters   Superclass   Superinterfaces  ClassBody ]],
+		[qw[                         CLASS type_identifier  TypeParameters   Superclass   Superinterfaces  ClassBody ]],
+		[qw[   ClassModifier_list_1  CLASS type_identifier                   Superclass   Superinterfaces  ClassBody ]],
+		[qw[                         CLASS type_identifier                   Superclass   Superinterfaces  ClassBody ]],
+		[qw[   ClassModifier_list_1  CLASS type_identifier  TypeParameters                Superinterfaces  ClassBody ]],
+		[qw[                         CLASS type_identifier  TypeParameters                Superinterfaces  ClassBody ]],
+		[qw[   ClassModifier_list_1  CLASS type_identifier                                Superinterfaces  ClassBody ]],
+		[qw[                         CLASS type_identifier                                Superinterfaces  ClassBody ]],
+		[qw[   ClassModifier_list_1  CLASS type_identifier  TypeParameters   Superclass                    ClassBody ]],
+		[qw[                         CLASS type_identifier  TypeParameters   Superclass                    ClassBody ]],
+		[qw[   ClassModifier_list_1  CLASS type_identifier                   Superclass                    ClassBody ]],
+		[qw[                         CLASS type_identifier                   Superclass                    ClassBody ]],
+		[qw[   ClassModifier_list_1  CLASS type_identifier  TypeParameters                                 ClassBody ]],
+		[qw[                         CLASS type_identifier  TypeParameters                                 ClassBody ]],
+		[qw[   ClassModifier_list_1  CLASS type_identifier                                                 ClassBody ]],
+		[qw[                         CLASS type_identifier                                                 ClassBody ]],
 		;
 
 	rule NormalInterfaceDeclaration  =>
-		[qw[   InterfaceModifier_list_1  INTERFACE TypeIdentifier  TypeParameters   ExtendsInterfaces  InterfaceBody ]],
-		[qw[                             INTERFACE TypeIdentifier  TypeParameters   ExtendsInterfaces  InterfaceBody ]],
-		[qw[   InterfaceModifier_list_1  INTERFACE TypeIdentifier                   ExtendsInterfaces  InterfaceBody ]],
-		[qw[                             INTERFACE TypeIdentifier                   ExtendsInterfaces  InterfaceBody ]],
-		[qw[   InterfaceModifier_list_1  INTERFACE TypeIdentifier  TypeParameters                      InterfaceBody ]],
-		[qw[                             INTERFACE TypeIdentifier  TypeParameters                      InterfaceBody ]],
-		[qw[   InterfaceModifier_list_1  INTERFACE TypeIdentifier                                      InterfaceBody ]],
-		[qw[                             INTERFACE TypeIdentifier                                      InterfaceBody ]],
+		[qw[   InterfaceModifier_list_1  INTERFACE type_identifier  TypeParameters   ExtendsInterfaces  InterfaceBody ]],
+		[qw[                             INTERFACE type_identifier  TypeParameters   ExtendsInterfaces  InterfaceBody ]],
+		[qw[   InterfaceModifier_list_1  INTERFACE type_identifier                   ExtendsInterfaces  InterfaceBody ]],
+		[qw[                             INTERFACE type_identifier                   ExtendsInterfaces  InterfaceBody ]],
+		[qw[   InterfaceModifier_list_1  INTERFACE type_identifier  TypeParameters                      InterfaceBody ]],
+		[qw[                             INTERFACE type_identifier  TypeParameters                      InterfaceBody ]],
+		[qw[   InterfaceModifier_list_1  INTERFACE type_identifier                                      InterfaceBody ]],
+		[qw[                             INTERFACE type_identifier                                      InterfaceBody ]],
 		;
 
 	rule NumericType                 =>
@@ -1210,8 +1210,8 @@
 		;
 
 	rule ReceiverParameter           =>
-		[qw[   Annotation_list_7  UnannType  Identifier DOT  THIS ]],
-		[qw[                      UnannType  Identifier DOT  THIS ]],
+		[qw[   Annotation_list_7  UnannType  variable_name DOT  THIS ]],
+		[qw[                      UnannType  variable_name DOT  THIS ]],
 		[qw[   Annotation_list_7  UnannType                  THIS ]],
 		[qw[                      UnannType                  THIS ]],
 		;
@@ -1242,8 +1242,8 @@
 		;
 
 	rule Resource                    =>
-		[qw[   VariableModifier_list_7  LocalVariableType Identifier ASSIGN Expression ]],
-		[qw[                            LocalVariableType Identifier ASSIGN Expression ]],
+		[qw[   VariableModifier_list_7  LocalVariableType variable_name ASSIGN Expression ]],
+		[qw[                            LocalVariableType variable_name ASSIGN Expression ]],
 		[qw[                                                            VariableAccess ]],
 		;
 
@@ -1276,10 +1276,6 @@
 		[qw[           ShiftExpression LEFT_SHIFT AdditiveExpression ]],
 		[qw[          ShiftExpression RIGHT_SHIFT AdditiveExpression ]],
 		[qw[ ShiftExpression UNSIGNED_RIGHT_SHIFT AdditiveExpression ]],
-		;
-
-	rule SimpleTypeName              =>
-		[qw[ TypeIdentifier ]],
 		;
 
 	rule SingleElementAnnotation     =>
@@ -1487,10 +1483,10 @@
 		;
 
 	rule TypeParameter               =>
-		[qw[   TypeParameterModifier_list_1  TypeIdentifier  TypeBound   ]],
-		[qw[                                 TypeIdentifier  TypeBound   ]],
-		[qw[   TypeParameterModifier_list_1  TypeIdentifier              ]],
-		[qw[                                 TypeIdentifier              ]],
+		[qw[   TypeParameterModifier_list_1  type_identifier  TypeBound   ]],
+		[qw[                                 type_identifier  TypeBound   ]],
+		[qw[   TypeParameterModifier_list_1  type_identifier              ]],
+		[qw[                                 type_identifier              ]],
 		;
 
 	rule TypeParameterList           =>
@@ -1516,14 +1512,14 @@
 		;
 
 	rule TypeVariable                =>
-		[qw[   Annotation_list_14  TypeIdentifier ]],
-		[qw[                       TypeIdentifier ]],
+		[qw[   Annotation_list_14  type_identifier ]],
+		[qw[                       type_identifier ]],
 		;
 
 	rule UnannArrayType              =>
 		[qw[        UnannPrimitiveType Dims ]],
 		[qw[ UnannClassOrInterfaceType Dims ]],
-		[qw[         UnannTypeVariable Dims ]],
+		[qw[           type_identifier Dims ]],
 		;
 
 	rule UnannClassOrInterfaceType   =>
@@ -1532,16 +1528,16 @@
 		;
 
 	rule UnannClassType              =>
-		[qw[                                                   TypeIdentifier  TypeArguments   ]],
-		[qw[                                                   TypeIdentifier                  ]],
-		[qw[               PackageName DOT  Annotation_list_2  TypeIdentifier  TypeArguments   ]],
-		[qw[               PackageName DOT                     TypeIdentifier  TypeArguments   ]],
-		[qw[               PackageName DOT  Annotation_list_2  TypeIdentifier                  ]],
-		[qw[               PackageName DOT                     TypeIdentifier                  ]],
-		[qw[ UnannClassOrInterfaceType DOT  Annotation_list_3  TypeIdentifier  TypeArguments   ]],
-		[qw[ UnannClassOrInterfaceType DOT                     TypeIdentifier  TypeArguments   ]],
-		[qw[ UnannClassOrInterfaceType DOT  Annotation_list_3  TypeIdentifier                  ]],
-		[qw[ UnannClassOrInterfaceType DOT                     TypeIdentifier                  ]],
+		[qw[                                                   type_identifier  TypeArguments   ]],
+		[qw[                                                   type_identifier                  ]],
+		[qw[               PackageName DOT  Annotation_list_2  type_identifier  TypeArguments   ]],
+		[qw[               PackageName DOT                     type_identifier  TypeArguments   ]],
+		[qw[               PackageName DOT  Annotation_list_2  type_identifier                  ]],
+		[qw[               PackageName DOT                     type_identifier                  ]],
+		[qw[ UnannClassOrInterfaceType DOT  Annotation_list_3  type_identifier  TypeArguments   ]],
+		[qw[ UnannClassOrInterfaceType DOT                     type_identifier  TypeArguments   ]],
+		[qw[ UnannClassOrInterfaceType DOT  Annotation_list_3  type_identifier                  ]],
+		[qw[ UnannClassOrInterfaceType DOT                     type_identifier                  ]],
 		;
 
 	rule UnannInterfaceType          =>
@@ -1555,17 +1551,13 @@
 
 	rule UnannReferenceType          =>
 		[qw[ UnannClassOrInterfaceType ]],
-		[qw[         UnannTypeVariable ]],
+		[qw[           type_identifier ]],
 		[qw[            UnannArrayType ]],
 		;
 
 	rule UnannType                   =>
 		[qw[ UnannPrimitiveType ]],
 		[qw[ UnannReferenceType ]],
-		;
-
-	rule UnannTypeVariable           =>
-		[qw[ TypeIdentifier ]],
 		;
 
 	rule UnaryExpression             =>
@@ -1600,10 +1592,10 @@
 		;
 
 	rule VariableArityParameter      =>
-		[qw[   VariableModifier_list_2  UnannType  Annotation_list_8  ELIPSIS Identifier ]],
-		[qw[                            UnannType  Annotation_list_8  ELIPSIS Identifier ]],
-		[qw[   VariableModifier_list_2  UnannType                     ELIPSIS Identifier ]],
-		[qw[                            UnannType                     ELIPSIS Identifier ]],
+		[qw[   VariableModifier_list_2  UnannType  Annotation_list_8  ELIPSIS variable_name ]],
+		[qw[                            UnannType  Annotation_list_8  ELIPSIS variable_name ]],
+		[qw[   VariableModifier_list_2  UnannType                     ELIPSIS variable_name ]],
+		[qw[                            UnannType                     ELIPSIS variable_name ]],
 		;
 
 	rule VariableDeclarator          =>
@@ -1612,8 +1604,8 @@
 		;
 
 	rule VariableDeclaratorId        =>
-		[qw[ Identifier  Dims   ]],
-		[qw[ Identifier         ]],
+		[qw[ variable_name  Dims   ]],
+		[qw[ variable_name         ]],
 		;
 
 	rule VariableDeclaratorList      =>

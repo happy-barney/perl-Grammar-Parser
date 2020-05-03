@@ -379,6 +379,31 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	word  _                                 => ;
 
 	ensure_rule_name_order;
+
+	rule  allowed_identifier                =>
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-Identifier
+		[qw[  IDENTIFIER          ]],
+		[qw[  keyword_identifier  ]],
+		;
+
+	rule  allowed_type_identifier           =>
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-TypeIdentifier
+		[qw[  IDENTIFIER               ]],
+		[qw[  keyword_type_identifier  ]],
+		;
+
+	rule  identifier                        => dom => 'CSI::Language::Java::Identifier',
+		[qw[  allowed_identifier  ]],
+		;
+
+	rule  label_name                        => dom => 'CSI::Language::Java::Label::Name',
+		[qw[  allowed_identifier  ]],
+		;
+
+	rule  label_reference                   => dom => 'CSI::Language::Java::Label::Reference',
+		[qw[  allowed_identifier  ]],
+		;
+
 	rule  literal                           =>
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-15.8.1
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-IntegerLiteral
@@ -406,6 +431,14 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  literal_null                      => dom => 'CSI::Language::Java::Literal::Null',
 		[qw[  null  ]],
+		;
+
+	rule  type_identifier                   => dom => 'CSI::Language::Java::Identifier',
+		[qw[  allowed_type_identifier  ]],
+		;
+
+	rule  variable_name                     => dom => 'CSI::Language::Java::Variable::Name',
+		[qw[  allowed_identifier  ]],
 		;
 
 	1;
