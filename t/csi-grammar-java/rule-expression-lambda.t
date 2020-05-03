@@ -10,7 +10,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expression';
 
-plan tests => 8;
+plan tests => 10;
 
 test_rule "lambda expression / expression lambda" => (
 	data => '() -> null',
@@ -88,10 +88,7 @@ test_rule "lambda expression / with binary expression" => (
 	],
 );
 
-SKIP: {
-	skip "still ambigous", 1;
 test_rule "lambda expression / precedence / casted lambda with binary expression" => (
-	# ambigous
 	data => '(Foo) a -> a > 1',
 	expect => [
 		expect_element ('::Expression::Cast' => (
@@ -113,7 +110,16 @@ test_rule "lambda expression / precedence / casted lambda with binary expression
 		)),
 	],
 );
-}
+
+test_rule "lambda expression / with method call" => (
+	data => ' (config, now) -> supplier.metricValue(now)',
+	expect => ignore,
+);
+
+test_rule "lambda expression / casted with method call" => (
+	data => '(Cast) (config, now) -> supplier.metricValue(now)',
+	expect => ignore,
+);
 
 had_no_warnings;
 

@@ -551,7 +551,8 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  assignment_element                =>
-		[qw[  lambda_expression      ]],
+		[qw[  lambda_expression   ]],
+		[qw[  cast_expression_lambda   ]],
 		[qw[  ternary_element     ]],
 		[qw[  ternary_expression  ]],
 		;
@@ -678,11 +679,16 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  cast_expression                   => dom => '::Expression::Cast',
-		[qw[  cast_reference_operator  lambda_expression                PRIORITY_TOKEN  ]],
+		#[qw[  cast_reference_operator  lambda_expression                ]],
 		[qw[  cast_reference_operator  prefix_element                   ]],
 		[qw[  cast_reference_operator  unary_expression_not_plus_minus  ]],
 		[qw[  cast_primary_operator    prefix_element                   ]],
 		[qw[  cast_primary_operator    prefix_expression                ]],
+		;
+
+	rule  cast_expression_lambda            => dom => '::Expression::Cast',
+		[qw[  cast_reference_operator  lambda_expression                ]],
+		[qw[  cast_reference_operator  cast_expression_lambda           ]],
 		;
 
 	rule  cast_primary_operator             => dom => '::Operator::Cast',
