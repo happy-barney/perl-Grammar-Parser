@@ -15,6 +15,7 @@ proclaim 'csi-language' => 'CSI::Language::Java::Grammar';
 
 sub expect_element;
 sub expect_token;
+sub expect_token_annotation;
 sub expect_word;
 sub expect_word_false;
 sub expect_word_null;
@@ -34,6 +35,12 @@ sub _list_with_separator                {
 	my $head = shift @content;
 
 	return ($head, map { @$separator, $_ } @content);
+}
+
+sub _expect_list_with_separator         {
+	my ($name, @list_spec) = @_;
+
+	expect_element $name => _list_with_separator @list_spec;
 }
 
 ######################################################################
@@ -191,6 +198,19 @@ sub expect_word_void                    { expect_word '::Token::Word::Void'     
 sub expect_word_volatile                { expect_word '::Token::Word::Volatile'     }
 sub expect_word_while                   { expect_word '::Token::Word::While'        }
 sub expect_word_with                    { expect_word '::Token::Word::With'         }
+sub expect_annotation                   {
+	my ($name, @params) = @_;
+
+	expect_element ('::Annotation' => (
+		expect_token_annotation,
+		expect_reference ($name),
+		@params
+			? (expect_token_paren_open, (grep defined, @params), expect_token_paren_close)
+			: ()
+			,
+	));
+}
+
 sub expect_identifier                   {
 	expect_token '::Identifier' => @_
 }
@@ -203,9 +223,26 @@ sub expect_label_reference              {
 	expect_token '::Label::Reference' => @_
 }
 
+sub expect_qualified_identifier         {
+	my ($name, @list_spec) = @_;
+
+	unshift @list_spec, \& expect_identifier
+		unless Ref::Util::is_plain_coderef $list_spec[0];
+
+	expect_element $name => _list_with_separator [ expect_token_dot() ], @list_spec;
+}
+
+sub expect_reference                    {
+	my (@list_spec) = @_;
+
+	@list_spec = @{ $list_spec[0] }
+		if Ref::Util::is_plain_arrayref $list_spec[0];
+
+	expect_qualified_identifier '::Reference' => @list_spec;
+}
+
 sub expect_variable_name                {
 	expect_token '::Variable::Name' => @_
 }
 
 1;
-

@@ -392,6 +392,18 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  keyword_type_identifier  ]],
 		;
 
+	rule  annotation                        => dom => 'CSI::Language::Java::Annotation',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-9.html#jls-Annotation
+		[qw[  marker_annotation          ]],
+		[qw[  normal_annotation          ]],
+		[qw[  single_element_annotation  ]],
+		;
+
+	rule  annotations                       =>
+		[qw[  annotation  annotations  ]],
+		[qw[  annotation               ]],
+		;
+
 	rule  identifier                        => dom => 'CSI::Language::Java::Identifier',
 		[qw[  allowed_identifier  ]],
 		;
@@ -433,8 +445,37 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  null  ]],
 		;
 
+	rule  marker_annotation                 =>
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-9.html#jls-MarkerAnnotation
+		[qw[  ANNOTATION  type_reference  ]],
+		;
+
+	rule  qualified_identifier              =>
+		[qw[  identifier  DOT  qualified_identifier  ]],
+		[qw[  identifier                             ]],
+		;
+
+	rule  qualified_type_identifier         =>
+		[qw[  qualified_identifier  DOT  type_identifier  ]],
+		[qw[                             type_identifier  ]],
+		;
+
+	rule  reference                         => dom => 'CSI::Language::Java::Reference',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-6.html#jls-AmbiguousName
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-6.html#jls-ExpressionName
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-6.html#jls-ModuleName
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-6.html#jls-PackageName
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-6.html#jls-PackageOrTypeName
+		[qw[  qualified_identifier  ]],
+		;
+
 	rule  type_identifier                   => dom => 'CSI::Language::Java::Identifier',
 		[qw[  allowed_type_identifier  ]],
+		;
+
+	rule  type_reference                    => dom => 'CSI::Language::Java::Reference',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-6.html#jls-TypeName
+		[qw[  qualified_type_identifier  ]],
 		;
 
 	rule  variable_name                     => dom => 'CSI::Language::Java::Variable::Name',
@@ -464,21 +505,6 @@ __END__
 		[
 			[qw[  equality_expression                    ]],
 			[qw[  equality_expression AND and_expression ]],
-		];
-	}
-
-	sub annotation                  :RULE :ACTION_ALIAS {
-		[
-			[qw[  normal_annotation          ]],
-			[qw[  marker_annotation          ]],
-			[qw[  single_element_annotation  ]],
-		];
-	}
-
-	sub annotation_list             :RULE :ACTION_LIST {
-		[
-			[qw[  annotation                  ]],
-			[qw[  annotation  annotation_list ]],
 		];
 	}
 
@@ -1559,12 +1585,6 @@ __END__
 		];
 	}
 
-	sub marker_annotation           :RULE :ACTION_DEFAULT {
-		[
-			[qw[ AT type_name ]],
-		];
-	}
-
 	sub method_body                 :RULE :ACTION_PASS_THROUGH {
 		[
 			[qw[     block ]],
@@ -1738,13 +1758,6 @@ __END__
 		];
 	}
 
-	sub normal_annotation           :RULE :ACTION_DEFAULT {
-		[
-			[qw[ AT type_name PAREN_OPEN  element_value_pair_list  PAREN_CLOSE ]],
-			[qw[ AT type_name PAREN_OPEN                           PAREN_CLOSE ]],
-		]
-	}
-
 	sub normal_class_declaration    :RULE :ACTION_DEFAULT {
 		[
 			[qw[                        CLASS type_identifier                                                  class_body ]],
@@ -1894,13 +1907,6 @@ __END__
 		]
 	}
 
-	sub qualified_identifier        :RULE :ACTION_LIST {
-		[
-			[qw[ identifier                          ]],
-			[qw[ identifier DOT qualified_identifier ]],
-		];
-	}
-
 	sub receiver_parameter          :RULE :ACTION_DEFAULT {
 		[
 			[qw[   annotation_list  unann_type  identifier DOT  THIS ]],
@@ -1991,12 +1997,6 @@ __END__
 	sub simple_type_name            :RULE :ACTION_PASS_THROUGH {
 		[
 			[qw[ type_identifier ]],
-		]
-	}
-
-	sub single_element_annotation   :RULE :ACTION_DEFAULT {
-		[
-			[qw[ AT type_name PAREN_OPEN element_value PAREN_CLOSE ]],
 		]
 	}
 
