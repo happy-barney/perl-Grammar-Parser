@@ -1230,6 +1230,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  interface_member_declaration      =>
 		[qw[  constant_declaration          ]],
 		[qw[  empty_declaration             ]],
+		[qw[  enum_declaration              ]],
 		[qw[  interface_method_declaration  ]],
 		[qw[  type_declaration              ]],
 		;
