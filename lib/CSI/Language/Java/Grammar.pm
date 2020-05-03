@@ -1498,6 +1498,47 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[       void  ]],
 		;
 
+	rule  modular_compilation_unit          =>
+		[qw[  import_declarations  module_declaration  ]],
+		[qw[                       module_declaration  ]],
+		;
+
+	rule  module_declaration                => dom => 'CSI::Language::Java::Module::Declaration',
+		[qw[  annotations  open  module  module_name  BRACE_OPEN  module_directives  BRACE_CLOSE  ]],
+		[qw[  annotations  open  module  module_name  BRACE_OPEN                     BRACE_CLOSE  ]],
+		[qw[  annotations        module  module_name  BRACE_OPEN  module_directives  BRACE_CLOSE  ]],
+		[qw[  annotations        module  module_name  BRACE_OPEN                     BRACE_CLOSE  ]],
+		[qw[               open  module  module_name  BRACE_OPEN  module_directives  BRACE_CLOSE  ]],
+		[qw[               open  module  module_name  BRACE_OPEN                     BRACE_CLOSE  ]],
+		[qw[                     module  module_name  BRACE_OPEN  module_directives  BRACE_CLOSE  ]],
+		[qw[                     module  module_name  BRACE_OPEN                     BRACE_CLOSE  ]],
+		;
+
+	rule  module_directive                  => dom => 'CSI::Language::Java::Module::Directive',
+		[qw[  requires  requires_modifiers  module_name  SEMICOLON  ]],
+		[qw[  requires                      module_name  SEMICOLON  ]],
+		[qw[  exports   package_name  to module_names    SEMICOLON  ]],
+		[qw[  exports   package_name                     SEMICOLON  ]],
+		[qw[  opens     package_name  to module_names    SEMICOLON  ]],
+		[qw[  opens     package_name                     SEMICOLON  ]],
+		[qw[  uses      type_name                        SEMICOLON  ]],
+		[qw[  provides  type_name with type_names        SEMICOLON  ]],
+		;
+
+	rule  module_directives                 =>
+		[qw[  module_directive  module_directives  ]],
+		[qw[  module_directive                     ]],
+		;
+
+	rule  module_name                       => dom => 'CSI::Language::Java::Module::Name',
+		[qw[ qualified_identifier ]],
+		;
+
+	rule  module_names                      =>
+		[qw[  module_name  COMMA  module_names  ]],
+		[qw[  module_name                       ]],
+		;
+
 	rule  multiplicative_element            =>
 		[qw[  prefix_element     ]],
 		[qw[  prefix_expression  ]],
@@ -2286,59 +2327,6 @@ __END__
 		[
 			[qw[ unann_type ]],
 			[qw[        VAR ]],
-		];
-	}
-
-	sub modular_compilation_unit    :RULE :ACTION_DEFAULT {
-		[
-			[qw[   import_declaration_list  module_declaration ]],
-			[qw[                            module_declaration ]],
-		];
-	}
-
-	sub module_declaration          :RULE :ACTION_DEFAULT {
-		[
-			[qw[   annotation_list   OPEN  MODULE module_name BRACE_OPEN  module_directive_list  BRACE_CLOSE ]],
-			[qw[                     OPEN  MODULE module_name BRACE_OPEN  module_directive_list  BRACE_CLOSE ]],
-			[qw[   annotation_list         MODULE module_name BRACE_OPEN  module_directive_list  BRACE_CLOSE ]],
-			[qw[                           MODULE module_name BRACE_OPEN  module_directive_list  BRACE_CLOSE ]],
-			[qw[   annotation_list   OPEN  MODULE module_name BRACE_OPEN                         BRACE_CLOSE ]],
-			[qw[                     OPEN  MODULE module_name BRACE_OPEN                         BRACE_CLOSE ]],
-			[qw[   annotation_list         MODULE module_name BRACE_OPEN                         BRACE_CLOSE ]],
-			[qw[                           MODULE module_name BRACE_OPEN                         BRACE_CLOSE ]],
-		];
-	}
-
-	sub module_directive            :RULE :ACTION_DEFAULT {
-		[
-			[qw[   REQUIRES requires_modifier_list  module_name SEMICOLON ]],
-			[qw[   REQUIRES                         module_name SEMICOLON ]],
-			[qw[   EXPORTS  package_name  TO module_name_list   SEMICOLON ]],
-			[qw[   EXPORTS  package_name                        SEMICOLON ]],
-			[qw[   OPENS    package_name  TO module_name_list   SEMICOLON ]],
-			[qw[   OPENS    package_name                        SEMICOLON ]],
-			[qw[   USES     type_name                           SEMICOLON ]],
-			[qw[   PROVIDES type_name WITH type_name_list       SEMICOLON ]],
-		];
-	}
-
-	sub module_directive_list       :RULE :ACTION_LIST {
-		[
-			[qw[ module_directive                       ]],
-			[qw[ module_directive module_directive_list ]],
-		];
-	}
-
-	sub module_name                 :RULE :ACTION_ALIAS {
-		[
-			[qw[ qualified_identifier ]],
-		];
-	}
-
-	sub module_name_list            :RULE :ACTION_LIST {
-		[
-			[qw[ module_name                        ]],
-			[qw[ module_name COMMA module_name_list ]],
 		];
 	}
 
