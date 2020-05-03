@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 11;
+plan tests => 13;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -814,6 +814,98 @@ subtest "expect_annotation"             => sub {
 			build_csi_token ('::Token::Paren::Open'  => '(' ),
 			build_csi_token ('::Token::Paren::Close' => ')'),
 		),
+		;
+
+	done_testing;
+};
+
+subtest "expect_block"                  => sub {
+	plan tests => 2;
+
+	is "expect_block / empty block" =>
+		expect => expect_block,
+		got    => build_csi_element ('::Structure::Block' => (
+			build_csi_token ('::Token::Brace::Open' => '{'),
+			build_csi_token ('::Token::Brace::Close' => '}'),
+		)),
+		;
+
+	is "expect block / non-empty block should pass its arguments" =>
+		expect => expect_block ('foo', 'bar', [ 'baz' ]),
+		got    => build_csi_element ('::Structure::Block' => (
+			build_csi_token ('::Token::Brace::Open' => '{'),
+			'foo',
+			'bar',
+			[ 'baz' ],
+			build_csi_token ('::Token::Brace::Close' => '}'),
+		)),
+		;
+
+	done_testing;
+};
+
+subtest "expect_lambda"                 => sub {
+	plan tests => 3;
+
+	is "expect_lambda / block lambda without parameters" =>
+		expect => expect_lambda (
+			parameters => expect_lambda_parameters,
+			expect_block,
+		),
+		got => build_csi_element ('::Expression::Lambda' => (
+			build_csi_element ('::Expression::Lambda::Parameters' => (
+				build_csi_token ('::Token::Paren::Open' => '('),
+				build_csi_token ('::Token::Paren::Close' => ')'),
+			)),
+			build_csi_token ('::Operator::Lambda' => '->'),
+			build_csi_element ('::Structure::Block' => (
+				build_csi_token ('::Token::Brace::Open' => '{'),
+				build_csi_token ('::Token::Brace::Close' => '}'),
+			)),
+		)),
+		;
+
+	is "expect_lambda / block lambda with variable parameter" =>
+		expect => expect_lambda (
+			parameters => expect_lambda_parameter (
+				expect_variable_name ('foo'),
+			),
+			expect_block,
+		),
+		got => build_csi_element ('::Expression::Lambda' => (
+			build_csi_element ('::Expression::Lambda::Parameters' => (
+				build_csi_token ('::Variable::Name' => 'foo'),
+			)),
+			build_csi_token ('::Operator::Lambda' => '->'),
+			build_csi_element ('::Structure::Block' => (
+				build_csi_token ('::Token::Brace::Open' => '{'),
+				build_csi_token ('::Token::Brace::Close' => '}'),
+			)),
+		)),
+		;
+
+	is "expect_lambda / block lambda with multiple parameters" =>
+		expect => expect_lambda (
+			parameters => expect_lambda_parameters (
+				expect_variable_name ('foo'),
+				expect_variable_name ('bar'),
+			),
+			expect_block,
+		),
+		got => build_csi_element ('::Expression::Lambda' => (
+			build_csi_element ('::Expression::Lambda::Parameters' => (
+				build_csi_token ('::Token::Paren::Open' => '('),
+				build_csi_token ('::Variable::Name' => 'foo'),
+				build_csi_token ('::Token::Comma' => ','),
+				build_csi_token ('::Variable::Name' => 'bar'),
+				build_csi_token ('::Token::Paren::Close' => ')'),
+			)),
+			build_csi_token ('::Operator::Lambda' => '->'),
+			build_csi_element ('::Structure::Block' => (
+				build_csi_token ('::Token::Brace::Open' => '{'),
+				build_csi_token ('::Token::Brace::Close' => '}'),
+			)),
+		)),
 		;
 
 	done_testing;
