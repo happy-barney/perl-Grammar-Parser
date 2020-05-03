@@ -204,7 +204,7 @@ sub expect_word_volatile                { expect_word '::Token::Word::Volatile' 
 sub expect_word_while                   { expect_word '::Token::Word::While'        }
 sub expect_word_with                    { expect_word '::Token::Word::With'         }
 sub expect_modifier                     { expect_element '::Modifier', @_           }
-sub expect_modifier_abstract            { expect_modifier expect_word_abstract       }
+sub expect_modifier_abstract            { expect_modifier expect_word_abstract      }
 sub expect_modifier_default             { expect_modifier expect_word_default       }
 sub expect_modifier_final               { expect_modifier expect_word_final         }
 sub expect_modifier_native              { expect_modifier expect_word_native        }
@@ -307,6 +307,30 @@ sub expect_reference                    {
 	expect_qualified_identifier '::Reference' => @list_spec;
 }
 
+sub expect_type_arguments               {
+	expect_element ('::Type::Arguments' => (
+		expect_token_type_list_open,
+		@_,
+		expect_token_type_list_close,
+	));
+}
+
+sub expect_type_class                   {
+	my ($class, %params) = @_;
+
+	expect_element ('::Type::Class' => (
+		$params{annotations}
+			? @{ $params{annotations} }
+			: ()
+			,
+		expect_reference (@$class),
+		$params{type_arguments}
+			? expect_type_arguments (@{ $params{type_arguments} })
+			: ()
+			,
+	)),
+}
+
 sub expect_type_identifier              {
 	expect_token ('::Type::Identifier' => @_)
 }
@@ -328,6 +352,10 @@ sub expect_type_reference               {
 				: ( expect_identifier ($_), (expect_token_dot) x!! --$counter )
 		} @params
 	));
+}
+
+sub expect_type_string              {
+	expect_type_class [qw[ String ]]
 }
 
 sub expect_variable_name                {
