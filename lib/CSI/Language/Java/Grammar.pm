@@ -583,6 +583,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  binary_xor_elements  ]],
 		;
 
+	rule  block                             => dom => 'CSI::Language::Java::Structure::Block',
+		[qw[  BRACE_OPEN  block_statements  BRACE_CLOSE  ]],
+		[qw[  BRACE_OPEN                    BRACE_CLOSE  ]],
+		;
+
 	rule  cast_element                      =>
 		[qw[  postfix_element     ]],
 		[qw[  postfix_expression  ]],
@@ -936,6 +941,34 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  label_reference                   => dom => 'CSI::Language::Java::Label::Reference',
 		[qw[  allowed_identifier  ]],
+		;
+
+	rule  lambda_body                       =>
+		[qw[  statement_expression  ]],
+		[qw[  block                 ]],
+		;
+
+	rule  lambda_expression                 => dom => 'CSI::Language::Java::Expression::Lambda',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-LambdaExpression
+		[qw[  lambda_expression_parameters  LAMBDA  lambda_body  ]],
+		;
+
+	rule  lambda_expression_parameters      => dom => 'CSI::Language::Java::Expression::Lambda::Parameters',
+		[qw[  PAREN_OPEN  lambda_parameters  PAREN_CLOSE  ]],
+		[qw[  PAREN_OPEN                     PAREN_CLOSE  ]],
+		[qw[  variable_name                               ]],
+		;
+
+	rule  lambda_parameter                  =>
+		[qw[  variable_modifiers  variable_type  variable_declarator_id  ]],
+		[qw[                      variable_type  variable_declarator_id  ]],
+		[qw[                                     variable_name           ]],
+		[qw[  variable_arity_parameter                                   ]],
+		;
+
+	rule  lambda_parameters                 =>
+		[qw[  lambda_parameter  COMMA  lambda_parameters  ]],
+		[qw[  lambda_parameter                            ]],
 		;
 
 	rule  left_hand_side                    =>
@@ -1350,6 +1383,18 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  LOGICAL_COMPLEMENT  unary_element  ]],
 		;
 
+	rule  variable_arity_parameter          => action => 'pass_through',
+		[qw[   variable_modifiers  data_type  annotations  ELIPSIS  variable_name  ]],
+		[qw[                       data_type  annotations  ELIPSIS  variable_name  ]],
+		[qw[   variable_modifiers  data_type               ELIPSIS  variable_name  ]],
+		[qw[                       data_type               ELIPSIS  variable_name  ]],
+		;
+
+	rule  variable_declarator_id            => dom => 'CSI::Language::Java::Variable::ID',
+		[qw[  variable_name  dims  ]],
+		[qw[  variable_name        ]],
+		;
+
 	rule  variable_initializer              =>
 		[qw[  array_initializer  ]],
 		[qw[  expression         ]],
@@ -1372,6 +1417,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  variable_name                     => dom => 'CSI::Language::Java::Variable::Name',
 		[qw[  allowed_identifier  ]],
+		;
+
+	rule  variable_type                     =>
+		[qw[  data_type  ]],
+		[qw[  var        ]],
 		;
 
 	1;
@@ -1506,13 +1556,6 @@ __END__
 			[qw[ FOR PAREN_OPEN            SEMICOLON  expression  SEMICOLON              PAREN_CLOSE statement_no_short_if ]],
 			[qw[ FOR PAREN_OPEN  for_init  SEMICOLON              SEMICOLON              PAREN_CLOSE statement_no_short_if ]],
 			[qw[ FOR PAREN_OPEN            SEMICOLON              SEMICOLON              PAREN_CLOSE statement_no_short_if ]],
-		];
-	}
-
-	sub block                       :RULE :ACTION_DEFAULT {
-		[
-			[qw[ BRACE_OPEN  block_statements  BRACE_CLOSE ]],
-			[qw[ BRACE_OPEN                    BRACE_CLOSE ]],
 		];
 	}
 
@@ -2040,19 +2083,6 @@ __END__
 	sub labeled_statement_no_short_if:RULE :ACTION_DEFAULT {
 		[
 			[qw[ identifier COLON statement_no_short_if ]],
-		];
-	}
-
-	sub lambda_body                 :RULE :ACTION_DEFAULT {
-		[
-			[qw[ expression ]],
-			[qw[      block ]],
-		];
-	}
-
-	sub lambda_expression           :RULE :ACTION_DEFAULT {
-		[
-			[qw[ lambda_parameters LAMBDA lambda_body ]],
 		];
 	}
 

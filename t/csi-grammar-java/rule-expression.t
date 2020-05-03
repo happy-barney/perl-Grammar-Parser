@@ -11,7 +11,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expression';
 
-plan tests => 24;
+plan tests => 25;
 
 test_rule "primary expression / literal / null" => (
 	data => 'null',
@@ -240,6 +240,16 @@ test_rule "expression / logical or expression" => (
 			expect_operator_logical_or,
 			expect_reference ('bar'),
 		)),
+	],
+);
+
+test_rule "lambda expression" => (
+	data => '() -> {}',
+	expect => [
+		expect_lambda (
+			parameters => expect_lambda_parameters,
+			expect_block,
+		),
 	],
 );
 

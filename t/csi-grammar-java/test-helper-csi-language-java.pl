@@ -262,6 +262,14 @@ sub expect_array_type                   {
 	));
 }
 
+sub expect_block                        {
+	expect_element ('::Structure::Block' => (
+		expect_token_brace_open,
+		@_,
+		expect_token_brace_close,
+	));
+}
+
 sub expect_class_extends                {
 	expect_element ('CSI::Language::Java::Class::Extends' => (
 		expect_token ('CSI::Language::Java::Token::Word::Extends' => 'extends'),
@@ -327,6 +335,38 @@ sub expect_label_name                   {
 
 sub expect_label_reference              {
 	expect_token '::Label::Reference' => @_
+}
+
+sub expect_lambda                       {
+	my ($parameters, @body);
+
+	if ($_[0] eq 'parameters') {
+		shift;
+		$parameters = shift;
+	}
+
+	$parameters //= shift;
+	@body = @_;
+
+	expect_element ('::Expression::Lambda' => (
+		$parameters,
+		expect_operator_lambda,
+		@body,
+	));
+}
+
+sub expect_lambda_parameter             {
+	expect_element ('::Expression::Lambda::Parameters' => (
+		@_,
+	));
+}
+
+sub expect_lambda_parameters            {
+	expect_element ('::Expression::Lambda::Parameters' => (
+		expect_token_paren_open,
+		_list_with_separator ([ expect_token_comma ], @_),
+		expect_token_paren_close,
+	));
 }
 
 sub expect_method_name                  {
