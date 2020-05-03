@@ -291,6 +291,13 @@ sub expect_import_declaration           {
 	));
 }
 
+sub expect_interface_extends            {
+	expect_element ('CSI::Language::Java::Interface::Extends' => (
+		expect_word_extends,
+		_list_with_separator ([ expect_token_comma ], @_),
+	));
+}
+
 sub expect_label_name                   {
 	expect_token '::Label::Name' => @_
 }
