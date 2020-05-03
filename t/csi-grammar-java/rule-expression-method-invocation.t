@@ -11,7 +11,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expressions';
 
-plan tests => 8;
+plan tests => 9;
 
 test_rule "method invocation / without invocant" => (
 	data => 'foo()',
@@ -113,6 +113,22 @@ test_rule "method invocation / with invocant / method call" => (
 			)),
 			expect_token_dot,
 			expect_method_name ('bar'),
+			expect_arguments,
+		)),
+	],
+);
+
+test_rule "method invocation / with qualified super" => (
+	data => 'Foo.Bar.super.baz()',
+	expect => [
+		expect_element ('CSI::Language::Java::Method::Invocation' => (
+			expect_element ('CSI::Language::Java::Method::Invocant' => (
+				expect_reference ('Foo', 'Bar'),
+				expect_token_dot,
+				expect_word_super,
+			)),
+			expect_token_dot,
+			expect_method_name ('baz'),
 			expect_arguments,
 		)),
 	],

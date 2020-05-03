@@ -1279,7 +1279,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		#[qw[  expression_name        ]],
 		[qw[  primary                ]],
 		#[qw[  type_name              ]],
-		[qw[  type_name  DOT  super  ]],
+		[qw[  type_reference  DOT  super  ]],
 		[qw[  super                  ]],
 		;
 
