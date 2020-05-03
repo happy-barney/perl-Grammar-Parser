@@ -541,7 +541,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[                       type_identifier  type_arguments  ]],
 		[qw[                       type_identifier                  ]],
 		[qw[  qualified_identifier DOT  type_identifier             ]],
-		[qw[  qualified_identifier DOT  class_type_identifiers         ]],
+		[qw[  qualified_identifier DOT  class_type_identifiers      ]],
 		;
 
 	rule  class_type                        => dom => '::Type::Class',
@@ -734,6 +734,13 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  allowed_identifier  ]],
 		;
 
+	rule  left_hand_side                    =>
+		[qw[  array_access     ]],
+		#[qw[  field_access     ]],
+		#[qw[  identifier       ]],
+		[qw[  reference        ]],
+		;
+
 	rule  literal                           =>
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-15.8.1
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-IntegerLiteral
@@ -786,6 +793,25 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  method_modifier                    ]],
 		;
 
+	rule  method_name                       => dom => '::Method::Name',
+		[qw[  identifier  ]],
+		;
+
+	rule  method_reference                  => dom => '::Method::Reference',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-MethodReference
+		[qw[  primary_no_reference    DOUBLE_COLON  type_arguments  method_name  ]],
+		[qw[  primary_no_reference    DOUBLE_COLON                  method_name  ]],
+		[qw[  class_type              DOUBLE_COLON  type_arguments  method_name  ]],
+		[qw[  class_type              DOUBLE_COLON                  method_name  ]],
+		[qw[  class_type  DOT  super  DOUBLE_COLON  type_arguments  method_name  ]],
+		[qw[  class_type  DOT  super  DOUBLE_COLON                  method_name  ]],
+		[qw[                   super  DOUBLE_COLON  type_arguments  method_name  ]],
+		[qw[                   super  DOUBLE_COLON                  method_name  ]],
+		[qw[  class_type              DOUBLE_COLON  type_arguments  new          ]],
+		[qw[  class_type              DOUBLE_COLON                  new          ]],
+		[qw[  array_type              DOUBLE_COLON                  new          ]],
+		;
+
 	rule  ordinary_compilation_unit         =>
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-7.html#jls-OrdinaryCompilationUnit
 		[qw[  package_declaration  import_declarations  type_declarations  ]],
@@ -821,11 +847,16 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  primary_no_new_array              =>
+		[qw[  primary_no_reference  ]],
+		[qw[  reference             ]],
+		;
+
+	rule  primary_no_reference              =>
 		[qw[  literal                       ]],
 		[qw[  class_literal                 ]],
 		[qw[  expression_group              ]],
 		[qw[  instance_creation_expression  ]],
-		[qw[  left_hand_side                ]],
+		[qw[  array_access                  ]],
 		[qw[  method_invocation             ]],
 		[qw[  method_reference              ]],
 		[qw[  qualified_this                ]],
@@ -1877,24 +1908,6 @@ __END__
 	sub method_name                 :RULE :ACTION_ALIAS {
 		[
 			[qw[ identifier ]],
-		];
-	}
-
-	sub method_reference            :RULE :ACTION_DEFAULT {
-		[
-			[qw[     expression_name DOUBLE_COLON  type_arguments  method_name ]],
-			[qw[     expression_name DOUBLE_COLON                  method_name ]],
-			[qw[             primary DOUBLE_COLON  type_arguments  method_name ]],
-			[qw[             primary DOUBLE_COLON                  method_name ]],
-			[qw[      reference_type DOUBLE_COLON  type_arguments  method_name ]],
-			[qw[      reference_type DOUBLE_COLON                  method_name ]],
-			[qw[               SUPER DOUBLE_COLON  type_arguments  method_name ]],
-			[qw[               SUPER DOUBLE_COLON                  method_name ]],
-			[qw[ type_name DOT SUPER DOUBLE_COLON  type_arguments  method_name ]],
-			[qw[ type_name DOT SUPER DOUBLE_COLON                  method_name ]],
-			[qw[          class_type DOUBLE_COLON  type_arguments  NEW         ]],
-			[qw[          class_type DOUBLE_COLON                  NEW         ]],
-			[qw[          array_type DOUBLE_COLON                  NEW         ]],
 		];
 	}
 
