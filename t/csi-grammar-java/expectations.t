@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 9;
+plan tests => 10;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -982,6 +982,21 @@ subtest "expect_package_declaration"    => sub {
 				build_csi_token ('::Identifier' => 'bar'),
 			)),
 			build_csi_token ('::Token::Semicolon' => ';'),
+		)),
+		;
+
+	done_testing;
+};
+
+subtest "expect_type_class"             => sub {
+	#plan tests => 3;
+
+	is "expect_type_class / short type name" =>
+		expect => expect_type_class ([qw[ Map ]]),
+		got    => build_csi_element ('::Type::Class' => (
+			build_csi_element ('::Reference' => (
+				build_csi_token ('::Identifier' => 'Map'),
+			)),
 		)),
 		;
 
