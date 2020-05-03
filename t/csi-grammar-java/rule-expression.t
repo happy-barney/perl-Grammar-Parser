@@ -10,7 +10,7 @@ BEGIN { require "test-helper-csi-language-java.pl" }
 
 arrange_start_rule 'expression';
 
-plan tests => 22;
+plan tests => 23;
 
 test_rule "primary expression / literal / null" => (
 	data => 'null',
@@ -84,6 +84,20 @@ test_rule "primary expression / field access / field of 'var' variable" => (
 	data => 'var.field',
 	expect => [
 		expect_reference (qw[ var field ]),
+	],
+);
+
+test_rule "primary expression / method invocation" => (
+	data => 'Foo.Bar.method()',
+	expect => [
+		expect_element ('::Method::Invocation' => (
+			expect_element ('::Method::Invocant' => (
+				expect_reference (qw[ Foo Bar ]),
+			)),
+			expect_token_dot,
+			expect_method_name ('method'),
+			expect_arguments,
+		)),
 	],
 );
 

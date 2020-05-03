@@ -276,34 +276,38 @@ sub expect_annotation                   {
 	));
 }
 
+sub expect_arguments                    {
+	expect_element ('::Arguments' => (
+		expect_token_paren_open,
+		_list_with_separator ([ expect_token_comma ], @_),
+		expect_token_paren_close,
+	)),
+}
+
 sub expect_array_type                   {
 	my ($array) = @_;
 
 	return $array
 		unless Ref::Util::is_plain_arrayref ($array);
 
-	expect_element ('CSI::Language::Java::Type::Array' => (
+	expect_element ('::Type::Array' => (
 		expect_array_type ($array->[0]),
-		expect_element ('CSI::Language::Java::Array::Dimension' => (
+		expect_element ('::Array::Dimension' => (
 			expect_token_bracket_open,
 			expect_token_bracket_close,
 		)),
 	));
 }
 
-sub expect_identifier                   {
-	expect_token '::Identifier' => @_
-}
-
 sub expect_class_extends                {
-	expect_element ('CSI::Language::Java::Class::Extends' => (
-		expect_token ('CSI::Language::Java::Token::Word::Extends' => 'extends'),
+	expect_element ('::Class::Extends' => (
+		expect_token ('::Token::Word::Extends' => 'extends'),
 		expect_class_type (@_),
 	));
 }
 
 sub expect_class_implements             {
-	expect_element ('CSI::Language::Java::Class::Implements' => (
+	expect_element ('::Class::Implements' => (
 		expect_word_implements,
 		_list_with_separator (
 			[ expect_token_comma ],
@@ -343,8 +347,12 @@ sub expect_import_declaration           {
 	));
 }
 
+sub expect_identifier                   {
+	expect_token '::Identifier' => @_
+}
+
 sub expect_interface_extends            {
-	expect_element ('CSI::Language::Java::Interface::Extends' => (
+	expect_element ('::Interface::Extends' => (
 		expect_word_extends,
 		_list_with_separator ([ expect_token_comma ], @_),
 	));
@@ -359,14 +367,14 @@ sub expect_label_reference              {
 }
 
 sub expect_method_name                  {
-	expect_element ('CSI::Language::Java::Method::Name' => (
+	expect_element ('::Method::Name' => (
 		expect_identifier (@_),
 	));
 }
 
 sub expect_modifiers                    {
 	map {
-		exists $_->{'CSI::Language::Java::Annotation'}
+		exists $_->{build_csi_class ('::Annotation')}
 			? (expect_modifier $_)
 			: $_
 		} @_;
@@ -412,9 +420,9 @@ sub expect_type                         {
 sub expect_type_arguments               {
 	expect_element ('::Type::Arguments' => (
 		expect_token_type_list_open,
-		@_,
+		_list_with_separator ([ expect_token_comma ], @_),
 		expect_token_type_list_close,
-	));
+	)),
 }
 
 sub expect_type_array                   {
@@ -490,7 +498,7 @@ sub expect_type_reference               {
 	my (@params) = @_;
 
 	my $counter = scalar grep ! ref, @params;
-	expect_element ('CSI::Language::Java::Type::Reference' => (
+	expect_element ('::Type::Reference' => (
 		map {
 			ref $_
 				? $_
