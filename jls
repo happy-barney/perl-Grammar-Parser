@@ -23,20 +23,9 @@
 		[qw[ AdditiveExpression MINUS MultiplicativeExpression ]],
 		;
 
-	rule AmbiguousName               =>
-		[qw[                   Identifier ]],
-		[qw[ AmbiguousName DOT Identifier ]],
-		;
-
 	rule AndExpression               =>
 		[qw[                   EqualityExpression ]],
 		[qw[ AndExpression AND EqualityExpression ]],
-		;
-
-	rule Annotation                  =>
-		[qw[        NormalAnnotation ]],
-		[qw[        MarkerAnnotation ]],
-		[qw[ SingleElementAnnotation ]],
 		;
 
 	rule AnnotationTypeBody          =>
@@ -84,102 +73,12 @@
 		[qw[ AnnotationTypeMemberDeclaration AnnotationTypeMemberDeclaration_list_1 ]],
 		;
 
-	rule Annotation_list_1           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_1 ]],
-		;
-
-	rule Annotation_list_10          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_10 ]],
-		;
-
-	rule Annotation_list_11          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_11 ]],
-		;
-
-	rule Annotation_list_12          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_12 ]],
-		;
-
-	rule Annotation_list_13          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_13 ]],
-		;
-
-	rule Annotation_list_14          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_14 ]],
-		;
-
-	rule Annotation_list_15          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_15 ]],
-		;
-
-	rule Annotation_list_16          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_16 ]],
-		;
-
-	rule Annotation_list_17          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_17 ]],
-		;
-
-	rule Annotation_list_18          =>
-		[qw[ Annotation                    ]],
-		[qw[ Annotation Annotation_list_18 ]],
-		;
-
-	rule Annotation_list_2           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_2 ]],
-		;
-
-	rule Annotation_list_3           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_3 ]],
-		;
-
-	rule Annotation_list_4           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_4 ]],
-		;
-
-	rule Annotation_list_5           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_5 ]],
-		;
-
-	rule Annotation_list_6           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_6 ]],
-		;
-
-	rule Annotation_list_7           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_7 ]],
-		;
-
-	rule Annotation_list_8           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_8 ]],
-		;
-
-	rule Annotation_list_9           =>
-		[qw[ Annotation                   ]],
-		[qw[ Annotation Annotation_list_9 ]],
-		;
-
 	rule ArgumentList                =>
 		[qw[ Expression_list_1  ]],
 		;
 
 	rule ArrayAccess                 =>
-		[qw[    ExpressionName BRACKET_OPEN Expression BRACKET_CLOSE ]],
+		[qw[    reference BRACKET_OPEN Expression BRACKET_CLOSE ]],
 		[qw[ PrimaryNoNewArray BRACKET_OPEN Expression BRACKET_CLOSE ]],
 		;
 
@@ -330,7 +229,7 @@
 
 	rule ClassInstanceCreationExpression=>
 		[qw[                    UnqualifiedClassInstanceCreationExpression ]],
-		[qw[ ExpressionName DOT UnqualifiedClassInstanceCreationExpression ]],
+		[qw[ reference DOT UnqualifiedClassInstanceCreationExpression ]],
 		[qw[        Primary DOT UnqualifiedClassInstanceCreationExpression ]],
 		;
 
@@ -371,29 +270,29 @@
 		;
 
 	rule ClassOrInterfaceTypeToInstantiate=>
-		[qw[   Annotation_list_16  Identifier {DOT  Annotation_list_17  Identifier}  TypeArgumentsOrDiamond   ]],
-		[qw[                       Identifier {DOT  Annotation_list_17  Identifier}  TypeArgumentsOrDiamond   ]],
-		[qw[   Annotation_list_16  Identifier {DOT                      Identifier}  TypeArgumentsOrDiamond   ]],
+		[qw[   annotations  Identifier {DOT  annotations  Identifier}  TypeArgumentsOrDiamond   ]],
+		[qw[                       Identifier {DOT  annotations  Identifier}  TypeArgumentsOrDiamond   ]],
+		[qw[   annotations  Identifier {DOT                      Identifier}  TypeArgumentsOrDiamond   ]],
 		[qw[                       Identifier {DOT                      Identifier}  TypeArgumentsOrDiamond   ]],
-		[qw[   Annotation_list_16  Identifier {DOT  Annotation_list_17  Identifier}                           ]],
-		[qw[                       Identifier {DOT  Annotation_list_17  Identifier}                           ]],
-		[qw[   Annotation_list_16  Identifier {DOT                      Identifier}                           ]],
+		[qw[   annotations  Identifier {DOT  annotations  Identifier}                           ]],
+		[qw[                       Identifier {DOT  annotations  Identifier}                           ]],
+		[qw[   annotations  Identifier {DOT                      Identifier}                           ]],
 		[qw[                       Identifier {DOT                      Identifier}                           ]],
 		;
 
 	rule ClassType                   =>
-		[qw[                           Annotation_list_11  type_identifier  TypeArguments   ]],
-		[qw[                                               type_identifier  TypeArguments   ]],
-		[qw[                           Annotation_list_11  type_identifier                  ]],
-		[qw[                                               type_identifier                  ]],
-		[qw[          PackageName DOT  Annotation_list_12  type_identifier  TypeArguments   ]],
-		[qw[          PackageName DOT                      type_identifier  TypeArguments   ]],
-		[qw[          PackageName DOT  Annotation_list_12  type_identifier                  ]],
-		[qw[          PackageName DOT                      type_identifier                  ]],
-		[qw[ ClassOrInterfaceType DOT  Annotation_list_13  type_identifier  TypeArguments   ]],
-		[qw[ ClassOrInterfaceType DOT                      type_identifier  TypeArguments   ]],
-		[qw[ ClassOrInterfaceType DOT  Annotation_list_13  type_identifier                  ]],
-		[qw[ ClassOrInterfaceType DOT                      type_identifier                  ]],
+		[qw[                           annotations  type_identifier  TypeArguments   ]],
+		[qw[                                        type_identifier  TypeArguments   ]],
+		[qw[                           annotations  type_identifier                  ]],
+		[qw[                                        type_identifier                  ]],
+		[qw[          PackageName DOT  annotations  type_identifier  TypeArguments   ]],
+		[qw[          PackageName DOT               type_identifier  TypeArguments   ]],
+		[qw[          PackageName DOT  annotations  type_identifier                  ]],
+		[qw[          PackageName DOT               type_identifier                  ]],
+		[qw[ ClassOrInterfaceType DOT  annotations  type_identifier  TypeArguments   ]],
+		[qw[ ClassOrInterfaceType DOT               type_identifier  TypeArguments   ]],
+		[qw[ ClassOrInterfaceType DOT  annotations  type_identifier                  ]],
+		[qw[ ClassOrInterfaceType DOT               type_identifier                  ]],
 		;
 
 	rule CompilationUnit             =>
@@ -482,7 +381,7 @@
 		;
 
 	rule DimExpr                     =>
-		[qw[   Annotation_list_18  BRACKET_OPEN Expression BRACKET_CLOSE ]],
+		[qw[   annotations  BRACKET_OPEN Expression BRACKET_CLOSE ]],
 		[qw[                       BRACKET_OPEN Expression BRACKET_CLOSE ]],
 		;
 
@@ -496,9 +395,9 @@
 		;
 
 	rule Dims                        =>
-		[qw[   Annotation_list_4  BRACKET_OPEN BRACKET_CLOSE { Annotation_list_5  BRACKET_OPEN BRACKET_CLOSE}  ]],
-		[qw[                      BRACKET_OPEN BRACKET_CLOSE { Annotation_list_5  BRACKET_OPEN BRACKET_CLOSE}  ]],
-		[qw[   Annotation_list_4  BRACKET_OPEN BRACKET_CLOSE {                    BRACKET_OPEN BRACKET_CLOSE}  ]],
+		[qw[   annotations  BRACKET_OPEN BRACKET_CLOSE { annotations  BRACKET_OPEN BRACKET_CLOSE}  ]],
+		[qw[                      BRACKET_OPEN BRACKET_CLOSE { annotations  BRACKET_OPEN BRACKET_CLOSE}  ]],
+		[qw[   annotations  BRACKET_OPEN BRACKET_CLOSE {                    BRACKET_OPEN BRACKET_CLOSE}  ]],
 		[qw[                      BRACKET_OPEN BRACKET_CLOSE {                    BRACKET_OPEN BRACKET_CLOSE}  ]],
 		;
 
@@ -645,10 +544,10 @@
 		[qw[                                    SUPER PAREN_OPEN  ArgumentList  PAREN_CLOSE SEMICOLON ]],
 		[qw[                     TypeArguments  SUPER PAREN_OPEN                PAREN_CLOSE SEMICOLON ]],
 		[qw[                                    SUPER PAREN_OPEN                PAREN_CLOSE SEMICOLON ]],
-		[qw[ ExpressionName DOT  TypeArguments  SUPER PAREN_OPEN  ArgumentList  PAREN_CLOSE SEMICOLON ]],
-		[qw[ ExpressionName DOT                 SUPER PAREN_OPEN  ArgumentList  PAREN_CLOSE SEMICOLON ]],
-		[qw[ ExpressionName DOT  TypeArguments  SUPER PAREN_OPEN                PAREN_CLOSE SEMICOLON ]],
-		[qw[ ExpressionName DOT                 SUPER PAREN_OPEN                PAREN_CLOSE SEMICOLON ]],
+		[qw[ reference DOT  TypeArguments  SUPER PAREN_OPEN  ArgumentList  PAREN_CLOSE SEMICOLON ]],
+		[qw[ reference DOT                 SUPER PAREN_OPEN  ArgumentList  PAREN_CLOSE SEMICOLON ]],
+		[qw[ reference DOT  TypeArguments  SUPER PAREN_OPEN                PAREN_CLOSE SEMICOLON ]],
+		[qw[ reference DOT                 SUPER PAREN_OPEN                PAREN_CLOSE SEMICOLON ]],
 		[qw[        Primary DOT  TypeArguments  SUPER PAREN_OPEN  ArgumentList  PAREN_CLOSE SEMICOLON ]],
 		[qw[        Primary DOT                 SUPER PAREN_OPEN  ArgumentList  PAREN_CLOSE SEMICOLON ]],
 		[qw[        Primary DOT  TypeArguments  SUPER PAREN_OPEN                PAREN_CLOSE SEMICOLON ]],
@@ -658,11 +557,6 @@
 	rule Expression                  =>
 		[qw[     LambdaExpression ]],
 		[qw[ AssignmentExpression ]],
-		;
-
-	rule ExpressionName              =>
-		[qw[                   Identifier ]],
-		[qw[ AmbiguousName DOT Identifier ]],
 		;
 
 	rule ExpressionStatement         =>
@@ -914,7 +808,7 @@
 		;
 
 	rule LeftHandSide                =>
-		[qw[ ExpressionName ]],
+		[qw[ reference ]],
 		[qw[    FieldAccess ]],
 		[qw[    ArrayAccess ]],
 		;
@@ -942,10 +836,6 @@
 		[qw[       VAR ]],
 		;
 
-	rule MarkerAnnotation            =>
-		[qw[ AT TypeName ]],
-		;
-
 	rule MethodBody                  =>
 		[qw[     Block ]],
 		[qw[ SEMICOLON ]],
@@ -970,9 +860,9 @@
 	rule MethodHeader                =>
 		[qw[                                    Result MethodDeclarator  Throws   ]],
 		[qw[                                    Result MethodDeclarator           ]],
-		[qw[ TypeParameters  Annotation_list_6  Result MethodDeclarator  Throws   ]],
+		[qw[ TypeParameters  annotations  Result MethodDeclarator  Throws   ]],
 		[qw[ TypeParameters                     Result MethodDeclarator  Throws   ]],
-		[qw[ TypeParameters  Annotation_list_6  Result MethodDeclarator           ]],
+		[qw[ TypeParameters  annotations  Result MethodDeclarator           ]],
 		[qw[ TypeParameters                     Result MethodDeclarator           ]],
 		;
 
@@ -983,10 +873,10 @@
 		[qw[           TypeName DOT                 Identifier PAREN_OPEN  ArgumentList  PAREN_CLOSE ]],
 		[qw[           TypeName DOT  TypeArguments  Identifier PAREN_OPEN                PAREN_CLOSE ]],
 		[qw[           TypeName DOT                 Identifier PAREN_OPEN                PAREN_CLOSE ]],
-		[qw[     ExpressionName DOT  TypeArguments  Identifier PAREN_OPEN  ArgumentList  PAREN_CLOSE ]],
-		[qw[     ExpressionName DOT                 Identifier PAREN_OPEN  ArgumentList  PAREN_CLOSE ]],
-		[qw[     ExpressionName DOT  TypeArguments  Identifier PAREN_OPEN                PAREN_CLOSE ]],
-		[qw[     ExpressionName DOT                 Identifier PAREN_OPEN                PAREN_CLOSE ]],
+		[qw[     reference DOT  TypeArguments  Identifier PAREN_OPEN  ArgumentList  PAREN_CLOSE ]],
+		[qw[     reference DOT                 Identifier PAREN_OPEN  ArgumentList  PAREN_CLOSE ]],
+		[qw[     reference DOT  TypeArguments  Identifier PAREN_OPEN                PAREN_CLOSE ]],
+		[qw[     reference DOT                 Identifier PAREN_OPEN                PAREN_CLOSE ]],
 		[qw[            Primary DOT  TypeArguments  Identifier PAREN_OPEN  ArgumentList  PAREN_CLOSE ]],
 		[qw[            Primary DOT                 Identifier PAREN_OPEN  ArgumentList  PAREN_CLOSE ]],
 		[qw[            Primary DOT  TypeArguments  Identifier PAREN_OPEN                PAREN_CLOSE ]],
@@ -1017,8 +907,8 @@
 		;
 
 	rule MethodReference             =>
-		[qw[     ExpressionName DOUBLE_COLON  TypeArguments  Identifier ]],
-		[qw[     ExpressionName DOUBLE_COLON                 Identifier ]],
+		[qw[     reference DOUBLE_COLON  TypeArguments  Identifier ]],
+		[qw[     reference DOUBLE_COLON                 Identifier ]],
 		[qw[            Primary DOUBLE_COLON  TypeArguments  Identifier ]],
 		[qw[            Primary DOUBLE_COLON                 Identifier ]],
 		[qw[      ReferenceType DOUBLE_COLON  TypeArguments  Identifier ]],
@@ -1038,23 +928,23 @@
 		;
 
 	rule ModuleDeclaration           =>
-		[qw[   Annotation_list_1   OPEN  MODULE Identifier_list_2 BRACE_OPEN  ModuleDirective_list_1  BRACE_CLOSE ]],
+		[qw[   annotations   OPEN  MODULE Identifier_list_2 BRACE_OPEN  ModuleDirective_list_1  BRACE_CLOSE ]],
 		[qw[                       OPEN  MODULE Identifier_list_2 BRACE_OPEN  ModuleDirective_list_1  BRACE_CLOSE ]],
-		[qw[   Annotation_list_1         MODULE Identifier_list_2 BRACE_OPEN  ModuleDirective_list_1  BRACE_CLOSE ]],
+		[qw[   annotations         MODULE Identifier_list_2 BRACE_OPEN  ModuleDirective_list_1  BRACE_CLOSE ]],
 		[qw[                             MODULE Identifier_list_2 BRACE_OPEN  ModuleDirective_list_1  BRACE_CLOSE ]],
-		[qw[   Annotation_list_1   OPEN  MODULE Identifier_list_2 BRACE_OPEN                          BRACE_CLOSE ]],
+		[qw[   annotations   OPEN  MODULE Identifier_list_2 BRACE_OPEN                          BRACE_CLOSE ]],
 		[qw[                       OPEN  MODULE Identifier_list_2 BRACE_OPEN                          BRACE_CLOSE ]],
-		[qw[   Annotation_list_1         MODULE Identifier_list_2 BRACE_OPEN                          BRACE_CLOSE ]],
+		[qw[   annotations         MODULE Identifier_list_2 BRACE_OPEN                          BRACE_CLOSE ]],
 		[qw[                             MODULE Identifier_list_2 BRACE_OPEN                          BRACE_CLOSE ]],
 		;
 
 	rule ModuleDirective             =>
-		[qw[ REQUIRES  RequiresModifier_list_1  ModuleName SEMICOLON ]],
-		[qw[ REQUIRES                           ModuleName SEMICOLON ]],
-		[qw[    EXPORTS PackageName  TO ModuleName_list_1  SEMICOLON ]],
-		[qw[    EXPORTS PackageName                        SEMICOLON ]],
-		[qw[      OPENS PackageName  TO ModuleName_list_2  SEMICOLON ]],
-		[qw[      OPENS PackageName                        SEMICOLON ]],
+		[qw[ REQUIRES  RequiresModifier_list_1  reference SEMICOLON ]],
+		[qw[ REQUIRES                           reference SEMICOLON ]],
+		[qw[    EXPORTS reference  TO ModuleName_list_1  SEMICOLON ]],
+		[qw[    EXPORTS reference                        SEMICOLON ]],
+		[qw[      OPENS reference  TO ModuleName_list_2  SEMICOLON ]],
+		[qw[      OPENS reference                        SEMICOLON ]],
 		[qw[                                 USES TypeName SEMICOLON ]],
 		[qw[        PROVIDES TypeName WITH TypeName_list_1 SEMICOLON ]],
 		;
@@ -1064,19 +954,14 @@
 		[qw[ ModuleDirective ModuleDirective_list_1 ]],
 		;
 
-	rule ModuleName                  =>
-		[qw[                Identifier ]],
-		[qw[ ModuleName DOT Identifier ]],
-		;
-
 	rule ModuleName_list_1           =>
-		[qw[ ModuleName                          ]],
-		[qw[ ModuleName COMMA  ModuleName_list_1 ]],
+		[qw[ reference                          ]],
+		[qw[ reference COMMA  ModuleName_list_1 ]],
 		;
 
 	rule ModuleName_list_2           =>
-		[qw[ ModuleName                          ]],
-		[qw[ ModuleName COMMA  ModuleName_list_2 ]],
+		[qw[ reference                          ]],
+		[qw[ reference COMMA  ModuleName_list_2 ]],
 		;
 
 	rule MultiplicativeExpression    =>
@@ -1151,16 +1036,6 @@
 		[qw[ PackageModifier PackageModifier_list_1 ]],
 		;
 
-	rule PackageName                 =>
-		[qw[                 Identifier ]],
-		[qw[ PackageName DOT Identifier ]],
-		;
-
-	rule PackageOrTypeName           =>
-		[qw[                       Identifier ]],
-		[qw[ PackageOrTypeName DOT Identifier ]],
-		;
-
 	rule PostDecrementExpression     =>
 		[qw[ PostfixExpression DECREMENT ]],
 		;
@@ -1171,7 +1046,7 @@
 
 	rule PostfixExpression           =>
 		[qw[                 Primary ]],
-		[qw[          ExpressionName ]],
+		[qw[          reference ]],
 		[qw[ PostIncrementExpression ]],
 		[qw[ PostDecrementExpression ]],
 		;
@@ -1203,17 +1078,17 @@
 		;
 
 	rule PrimitiveType               =>
-		[qw[   Annotation_list_9  NumericType ]],
+		[qw[   annotations  NumericType ]],
 		[qw[                      NumericType ]],
-		[qw[      Annotation_list_10  BOOLEAN ]],
+		[qw[      annotations  BOOLEAN ]],
 		[qw[                          BOOLEAN ]],
 		;
 
 	rule ReceiverParameter           =>
-		[qw[   Annotation_list_7  UnannType  variable_name DOT  THIS ]],
-		[qw[                      UnannType  variable_name DOT  THIS ]],
-		[qw[   Annotation_list_7  UnannType                  THIS ]],
-		[qw[                      UnannType                  THIS ]],
+		[qw[   annotations  UnannType  variable_name DOT  THIS ]],
+		[qw[                UnannType  variable_name DOT  THIS ]],
+		[qw[   annotations  UnannType                     THIS ]],
+		[qw[                UnannType                     THIS ]],
 		;
 
 	rule ReferenceType               =>
@@ -1469,12 +1344,12 @@
 		;
 
 	rule TypeImportOnDemandDeclaration=>
-		[qw[ IMPORT PackageOrTypeName DOT MULTIPLY SEMICOLON ]],
+		[qw[ IMPORT reference DOT MULTIPLY SEMICOLON ]],
 		;
 
 	rule TypeName                    =>
 		[qw[                       TypeIdentifier ]],
-		[qw[ PackageOrTypeName DOT TypeIdentifier ]],
+		[qw[ reference DOT TypeIdentifier ]],
 		;
 
 	rule TypeName_list_1             =>
@@ -1512,8 +1387,8 @@
 		;
 
 	rule TypeVariable                =>
-		[qw[   Annotation_list_14  type_identifier ]],
-		[qw[                       type_identifier ]],
+		[qw[   annotations  type_identifier ]],
+		[qw[                type_identifier ]],
 		;
 
 	rule UnannArrayType              =>
@@ -1528,16 +1403,16 @@
 		;
 
 	rule UnannClassType              =>
-		[qw[                                                   type_identifier  TypeArguments   ]],
-		[qw[                                                   type_identifier                  ]],
-		[qw[               PackageName DOT  Annotation_list_2  type_identifier  TypeArguments   ]],
-		[qw[               PackageName DOT                     type_identifier  TypeArguments   ]],
-		[qw[               PackageName DOT  Annotation_list_2  type_identifier                  ]],
-		[qw[               PackageName DOT                     type_identifier                  ]],
-		[qw[ UnannClassOrInterfaceType DOT  Annotation_list_3  type_identifier  TypeArguments   ]],
-		[qw[ UnannClassOrInterfaceType DOT                     type_identifier  TypeArguments   ]],
-		[qw[ UnannClassOrInterfaceType DOT  Annotation_list_3  type_identifier                  ]],
-		[qw[ UnannClassOrInterfaceType DOT                     type_identifier                  ]],
+		[qw[                                             type_identifier  TypeArguments   ]],
+		[qw[                                             type_identifier                  ]],
+		[qw[               PackageName DOT  annotations  type_identifier  TypeArguments   ]],
+		[qw[               PackageName DOT               type_identifier  TypeArguments   ]],
+		[qw[               PackageName DOT  annotations  type_identifier                  ]],
+		[qw[               PackageName DOT               type_identifier                  ]],
+		[qw[ UnannClassOrInterfaceType DOT  annotations  type_identifier  TypeArguments   ]],
+		[qw[ UnannClassOrInterfaceType DOT               type_identifier  TypeArguments   ]],
+		[qw[ UnannClassOrInterfaceType DOT  annotations  type_identifier                  ]],
+		[qw[ UnannClassOrInterfaceType DOT               type_identifier                  ]],
 		;
 
 	rule UnannInterfaceType          =>
@@ -1587,15 +1462,15 @@
 		;
 
 	rule VariableAccess              =>
-		[qw[ ExpressionName ]],
+		[qw[ reference ]],
 		[qw[    FieldAccess ]],
 		;
 
 	rule VariableArityParameter      =>
-		[qw[   VariableModifier_list_2  UnannType  Annotation_list_8  ELIPSIS variable_name ]],
-		[qw[                            UnannType  Annotation_list_8  ELIPSIS variable_name ]],
-		[qw[   VariableModifier_list_2  UnannType                     ELIPSIS variable_name ]],
-		[qw[                            UnannType                     ELIPSIS variable_name ]],
+		[qw[   VariableModifier_list_2  UnannType  annotations  ELIPSIS variable_name ]],
+		[qw[                            UnannType  annotations  ELIPSIS variable_name ]],
+		[qw[   VariableModifier_list_2  UnannType               ELIPSIS variable_name ]],
+		[qw[                            UnannType               ELIPSIS variable_name ]],
 		;
 
 	rule VariableDeclarator          =>
@@ -1685,9 +1560,9 @@
 		;
 
 	rule Wildcard                    =>
-		[qw[   Annotation_list_15  QUESTION_MARK  WildcardBounds   ]],
+		[qw[   annotations  QUESTION_MARK  WildcardBounds   ]],
 		[qw[                       QUESTION_MARK  WildcardBounds   ]],
-		[qw[   Annotation_list_15  QUESTION_MARK                   ]],
+		[qw[   annotations  QUESTION_MARK                   ]],
 		[qw[                       QUESTION_MARK                   ]],
 		;
 

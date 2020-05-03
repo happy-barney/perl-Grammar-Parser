@@ -8,7 +8,7 @@ use lib $FindBin::Bin;
 
 BEGIN { require "test-helper-csi-language-java.pl" }
 
-plan tests => 5;
+plan tests => 7;
 
 subtest "operators"                     => sub {
 	plan tests => 38 + 4;
@@ -766,6 +766,100 @@ subtest "literals"                  => sub {
 				),
 			],
 		);
+		;
+
+	done_testing;
+};
+
+subtest "expect_annotation"             => sub {
+	plan tests => 3;
+
+	is_expectation "expect_annotation / referenced by identifer" =>
+		expectation => expect_annotation ([qw[ foo ]]),
+		match       => build_csi_element (
+			'::Annotation',
+			build_csi_token ('::Token::Annotation' => '@'),
+			build_csi_element (
+				'::Reference',
+				build_csi_token ('::Identifier' => 'foo'),
+			),
+		),
+		;
+
+	is_expectation "expect_annotation / referenced by qualified identifier" =>
+		expectation => expect_annotation ([qw[ foo bar baz ]]),
+		match       => build_csi_element (
+			'::Annotation',
+			build_csi_token ('::Token::Annotation' => '@'),
+			build_csi_element (
+				'::Reference',
+				build_csi_token ('::Identifier' => 'foo'),
+				build_csi_token ('::Token::Dot' => '.'),
+				build_csi_token ('::Identifier' => 'bar'),
+				build_csi_token ('::Token::Dot' => '.'),
+				build_csi_token ('::Identifier' => 'baz'),
+			),
+		),
+		;
+
+	is_expectation "expect_annotation / with empty parameters" =>
+		expectation => expect_annotation ([qw[ foo ]], undef),
+		match       => build_csi_element (
+			'::Annotation',
+			build_csi_token ('::Token::Annotation' => '@'),
+			build_csi_element (
+				'::Reference',
+				build_csi_token ('::Identifier' => 'foo'),
+			),
+			build_csi_token ('::Token::Paren::Open'  => '(' ),
+			build_csi_token ('::Token::Paren::Close' => ')'),
+		),
+		;
+
+	done_testing;
+};
+
+subtest "expect_reference"              => sub {
+	plan tests => 4;
+
+	is_expectation "expect_reference / single element" =>
+		expectation => expect_reference (qw[ foo ]),
+		match       => build_csi_element (
+			'::Reference',
+			build_csi_token ('::Identifier' => 'foo'),
+		),
+		;
+
+	is_expectation "expect_reference / multiple elements" =>
+		expectation => expect_reference (qw[ foo bar var ]),
+		match       => build_csi_element (
+			'::Reference',
+			build_csi_token ('::Identifier' => 'foo'),
+			build_csi_token ('::Token::Dot' => '.'),
+			build_csi_token ('::Identifier' => 'bar'),
+			build_csi_token ('::Token::Dot' => '.'),
+			build_csi_token ('::Identifier' => 'var'),
+		),
+		;
+
+	is_expectation "expect_reference / arrayref / single element" =>
+		expectation => expect_reference ([qw[ foo ]]),
+		match       => build_csi_element (
+			'::Reference',
+			build_csi_token ('::Identifier' => 'foo'),
+		),
+		;
+
+	is_expectation "expect_reference / arrayref / multiple elements" =>
+		expectation => expect_reference ([qw[ foo bar var ]]),
+		match       => build_csi_element (
+			'::Reference',
+			build_csi_token ('::Identifier' => 'foo'),
+			build_csi_token ('::Token::Dot' => '.'),
+			build_csi_token ('::Identifier' => 'bar'),
+			build_csi_token ('::Token::Dot' => '.'),
+			build_csi_token ('::Identifier' => 'var'),
+		),
 		;
 
 	done_testing;
