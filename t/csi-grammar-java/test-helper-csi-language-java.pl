@@ -321,6 +321,12 @@ sub expect_label_reference              {
 	expect_token '::Label::Reference' => @_
 }
 
+sub expect_method_name                  {
+	expect_element ('CSI::Language::Java::Method::Name' => (
+		expect_identifier (@_),
+	));
+}
+
 sub expect_modifiers                    {
 	map {
 		exists $_->{'CSI::Language::Java::Annotation'}
