@@ -1743,7 +1743,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  resource                          => dom => 'CSI::Language::Java::Resource',
 		[qw[  single_variable_declaration  ASSIGN expression  ]],
-		[qw[  variable_access                                 ]],
+		[qw[  reference                                       ]],
 		;
 
 	rule  resource_specification            => dom => 'CSI::Language::Java::List::Resources',
