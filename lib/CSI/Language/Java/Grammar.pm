@@ -675,6 +675,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[                       interface  type_name                                       interface_body  ]],
 		;
 
+	rule  interface_extends                 => dom => '::Interface::Extends',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-9.html#jls-ExtendsInterfaces
+		[qw[  extends  class_types  ]],
+		;
+
 	rule  interface_method_modifier         => dom => '::Modifier',
 		[qw[  annotation  ]],
 		[qw[  public      ]],
@@ -1498,12 +1503,6 @@ __END__
 	sub expression_statement        :RULE :ACTION_DEFAULT {
 		[
 			[qw[ statement_expression SEMICOLON ]],
-		];
-	}
-
-	sub extends_interfaces          :RULE :ACTION_DEFAULT {
-		[
-			[qw[ EXTENDS interface_type_list ]],
 		];
 	}
 
