@@ -124,6 +124,14 @@ subtest "assign lambda with assignment" => sub {
 	done_testing;
 };
 
+test_rule "empty declaration (syntactically hidden)" =>
+	rule => 'interface_member_declarations',
+	expect => ignore,
+	data   => <<'EODATA',
+default void foo(){};
+EODATA
+;
+
 had_no_warnings;
 
 done_testing;
