@@ -776,13 +776,9 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  class_member_declaration          =>
-		[qw[  annotation_declaration    ]],
-		[qw[  class_declaration         ]],
-		[qw[  empty_declaration         ]],
-		[qw[  enum_declaration          ]],
-		[qw[  field_declaration         ]],
-		[qw[  interface_declaration     ]],
 		[qw[  class_method_declaration  ]],
+		[qw[  field_declaration         ]],
+		[qw[  type_declaration          ]],
 		;
 
 	rule  class_method_declaration          => dom => '::Method::Declaration',
@@ -1233,7 +1229,6 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  interface_member_declaration      =>
 		[qw[  constant_declaration          ]],
-		[qw[  empty_declaration             ]],
 		[qw[  interface_method_declaration  ]],
 		[qw[  type_declaration              ]],
 		;
