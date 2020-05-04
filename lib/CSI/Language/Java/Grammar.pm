@@ -556,7 +556,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  assignment                        => dom => '::Expression::Assignment',
 		# TODO: assignment chain as a list
-		[qw[  left_hand_side  assignment_operands  ]],
+		[qw[  assignment_operands  assignment_element ]],
 		;
 
 	rule  assignment_element                =>
@@ -571,7 +571,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  assignment_operand                =>
-		[qw[ assignment_operator  assignment_element  ]],
+		[qw[  left_hand_side  assignment_operator  ]],
 		;
 
 	rule  assignment_operands               =>
