@@ -178,7 +178,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			(?:
 				(?<value>
 					(?= \.? [[:digit:]] )
-					(??{ 'Decimal_Numeral' })?
+					0* (??{ 'Decimal_Numeral' })?
 					\.
 					0* (??{ 'Decimal_Numeral' }) ?
 					(??{ 'Exponent_Part'   }) ?
@@ -188,7 +188,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			|
 			(?:
 				(?<value>
-					(??{ 'Decimal_Numeral' })
+					0* (??{ 'Decimal_Numeral' })
 					(??{ 'Exponent_Part'   })
 					(?<type_suffix> (??{ 'Floating_Type_Suffix' }) ) ?
 				)
@@ -241,6 +241,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	token LITERAL_INTEGRAL_OCTAL            => dom => '::Number::Integral::Octal', action => 'integral_value',
 		qr/(?>
 			(?<octal_value>   (??{ 'Octal_Numeral'   }) )
+			(?! \. )
 			(?<type_suffix>   (??{ 'Integral_Type_Suffix' }) )?
 			\b
 		)/sx;
