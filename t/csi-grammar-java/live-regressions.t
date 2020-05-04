@@ -65,6 +65,23 @@ EODATA
 		;
 };
 
+subtest "initialize from array creation access" => sub {
+	#String type = new String[]{ "boolean", "long", "double" }[randomIndex];
+	test_rule "interface with enum" =>
+		rule   => 'expression',
+		expect => ignore,
+		data   => 'new String[] { "boolean", "long", "double" }',
+		;
+
+	test_rule "interface with enum" =>
+		rule   => 'expression',
+		expect => ignore,
+		data   => 'new String[] { "boolean", "long", "double" }[index]',
+		;
+
+	done_testing;
+};
+
 had_no_warnings;
 
 done_testing;

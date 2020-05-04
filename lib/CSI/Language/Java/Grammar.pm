@@ -522,7 +522,10 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  array_access                      => dom => 'CSI::Language::Java::Array::Access',
-		[qw[  primary_no_new_array  BRACKET_OPEN  expression  BRACKET_CLOSE  ]],
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-ArrayAccess
+		# even array_creation [ expression ] is valid syntax (in 1.13)
+		#[qw[  primary_no_new_array  BRACKET_OPEN  expression  BRACKET_CLOSE  ]],
+		[qw[  primary  BRACKET_OPEN  expression  BRACKET_CLOSE  ]],
 		;
 
 	rule  array_creation_dims               =>
