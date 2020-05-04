@@ -38,10 +38,15 @@ subtest 'identifier'                    => sub {
 };
 
 subtest "insignificant tokens"          => sub {
-	plan tests => 4;
+	plan tests => 5;
 
 	test_token 'insignificant / whitespaces' => (
 		data => " \t\n\t ",
+		expect_token => 'whitespaces',
+	);
+
+	test_token 'insignificant / zero-width space' => (
+		data => "\x{200b}",
 		expect_token => 'whitespaces',
 	);
 
