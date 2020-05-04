@@ -114,6 +114,16 @@ subtest "string variable initializer" => sub {
 		;
 };
 
+subtest "assign lambda with assignment" => sub {
+	test_rule "interface with enum" =>
+		rule   => 'statement',
+		expect => ignore,
+		data   => 'foo = bar -> baz = true;',
+		;
+
+	done_testing;
+};
+
 had_no_warnings;
 
 done_testing;
