@@ -382,9 +382,17 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	ensure_rule_name_order;
 
-	rule  TYPE_LIST_CLOSE                   => dom => 'CSI::Language::Java::Token::Type::List::Close',
+	rule  TYPE_LIST_CLOSE                   =>
+		[qw[  TYPE_LIST_CLOSE_AMBIGUOUS  ]],
+		[qw[  TYPE_LIST_CLOSE_FINAL      ]],
+		;
+
+	rule  TYPE_LIST_CLOSE_AMBIGUOUS         => dom => 'CSI::Language::Java::Token::Type::List::Close',
 		[qw[  TOKEN_GT_AMBIGUOUS  ]],
-		[qw[  TOKEN_GT_FINAL      ]],
+		;
+
+	rule  TYPE_LIST_CLOSE_FINAL             => dom => 'CSI::Language::Java::Token::Type::List::Close',
+		[qw[  TOKEN_GT_FINAL  PRIORITY_TOKEN  ]],
 		;
 
 	rule  TYPE_LIST_OPEN                    => dom => 'CSI::Language::Java::Token::Type::List::Open',
