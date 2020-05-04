@@ -1178,6 +1178,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  import  static  reference                    SEMICOLON  ]],
 		[qw[  import          reference  DOT  import_type  SEMICOLON  ]],
 		[qw[  import          reference                    SEMICOLON  ]],
+		[qw[  empty_declaration                                       ]],
 		;
 
 	rule  import_declarations               =>

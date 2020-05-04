@@ -132,6 +132,17 @@ default void foo(){};
 EODATA
 ;
 
+test_rule "javac accepts empty import declaration" =>
+	rule => 'import_declarations',
+	expect => ignore,
+	data   => <<'EODATA',
+import foo.bar;
+;
+import bar.foo;
+EODATA
+;
+
+
 had_no_warnings;
 
 done_testing;
