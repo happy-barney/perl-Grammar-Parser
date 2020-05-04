@@ -37,12 +37,17 @@ subtest "identifier"                => sub {
 };
 
 subtest "insignificant tokens"      => sub {
-	plan tests => 4;
+	plan tests => 5;
 	note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.6";
 	note "https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.7";
 
 	test_token 'insignificant / whitespaces' => (
 		with_data => " \t\n\t ",
+		expect_token => 'whitespaces',
+	);
+
+	test_token 'insignificant / zero-width space' => (
+		with_data => "\x{200b}",
 		expect_token => 'whitespaces',
 	);
 

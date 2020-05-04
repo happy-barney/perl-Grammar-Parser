@@ -134,7 +134,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	insignificant token whitespaces         => dom => '::Token::Whitespace',
 		qr/(?>
-			\s+
+			[\s\N{ZERO WIDTH SPACE}]+
 		)/sx;
 
 	insignificant token comment_c           => dom => '::Token::Comment::C',
