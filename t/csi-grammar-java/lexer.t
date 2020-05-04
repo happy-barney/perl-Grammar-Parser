@@ -346,6 +346,7 @@ subtest "literals"                      => sub {
 		subtest  'literals / lexical / floating / decimal' => sub {
 			my @literal_floating_decimal = (
 				'10.',
+				'10.',
 				'10.10',
 				'.10',
 				'1_0.1_0',
@@ -362,6 +363,8 @@ subtest "literals"                      => sub {
 				'10.10e+10',
 				'10.10e-10',
 				'1_0.1_0e-1_0',
+				'0010.',
+				'0010e0',
 			);
 
 			plan tests => 2 + 3 * scalar @literal_floating_decimal;
