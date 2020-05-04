@@ -446,13 +446,9 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  annotation_body_declaration       =>
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-9.html#jls-AnnotationTypeMemberDeclaration
-		[qw[  annotation_declaration          ]],
 		[qw[  annotation_element_declaration  ]],
-		[qw[  class_declaration               ]],
 		[qw[  constant_declaration            ]],
-		[qw[  empty_declaration               ]],
-		[qw[  enum_declaration                ]],
-		[qw[  interface_declaration           ]],
+		[qw[  type_declaration                ]],
 		;
 
 	rule  annotation_body_declarations      =>
@@ -1226,7 +1222,6 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  interface_member_declaration      =>
 		[qw[  constant_declaration          ]],
 		[qw[  empty_declaration             ]],
-		[qw[  enum_declaration              ]],
 		[qw[  interface_method_declaration  ]],
 		[qw[  type_declaration              ]],
 		;
@@ -1930,7 +1925,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  class_declaration        ]],
 		[qw[  enum_declaration         ]],
 		[qw[  interface_declaration    ]],
-		[qw[  SEMICOLON                ]],
+		[qw[  empty_declaration        ]],
 		;
 
 	rule  type_declarations                 =>
