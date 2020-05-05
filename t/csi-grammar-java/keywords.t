@@ -75,7 +75,7 @@ plan tests =>
 	+ 2  # literal / boolean - https://docs.oracle.com/javase/specs/jls/se13/html/jls-3.html#jls-3.10.3
 	;
 
-test_keyword _              =>                                       ;
+test_keyword _              => ALLOWED_IDENTIFIER, ALLOWED_TYPE_NAME ;
 test_keyword abstract       =>                                       ;
 test_keyword assert         =>                                       ;
 test_keyword boolean        =>                                       ;

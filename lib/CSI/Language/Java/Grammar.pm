@@ -379,7 +379,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	word  VOLATILE                          => ;
 	word  WHILE                             => ;
 	word  WITH                              => group => 'keyword_identifier', group => 'keyword_type_identifier';
-	word  _                                 => ;
+	word  _                                 => group => 'keyword_identifier', group => 'keyword_type_identifier'; # valid pre 1.9
 
 	ensure_rule_name_order;
 
