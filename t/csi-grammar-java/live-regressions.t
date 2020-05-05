@@ -160,6 +160,12 @@ test_rule  "annotation in complex type argument" =>
 	expect => ignore,
 	;
 
+test_rule  "annotated cast operator" =>
+	rule => 'cast_reference_operator',
+	data => '(@Annotation Object)',
+	expect => ignore,
+	;
+
 had_no_warnings;
 
 done_testing;

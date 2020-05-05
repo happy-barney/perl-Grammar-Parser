@@ -444,6 +444,11 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		[qw[  class_reference                               ]],
 		;
 
+	rule  annotated_reference_type          =>
+		[qw[  annotated_class_type  ]],
+		[qw[  array_type            ]],
+		;
+
 	rule  annotation                        => dom => 'CSI::Language::Java::Annotation',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-9.html#jls-Annotation
 		[qw[  marker_annotation          ]],
@@ -714,8 +719,8 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  cast_reference_operator           => dom => 'CSI::Language::Java::Operator::Cast',
-		[qw[  PAREN_OPEN  reference_type                    PAREN_CLOSE  ]],
-		[qw[  PAREN_OPEN  reference_type  additional_bound  PAREN_CLOSE  ]],
+		[qw[  PAREN_OPEN  annotated_reference_type                    PAREN_CLOSE  ]],
+		[qw[  PAREN_OPEN  annotated_reference_type  additional_bound  PAREN_CLOSE  ]],
 		;
 
 	rule  class_body                        => dom => 'CSI::Language::Java::Class::Body',
