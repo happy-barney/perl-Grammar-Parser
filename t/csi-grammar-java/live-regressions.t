@@ -142,6 +142,11 @@ import bar.foo;
 EODATA
 ;
 
+test_rule "variable declaration / multi-dimensional array creation" =>
+	rule => 'variable_declaration_statement',
+	data => 'Object[][] rows = new Object[size()][13];',
+	expect => ignore,
+	;
 
 had_no_warnings;
 
