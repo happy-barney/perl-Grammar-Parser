@@ -148,6 +148,18 @@ test_rule "variable declaration / multi-dimensional array creation" =>
 	expect => ignore,
 	;
 
+test_rule "annotation in type arguments" =>
+	rule => 'data_type',
+	data => 'Observable<@NonNull List<T>>',
+	expect => ignore,
+	;
+
+test_rule  "annotation in complex type argument" =>
+	rule => 'type_argument',
+	data => '@NonNull ? super @NonNull Integer',
+	expect => ignore,
+	;
+
 had_no_warnings;
 
 done_testing;

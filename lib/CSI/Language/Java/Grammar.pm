@@ -1916,13 +1916,18 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  type_argument                     =>
-		[qw[  reference_type  ]],
-		[qw[  type_wildcard   ]],
+		[qw[  type_argument_reference_type  ]],
+		[qw[  type_wildcard                 ]],
 		;
 
 	rule  type_argument_list                =>
 		[qw[  type_argument  COMMA  type_argument_list  ]],
 		[qw[  type_argument                             ]],
+		;
+
+	rule  type_argument_reference_type      =>
+		[qw[  annotated_class_type  ]],
+		[qw[  array_type            ]],
 		;
 
 	rule  type_arguments                    => dom => 'CSI::Language::Java::Type::Arguments',
@@ -2003,8 +2008,8 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  type_wildcard_bounds              =>
-		[qw[  extends  reference_type  ]],
-		[qw[  super    reference_type  ]],
+		[qw[  extends  type_argument_reference_type  ]],
+		[qw[  super    type_argument_reference_type  ]],
 		;
 
 	rule  unary_element                     =>
