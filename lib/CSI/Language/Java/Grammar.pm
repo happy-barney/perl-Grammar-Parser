@@ -1214,9 +1214,12 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  instance_reference                =>
 		# TODO annotated reference
-		[qw[  type_arguments  reference  type_arguments  ]],
-		[qw[                  reference  type_arguments  ]],
-		[qw[                  reference                  ]],
+		[qw[  type_arguments  annotations reference  type_arguments  ]],
+		[qw[                  annotations reference  type_arguments  ]],
+		[qw[                  annotations reference                  ]],
+		[qw[  type_arguments              reference  type_arguments  ]],
+		[qw[                              reference  type_arguments  ]],
+		[qw[                              reference                  ]],
 		;
 
 	rule  interface_body                    => dom => 'CSI::Language::Java::Interface::Body',

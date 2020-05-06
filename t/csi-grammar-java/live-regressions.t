@@ -166,6 +166,12 @@ test_rule  "annotated cast operator" =>
 	expect => ignore,
 	;
 
+test_rule  "instance creation type can be annotated" =>
+	rule => 'instance_creation',
+	data => 'new @Foo Bar()',
+	expect => ignore,
+	;
+
 had_no_warnings;
 
 done_testing;
