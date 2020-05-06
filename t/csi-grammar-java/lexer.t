@@ -368,6 +368,7 @@ subtest "literals"                  => sub {
 				'.10',
 				'1_0.1_0',
 				'10e10',
+				'10E01',
 				'10e+10',
 				'10e-10',
 				'10.e10',
@@ -392,7 +393,7 @@ subtest "literals"                  => sub {
 				;
 
 			test_token 'literals / lexical / floating / decimal / 0d' =>
-				with_data => '0d',
+				with_data => '00d',
 				expect_token => 'LITERAL_FLOAT_DECIMAL',
 				;
 
