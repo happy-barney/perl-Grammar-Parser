@@ -171,6 +171,12 @@ test_rule  "instance creation type can be annotated" =>
 	expect => ignore,
 	;
 
+test_rule  "method reference / array method" =>
+	rule => 'method_reference',
+	data => 'int[]::clone',
+	expect => ignore,
+	;
+
 had_no_warnings;
 
 done_testing;
