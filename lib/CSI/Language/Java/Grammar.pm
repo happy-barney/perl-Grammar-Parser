@@ -152,7 +152,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	insignificant token comment_cpp         => dom => 'CSI::Language::Java::Token::Comment::Cpp',
 		qr/(?>
 			\/\/
-			\V*
+			[^\r\n]*
 		)/sx;
 
 	insignificant token comment_javadoc     => dom => 'CSI::Language::Java::Token::Comment::Javadoc',
