@@ -1462,9 +1462,12 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		;
 
 	rule  method_declarator                 =>
-		[qw[  type_parameters  annotations  method_result  method_name  parameters  ]],
-		[qw[  type_parameters               method_result  method_name  parameters  ]],
-		[qw[                                method_result  method_name  parameters  ]],
+		[qw[  type_parameters  annotations  method_result  method_name  parameters  dims  ]],
+		[qw[  type_parameters  annotations  method_result  method_name  parameters        ]],
+		[qw[  type_parameters               method_result  method_name  parameters  dims  ]],
+		[qw[  type_parameters               method_result  method_name  parameters        ]],
+		[qw[                                method_result  method_name  parameters  dims  ]],
+		[qw[                                method_result  method_name  parameters        ]],
 		;
 
 	rule  method_invocation                 => dom => 'CSI::Language::Java::Method::Invocation',

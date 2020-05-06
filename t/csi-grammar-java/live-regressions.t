@@ -178,6 +178,12 @@ test_rule  "method reference / array method" =>
 	expect => ignore,
 	;
 
+test_rule  "method declaration returning array with dimensions spec after method parameters" =>
+	rule => 'method_declarator',
+    data => 'byte toByteArray()[]',
+	expect => ignore,
+	;
+
 had_no_warnings;
 
 done_testing;
