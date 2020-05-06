@@ -100,7 +100,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	regex Exponent_Part                     => qr/(?>
 		[eE]
 		[+-]?
-		(??{ 'Decimal_Numeral' })
+		0* (??{ 'Decimal_Numeral' })
 	)/sx;
 
 	regex Floating_Type_Suffix              => qr/(?>
@@ -200,7 +200,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			|
 			(?:
 				(?<value>
-					(??{ 'Decimal_Numeral' })
+					0* (??{ 'Decimal_Numeral' })
 					(??{ 'Exponent_Part'   }) ?
 					(?<type_suffix> (??{ 'Floating_Type_Suffix' }) )
 				)
