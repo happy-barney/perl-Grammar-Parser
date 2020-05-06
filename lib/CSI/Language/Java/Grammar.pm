@@ -1500,8 +1500,8 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-MethodReference
 		[qw[  primary_no_reference    DOUBLE_COLON  type_arguments  method_name  ]],
 		[qw[  primary_no_reference    DOUBLE_COLON                  method_name  ]],
-		[qw[  class_type              DOUBLE_COLON  type_arguments  method_name  ]],
-		[qw[  class_type              DOUBLE_COLON                  method_name  ]],
+		[qw[  reference_type          DOUBLE_COLON  type_arguments  method_name  ]],
+		[qw[  reference_type          DOUBLE_COLON                  method_name  ]],
 		[qw[  class_type  DOT  super  DOUBLE_COLON  type_arguments  method_name  ]],
 		[qw[  class_type  DOT  super  DOUBLE_COLON                  method_name  ]],
 		[qw[                   super  DOUBLE_COLON  type_arguments  method_name  ]],
