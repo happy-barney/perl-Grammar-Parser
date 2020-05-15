@@ -45,7 +45,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			next;
 		}
 
-		$dom[1] =~ s/^::/CSI::Language::Java::/;
+		#$dom[1] =~ s/^::/CSI::Language::Java::/;
 
 		token uc $keyword => @proto, @group, $re;
 		rule  lc $keyword => @dom, [ uc $keyword ]
