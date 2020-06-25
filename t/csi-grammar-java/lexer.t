@@ -136,7 +136,7 @@ subtest "literals"                      => sub {
 	};
 
 	subtest "literals / lexical / string" => sub {
-		plan tests => 9;
+		plan tests => 12;
 
 		test_token 'literals / lexical / string / empty' =>
 			data => q/""/,
@@ -178,8 +178,23 @@ subtest "literals"                      => sub {
 			expect_token => 'LITERAL_STRING',
 			;
 
+		test_token 'literals / lexical / string / escape \\\\' =>
+			data => q/"\\\\"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
 		test_token 'literals / lexical / string / unicode escape' =>
 			data => q/"\u20ac"/,
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / very long string' =>
+			data => '"' . (q/x/ x 4096) . '"',
+			expect_token => 'LITERAL_STRING',
+			;
+
+		test_token 'literals / lexical / very long string with escapes' =>
+			data => '"' . (q/x\\\\/ x 4096) . '"',
 			expect_token => 'LITERAL_STRING',
 			;
 

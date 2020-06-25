@@ -76,10 +76,42 @@ subtest "initialize from array creation access" => sub {
 	test_rule "interface with enum" =>
 		rule   => 'expression',
 		expect => ignore,
-		data   => 'new String[] { "boolean", "long", "double" }[index]',
+		data   => 'new String[] { "boolean", "long", "double" }[randomIndex]',
 		;
 
 	done_testing;
+};
+
+subtest "string variable initializer" => sub {
+	test_rule "empty string" =>
+		rule   => 'variable_declaration_statement',
+		expect => ignore,
+		data   => 'String foo = "";',
+		;
+
+	test_rule "empty string" =>
+		rule   => 'block_statement',
+		expect => ignore,
+		data   => 'String foo = "";',
+		;
+
+	test_rule "empty string" =>
+		rule   => 'try_statement',
+		expect => ignore,
+		data   => 'try { String foo = ""; } finally { }',
+		;
+
+	test_rule "very long string" =>
+		rule   => 'block_statement',
+		expect => ignore,
+		data   => "String foo = \"${\ (q/x/ x 4096) }\";",
+		;
+
+	test_rule "very long string" =>
+		rule   => 'block_statement',
+		expect => ignore,
+		data   => 'String foo = "' . (q/x\\\\/ x 4096) . '";',
+		;
 };
 
 had_no_warnings;
