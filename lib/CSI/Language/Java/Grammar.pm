@@ -249,7 +249,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	token LITERAL_STRING                    => dom => '::Literal::String', action => 'literal_unescape',
 		qr/(?>
 			\"
-			(?<value> (?: [^\"\\\r\n] | (??{ 'Escape_Sequence' }) )* )
+			(?<value> (?: [^\"\\\r\n]*+ (??{ 'Escape_Sequence' })*+ )*+ )
 			\"
 		)/sx;
 
