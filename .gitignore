@@ -3,5 +3,6 @@
 /MYMETA.*
 /Grammar-Parser-*
 .prove
+.prove*
 TODO*
 !/TODO-Grammar-Parser.org
