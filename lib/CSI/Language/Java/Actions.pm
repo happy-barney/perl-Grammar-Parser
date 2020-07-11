@@ -33,13 +33,17 @@ package CSI::Language::Java::Actions v1.0.0 {
 			$result = rule_dom_token ($parser, $name, @context);
 		}
 
-		 $result //= rule_default ($parser, $name, @context);
+		$result //= rule_default ($parser, $name, @context);
 
-		# TODO: construct instance ...
-		return +{
-			CSI::Language::Java::Grammar->dom_for ($name),
-			$result->{$name},
-		};
+		my $instance = CSI::Language::Java::Grammar->dom_for ($name)->new (
+			children => $result->{$name},
+		);
+
+		if (Ref::Util::is_plain_arrayref ($result->{$name})) {
+			$_->parent ($instance) for @{ $result->{$name} }
+		}
+
+		$instance;
 	}
 
 	sub rule_dom_token {

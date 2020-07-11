@@ -22,7 +22,8 @@ package CSI::Language::Java::Grammar v1.0.0 {
 		$keyword = ucfirst lc $keyword;
 		my $re = qr/ (?> \b ${\ lc $keyword } (?! (??{ 'Identifier_Character' }) ) ) /sx;
 
-		my @dom   = (dom => "::Token::Word::$keyword");
+		my $dom_keyword = $keyword eq '_' ? 'Underscore' : $keyword;
+		my @dom   = (dom => "::Token::Word::$dom_keyword");
 		my @proto = (proto => 'Prohibited_Identifier');
 		my @group = (group => 'keyword');
 
@@ -45,9 +46,8 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			next;
 		}
 
-		token uc $keyword => @proto, @group, $re;
-		rule  lc $keyword => @dom, [ uc $keyword ]
-			unless $keyword eq '_';
+		token uc $dom_keyword => @proto, @group, $re;
+		rule  lc $dom_keyword => @dom, [ uc $dom_keyword ];
 	}
 
 	sub operator {

@@ -56,7 +56,14 @@ sub _expect_list_with_separator         {
 sub expect_element {
 	my ($name, @expect_content) = @_;
 
-	+{ build_csi_class ($name) => @expect_content ? \@expect_content : ignore };
+	$name = build_csi_class ($name);
+
+	my $expectation = obj_isa ($name);
+
+	$expectation &= methods (children => \@expect_content)
+		if @expect_content;
+
+	$expectation;
 }
 
 sub expect_token {
@@ -178,9 +185,10 @@ sub expect_operator_subtraction         { expect_token '::Operator::Subtraction'
 sub expect_operator_unary_minus         { expect_token '::Operator::Unary::Minus'           => '-' }
 sub expect_operator_unary_plus          { expect_token '::Operator::Unary::Plus'            => '+' }
 sub expect_word                         {
-	my ($dom) = @_;
+	my ($dom, $word) = @_;
 
-	my ($word) = (split '::', $dom)[-1];
+	($word) = (split '::', $dom)[-1]
+		unless $word;
 
 	expect_token ($dom => lc $word);
 }
@@ -243,7 +251,7 @@ sub expect_word_transient               { expect_word '::Token::Word::Transient'
 sub expect_word_transitive              { expect_word '::Token::Word::Transitive'   }
 sub expect_word_true                    { expect_word '::Token::Word::True'         }
 sub expect_word_try                     { expect_word '::Token::Word::Try'          }
-sub expect_word_underscore              { expect_word '::Token::Word::_'            }
+sub expect_word_underscore              { expect_word '::Token::Word::Underscore', '_' }
 sub expect_word_uses                    { expect_word '::Token::Word::Uses'         }
 sub expect_word_var                     { expect_word '::Token::Word::Var'          }
 sub expect_word_void                    { expect_word '::Token::Word::Void'         }
@@ -421,7 +429,12 @@ sub expect_method_name                  {
 
 sub expect_modifiers                    {
 	map {
-		exists $_->{build_csi_class ('::Annotation')}
+		my $obj_test;
+		($obj_test) = grep { $_->isa ('Test::Deep::Obj') }
+			$_->isa ('Test::Deep::All') ? @{ $_->{val} } : $_
+			;
+
+		$obj_test->{val} eq build_csi_class ('::Annotation')
 			? (expect_modifier $_)
 			: $_
 		} @_;
