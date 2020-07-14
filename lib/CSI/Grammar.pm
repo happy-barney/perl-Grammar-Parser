@@ -12,6 +12,7 @@ package CSI::Grammar v1.0.0 {
 	use CSI::Grammar::Base;
 	use CSI::Grammar::Meta;
 	use CSI::Grammar::Actions;
+	use CSI::DOM::Node;
 
 	our @EXPORT = (
 		qw[ insignificant start ],
@@ -88,6 +89,13 @@ package CSI::Grammar v1.0.0 {
 			DOM:
 			$value = $dom_prefix . $value
 				if $dom_prefix && $value =~ m/^::/;
+
+			unless ($value->can ('new')) {
+				unless (eval "require $value") {
+					no strict 'refs';
+					push @{ "${value}::ISA" }, 'CSI::DOM::Node';
+				}
+			}
 
 			$meta->add_dom ($rule_name => $value);
 			$meta->add_action ($rule_name => 'dom');
