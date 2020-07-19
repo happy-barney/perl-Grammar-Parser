@@ -7,9 +7,6 @@ use require::relative "test-helper-common.pl"
 use Grammar::Parser;
 use Grammar::Parser::Grammar;
 
-our $DUMP_IT_GOT = 1;
-our $DUMP_IT_EXPECTED = 1;
-
 trigger 'csi-language' => sub {
 	eval "require $_[0]" or die;
 };
@@ -109,24 +106,15 @@ sub test_rule {
 
 		it $title => (
 			expect => $params{expect},
-		) or do {
-			if ($DUMP_IT_GOT) {
-				diag ("== Got");
-				diag (do { my $value = deduce ('act-value'); np $value });
-			}
-			if ($DUMP_IT_EXPECTED) {
-				diag ("== Expected");
-				diag (np $params{expect});
-			}
-		};
+		);
 	};
 }
 
 sub test_token {
 	my ($title, %params) = @_;
 
-	my $data     = delete $params{data} // $title;
-	my $from_pos = delete $params{from_pos} // 0;
+	my $data     = delete $params{with_data} // $title;
+	my $from_pos = delete $params{with_pos} // 0;
 
 	my $expect_match = delete $params{expect_match} // $data;
 	my $expect_token = delete $params{expect_token};
@@ -175,6 +163,39 @@ sub test_token {
 
 	pass $title;
 }
+
+sub build_csi_class {
+	my ($class) = @_;
+
+	$class = deduce ('csi-dom-namespace') . $class
+		if starts_with ($class, '::');
+
+	$class;
+}
+
+sub build_csi_token {
+	my ($class, $match, %captures) = @_;
+
+	+{ build_csi_class ($class) => $match };
+}
+
+sub build_csi_element {
+	my ($class, @content) = @_;
+
+	+{ build_csi_class ($class) => \ @content };
+}
+
+
+sub is_expectation {
+	my ($title, %params) = @_;
+
+	local $Test::Builder::Level += 1;
+
+	is $title,
+		got => $params{match},
+		expect => $params{expectation},
+		;
+};
 
 1;
 
