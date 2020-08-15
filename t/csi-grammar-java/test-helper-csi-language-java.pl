@@ -16,7 +16,7 @@ proclaim 'csi-language' => 'CSI::Language::Java::Grammar';
 sub expect_token {
 	my ($token, $value) = @_;
 
-	+{ $token => $value // ignore };
+	+{ $token => defined $value ? methods (value => $value) : ignore };
 }
 
 sub expect_element {

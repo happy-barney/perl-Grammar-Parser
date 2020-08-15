@@ -12,6 +12,7 @@ package CSI::Language::Java::Actions v1.0.0 {
 	use Scalar::Util qw[ blessed ];
 
 	require Grammar::Parser::Action::Util;
+	require Grammar::Parser::Lexer::Token;
 
 	sub _flatten {
 		map { is_plain_arrayref ($_) ? @$_ : $_ } @_;
@@ -44,9 +45,28 @@ package CSI::Language::Java::Actions v1.0.0 {
 	sub rule_dom_token {
 		my ($context, $name, @tokens) = @_;
 
-		my $value = join '', map $_->value, @tokens;
+		my $token = $tokens[0];
 
-		+{ $name => $value };
+		if (@tokens > 1) {
+			$token = Grammar::Parser::Lexer::Token->new (
+				name => $name,
+				match => join ('', map $_->match, @tokens),
+				value => join ('', map $_->value, @tokens),
+				line => $token->line,
+				column => $token->column,
+				significant => 1,
+			);
+		}
+
+		my $previous = $context->stash->{previous_token};
+		$context->stash->{previous_token} = $token;
+
+		if ($previous ) {
+			$previous->next ($token);
+			$token->previous ($previous);
+		}
+
+		return +{ $name => $token };
 	}
 
 	my %char_escape_map = (
@@ -78,18 +98,25 @@ package CSI::Language::Java::Actions v1.0.0 {
 	}
 
 	sub rule_integral_value {
-		Grammar::Parser::Action::Util::rule_handler_literal_value (@_);
+		my ($context, $name, @values) = @_;
+		my $token = first { blessed $_ } @values;
+
+		return +{ $name => $token };
 	}
 
 	sub rule_float_value {
-		Grammar::Parser::Action::Util::rule_handler_literal_value (@_);
+		my ($context, $name, @values) = @_;
+		my $token = first { blessed $_ } @values;
+
+		return +{ $name => $token };
 	}
 
 	sub rule_literal_unescape {
 		my ($instance, $name, @values) = @_;
 		my $token = first { blessed $_ } @values;
 
-		$token->value (_unescape ($token->value));
+		$token->captures->{value} = _unescape ($token->captures->{value})
+			if exists $token->captures->{value};
 
 		rule_dom ($instance, $name, $token);
 	}
