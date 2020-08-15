@@ -521,20 +521,25 @@ package CSI::Language::Java::Grammar v1.0.0 {
 	rule  array_access                      => dom => '::Array::Access',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-ArrayAccess
 		# even array_creation [ expression ] is valid syntax (in 1.13)
-		#[qw[  primary_no_new_array  BRACKET_OPEN  expression  BRACKET_CLOSE  ]],
-		[qw[  primary  BRACKET_OPEN  expression  BRACKET_CLOSE  ]],
+		[qw[  primary_no_new_array  BRACKET_OPEN  expression  BRACKET_CLOSE  ]],
 		;
 
 	rule  array_creation_dims               =>
 		[qw[  dim_expressions  dims                     ]],
 		[qw[  dim_expressions                           ]],
-		[qw[                   dims  array_initializer  ]],
+		#[qw[                   dims  array_initializer  ]],
 		;
 
 	rule  array_creation_expression         => dom => '::Array::Creation',
 		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-ArrayCreationExpression
 		[qw[  new  primitive_type  array_creation_dims  ]],
 		[qw[  new  class_type      array_creation_dims  ]],
+		;
+
+	rule  array_creation_initializer        => dom => '::Array::Creation',
+		# https://docs.oracle.com/javase/specs/jls/se13/html/jls-15.html#jls-ArrayCreationExpression
+		[qw[  new  primitive_type  dims  array_initializer  ]],
+		[qw[  new  class_type      dims  array_initializer  ]],
 		;
 
 	rule  array_initializer                 => dom => '::Array::Initializer',
@@ -1659,6 +1664,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 
 	rule  primary_no_reference              =>
 		[qw[  array_access       ]],
+		[qw[  array_creation_initializer ]],
 		[qw[  class_literal      ]],
 		[qw[  expression_group   ]],
 		[qw[  field_access       ]],
