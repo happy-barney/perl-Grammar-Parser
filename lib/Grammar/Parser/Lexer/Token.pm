@@ -32,6 +32,16 @@ has captures => (
 	default => sub { +{} },
 );
 
+has previous => (
+	is => 'rw',
+	weak_ref => 1,
+);
+
+has next => (
+	is => 'rw',
+	weak_ref => 1,
+);
+
 sub value {
 	my ($self) = @_;
 
