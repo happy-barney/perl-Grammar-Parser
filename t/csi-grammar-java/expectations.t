@@ -695,37 +695,77 @@ subtest "literals"                  => sub {
 
 	is_expectation "expect_literal_string" =>
 		expectation => expect_literal_string ('foo'),
-		match       => build_csi_token ('LITERAL_STRING' => 'foo'),
-		;
+		match       => build_csi_class ('::Literal::String')->new (
+			children => [
+				Grammar::Parser::Lexer::Token->new (
+					match => '"foo"',
+					captures => { value => 'foo' },
+				),
+			],
+		);
 
 	is_expectation "expect_literal_character" =>
 		expectation => expect_literal_character ('f'),
-		match       => build_csi_token ('LITERAL_CHARACTER' => 'f'),
+		match       => build_csi_class ('::Literal::Character')->new (
+			children => [
+				Grammar::Parser::Lexer::Token->new (
+					match => "'f'",
+					captures => { value => 'f' },
+				),
+			],
+		);
 		;
 
 	is_expectation "expect_literal_integral_binary" =>
 		expectation => expect_literal_integral_binary ('0b0'),
-		match       => build_csi_token ('LITERAL_INTEGRAL_BINARY' => '0b0'),
-		;
+		match       => build_csi_class ('::Number::Integral::Binary')->new (
+			children => [
+				Grammar::Parser::Lexer::Token->new (
+					match => "0b0",
+				),
+			],
+		);
 
 	is_expectation "expect_literal_integral_decimal" =>
 		expectation => expect_literal_integral_decimal ('0'),
-		match       => build_csi_token ('LITERAL_INTEGRAL_DECIMAL' => '0'),
-		;
+		match       => build_csi_class ('::Number::Integral::Decimal')->new (
+			children => [
+				Grammar::Parser::Lexer::Token->new (
+					match => "0",
+				),
+			],
+		);
 
 	is_expectation "expect_literal_integral_hex" =>
 		expectation => expect_literal_integral_hex ('0x0'),
-		match       => build_csi_token ('LITERAL_INTEGRAL_HEX' => '0x0'),
-		;
+		match       => build_csi_class ('::Number::Integral::Hex')->new (
+			children => [
+				Grammar::Parser::Lexer::Token->new (
+					match => "0x0",
+				),
+			],
+		);
 
 	is_expectation "expect_literal_integral_octal" =>
 		expectation => expect_literal_integral_octal ('06'),
-		match       => build_csi_token ('LITERAL_INTEGRAL_OCTAL' => '06'),
+		match       => build_csi_class ('::Number::Integral::Octal')->new (
+			children => [
+				Grammar::Parser::Lexer::Token->new (
+					match => "06",
+				),
+			],
+		);
 		;
 
 	is_expectation "expect_literal_floating_decimal" =>
 		expectation => expect_literal_floating_decimal ('.0'),
-		match       => build_csi_token ('LITERAL_FLOAT_DECIMAL' => '.0'),
+		match       => build_csi_class ('::Number::Float::Decimal')->new (
+			children => [
+				Grammar::Parser::Lexer::Token->new (
+					match => ".0",
+				),
+			],
+		);
 		;
 
 	done_testing;

@@ -37,24 +37,6 @@ sub _list_with_separator {
 	return ($head, map { @$separator, $_ } @content);
 }
 
-sub expect_dom_token {
-	my ($token, $value) = @_;
-	$token = build_csi_class ($token);
-
-	my $expectation = obj_isa ($token);
-
-	if (defined $value) {
-		$expectation &= methods (children => [
-			all (
-				obj_isa ('Grammar::Parser::Lexer::Token'),
-				methods (value => $value ),
-			)
-		]);
-	}
-
-	$expectation;
-}
-
 ######################################################################
 
 sub expect_element {
@@ -81,17 +63,44 @@ sub expect_token {
 	$expectation;
 }
 
+sub expect_dom_token {
+	my ($token, $value) = @_;
+	$token = build_csi_class ($token);
+
+	my $expectation = obj_isa ($token);
+
+	if (defined $value) {
+		$expectation &= methods (children => [
+			all (
+				obj_isa ('Grammar::Parser::Lexer::Token'),
+				methods (value => $value ),
+			)
+		]);
+	}
+
+	$expectation;
+}
+
+sub expect_element {
+	my ($name, @expect_content) = @_;
+
+	+{ build_csi_class ($name) => @expect_content ? \@expect_content : ignore };
+}
+
+sub expect_token {
+}
+
 sub expect_literal_false                { expect_element '::Literal::Boolean::False', expect_word_false  }
 sub expect_literal_null                 { expect_element '::Literal::Null',           expect_word_null   }
 sub expect_literal_true                 { expect_element '::Literal::Boolean::True',  expect_word_true   }
-sub expect_literal_character            { expect_token LITERAL_CHARACTER        => @_ }
-sub expect_literal_string               { expect_token LITERAL_STRING           => @_ }
-sub expect_literal_floating_decimal     { expect_token LITERAL_FLOAT_DECIMAL    => @_ }
-sub expect_literal_floating_hex         { expect_token LITERAL_FLOAT_HEX        => @_ }
-sub expect_literal_integral_binary      { expect_token LITERAL_INTEGRAL_BINARY  => @_ }
-sub expect_literal_integral_decimal     { expect_token LITERAL_INTEGRAL_DECIMAL => @_ }
-sub expect_literal_integral_hex         { expect_token LITERAL_INTEGRAL_HEX     => @_ }
-sub expect_literal_integral_octal       { expect_token LITERAL_INTEGRAL_OCTAL   => @_ }
+sub expect_literal_character            { expect_dom_token '::Literal::Character'        => @_ }
+sub expect_literal_string               { expect_dom_token '::Literal::String'           => @_ }
+sub expect_literal_floating_decimal     { expect_dom_token '::Number::Float::Decimal'    => @_ }
+sub expect_literal_floating_hex         { expect_dom_token '::Number::Float::Hex'        => @_ }
+sub expect_literal_integral_binary      { expect_dom_token '::Number::Integral::Binary'  => @_ }
+sub expect_literal_integral_decimal     { expect_dom_token '::Number::Integral::Decimal' => @_ }
+sub expect_literal_integral_hex         { expect_dom_token '::Number::Integral::Hex'     => @_ }
+sub expect_literal_integral_octal       { expect_dom_token '::Number::Integral::Octal'   => @_ }
 sub expect_token_annotation             { expect_token '::Token::Annotation'            => '@' }
 sub expect_token_brace_close            { expect_token '::Token::Brace::Close'          => '}' }
 sub expect_token_brace_open             { expect_token '::Token::Brace::Open'           => '{' }

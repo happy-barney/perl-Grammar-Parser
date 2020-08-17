@@ -164,14 +164,14 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			(?<value> (??{ 'Identifier_Character' })+ )
 		) /sx;
 
-	token LITERAL_CHARACTER                 => action => 'literal_unescape',
+	token LITERAL_CHARACTER                 => dom => '::Literal::Character', action => 'literal_unescape',
 		qr/(?>
 			\'
 			(?<value> [^\'\\] | (??{ 'Escape_Sequence' }) )
 			\'
 		)/sx;
 
-	token LITERAL_FLOAT_DECIMAL             => action => 'float_value',
+	token LITERAL_FLOAT_DECIMAL             => dom => '::Number::Float::Decimal', action => 'float_value',
 		qr/(?>
 			(?:
 				(?<value>
@@ -201,7 +201,7 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			)
 		)/sx;
 
-	token LITERAL_FLOAT_HEX                 => action => 'float_value',
+	token LITERAL_FLOAT_HEX                 => dom => '::Number::Float::Hex', action => 'float_value',
 		qr/(?>
 			(?<hex_value>
 				(?: (??{ 'Hex_Numeral' }) \.? )
@@ -214,21 +214,21 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			(?<type_suffix> (??{ 'Floating_Type_Suffix' }) ) ?
 		)/sx;
 
-	token LITERAL_INTEGRAL_BINARY           => action => 'integral_value',
+	token LITERAL_INTEGRAL_BINARY           => dom => '::Number::Integral::Binary', action => 'integral_value',
 		qr/(?>
 			(?<binary_value>  (??{ 'Binary_Numeral'  }) )
 			(?<type_suffix>   (??{ 'Integral_Type_Suffix' }) )?
 			\b
 		)/sx;
 
-	token LITERAL_INTEGRAL_DECIMAL          => action => 'integral_value',
+	token LITERAL_INTEGRAL_DECIMAL          => dom => '::Number::Integral::Decimal', action => 'integral_value',
 		qr/(?>
 			(?<decimal_value> (??{ 'Decimal_Numeral' }) ) (?! \. )
 			(?<type_suffix>   (??{ 'Integral_Type_Suffix' }) )?
 			\b
 		)/sx;
 
-	token LITERAL_INTEGRAL_HEX              => action => 'integral_value',
+	token LITERAL_INTEGRAL_HEX              => dom => '::Number::Integral::Hex', action => 'integral_value',
 		qr/(?>
 			(?<hex_value>     (??{ 'Hex_Numeral'     }) )
 			(?<type_suffix>   (??{ 'Integral_Type_Suffix' }) )?
@@ -236,14 +236,14 @@ package CSI::Language::Java::Grammar v1.0.0 {
 			(?! \. )
 		)/sx;
 
-	token LITERAL_INTEGRAL_OCTAL            => action => 'integral_value',
+	token LITERAL_INTEGRAL_OCTAL            => dom => '::Number::Integral::Octal', action => 'integral_value',
 		qr/(?>
 			(?<octal_value>   (??{ 'Octal_Numeral'   }) )
 			(?<type_suffix>   (??{ 'Integral_Type_Suffix' }) )?
 			\b
 		)/sx;
 
-	token LITERAL_STRING                    => action => 'literal_unescape',
+	token LITERAL_STRING                    => dom => '::Literal::String', action => 'literal_unescape',
 		qr/(?>
 			\"
 			(?<value> (?: [^\"\\\r\n] | (??{ 'Escape_Sequence' }) )* )
