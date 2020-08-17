@@ -16,8 +16,20 @@ proclaim 'csi-language'      => 'CSI::Language::Java::Grammar';
 
 sub expect_token {
 	my ($token, $value) = @_;
+	$token = build_csi_class ($token);
 
-	+{ build_csi_class ($token) => defined $value ? methods (value => $value) : ignore };
+	my $expectation = obj_isa ($token);
+
+	if (defined $value) {
+		$expectation &= methods (children => [
+			all (
+				obj_isa ('Grammar::Parser::Lexer::Token'),
+				methods (value => $value ),
+			)
+		]);
+	}
+
+	$expectation;
 }
 
 sub expect_element {
