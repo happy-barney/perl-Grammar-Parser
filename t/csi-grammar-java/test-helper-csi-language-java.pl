@@ -41,5 +41,23 @@ sub _list_with_separator {
 	return ($head, map { @$separator, $_ } @content);
 }
 
+sub expect_dom_token {
+	my ($token, $value) = @_;
+	$token = build_csi_class ($token);
+
+	my $expectation = obj_isa ($token);
+
+	if (defined $value) {
+		$expectation &= methods (children => [
+			all (
+				obj_isa ('Grammar::Parser::Lexer::Token'),
+				methods (value => $value ),
+			)
+		]);
+	}
+
+	$expectation;
+}
+
 1;
 
