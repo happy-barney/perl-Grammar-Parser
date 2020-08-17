@@ -176,10 +176,14 @@ sub build_csi_class {
 sub build_csi_token {
 	my ($class, $match, %captures) = @_;
 
-	+{ build_csi_class ($class) => Grammar::Parser::Lexer::Token->new (
-		match => $match,
-		(captures => \%captures) x!! scalar %captures,
-	) };
+	build_csi_class ($class)->new (
+		children => [
+			Grammar::Parser::Lexer::Token->new (
+				match => $match,
+				(captures => \%captures) x!! scalar %captures,
+			)
+		]
+	);
 }
 
 sub build_csi_element {
