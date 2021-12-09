@@ -118,6 +118,10 @@ sub there {
 	goto \ &cmp_deeply;
 }
 
+sub there {
+	goto \ &cmp_deeply;
+}
+
 sub is {
 	goto \ &cmp_deeply;
 }
