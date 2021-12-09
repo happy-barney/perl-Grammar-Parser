@@ -1,8 +1,5 @@
 
 use v5.14;
-use Syntax::Construct v1.8 qw[ package-version package-block ];
-
-use strict;
 use warnings;
 
 package CSI::Grammar::Base v1.0.0 {
