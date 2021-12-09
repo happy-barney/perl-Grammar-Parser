@@ -1,8 +1,5 @@
 
 use v5.14;
-use Syntax::Construct 1.008 qw[ package-version package-block ];
-
-use strict;
 use warnings;
 
 package CSI::Grammar v1.0.0 {
@@ -19,14 +16,13 @@ package CSI::Grammar v1.0.0 {
 	our @EXPORT = (
 		qw[ insignificant start ],
 		qw[ rule regex token ],
-		qw[ ensure_rule_name_order  reset_rule_name_order ],
 	);
 
 	sub _exporter_validate_opts {
 		my ($class, $globals) = @_;
 
 		my $into = $globals->{into};
-		my $meta = CSI::Grammar::Meta->new (class => $into);
+		my $meta = CSI::Grammar::Meta->new (for_class => $into);
 		$meta->add_action (PRIORITY_TOKEN =>  'skip');
 
 		{
@@ -150,28 +146,6 @@ package CSI::Grammar v1.0.0 {
 		my $subname = $class->_exporter_symbol_name ($name, $args, $globals);
 
 		Sub::Name::subname "$globals->{into}::$subname" => $coderef;
-	}
-
-	sub _generate_ensure_rule_name_order {
-		my ($class, $name, $args, $globals) = @_;
-		my $into = $globals->{into};
-		my $meta = $into->__csi_grammar;
-
-		my $subname = $args->{-as} // $name;
-
-		_exporter_subname $class, $name, $args, $globals, sub {
-			$meta->ensure_rule_name_order;
-		};
-	}
-
-	sub _generate_reset_rule_name_order {
-		my ($class, $name, $args, $globals) = @_;
-		my $into = $globals->{into};
-		my $meta = $into->__csi_grammar;
-
-		_exporter_subname $class, $name, $args, $globals, sub {
-			$meta->reset_rule_name_order;
-		};
 	}
 
 	sub _generate_rule {
