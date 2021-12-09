@@ -1,13 +1,8 @@
-#!/usr/bin/env perl
 
 use v5.14;
-use strict;
 use warnings;
 
-use FindBin;
-use lib $FindBin::Bin;
-
-BEGIN { require "test-helper-common.pl" }
+use require::relative "test-helper-common.pl"
 
 use Grammar::Parser;
 use Grammar::Parser::Grammar;
