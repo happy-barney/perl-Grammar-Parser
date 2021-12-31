@@ -32,6 +32,7 @@ my %module_build_args = (
     "Ref::Util" => 0,
     "Test::YAFT" => 0,
     "open" => 0,
+    "require::relative" => 0,
     "utf8" => 0
   }
 );
@@ -44,6 +45,7 @@ my %fallback_build_requires = (
   "Ref::Util" => 0,
   "Test::YAFT" => 0,
   "open" => 0,
+  "require::relative" => 0,
   "utf8" => 0
 );
 

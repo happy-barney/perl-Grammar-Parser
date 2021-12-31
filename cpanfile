@@ -14,6 +14,7 @@ on 'test' => sub {
   requires "Ref::Util" => "0";
   requires "Test::YAFT" => "0";
   requires "open" => "0";
+  requires "require::relative" => "0";
   requires "utf8" => "0";
 };
 
