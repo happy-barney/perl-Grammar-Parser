@@ -15,21 +15,19 @@ version 1.0.0
 This module started its life as part of L<< SQL::Admin >> after having
 maintenance issues with L<< Parse::RecDescent >> grammars.
 
-Basic idea is:
-
 =over
 
-=item support multiple backends using unified definition and access API
+=item it should support multiple backends using unified definition
 
 There are plenty of grammar parsing modules around, each one with its own callbacks,
-grammar definition, features, lifecycle, performance.
+grammar definition, features, lifecycle, performance, ...
 
 Having unified API makes easier to change backends (regardless of reason).
 
-=item support related grammars
+=item support related grammars / grammar inheritance
 
 Every SQL database has its own dialect based on one of SQL standards.
-Even every version has different subset.
+Even every version of same product has different subset.
 
 Maintaining their grammars and/or adding new one will be real pain without
 possibility to reuse common parts.
