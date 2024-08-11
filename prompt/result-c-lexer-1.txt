@@ -1,0 +1,201 @@
+package CSI::Language::C::Lexer v1.0.0 {
+	use strict;
+	use warnings;
+	use CSI::Lexer;
+
+	__PACKAGE__->true;
+
+	# {{SECTION}} patterns
+
+	# Define named patterns for reuse in regular expressions
+	pattern DIGIT           => qr( [0-9] );
+	pattern HEXDIGIT        => qr( [0-9a-fA-F] );
+	pattern OCTALDIGIT      => qr( [0-7] );
+	pattern NONDIGIT        => qr( [_a-zA-Z] );
+	pattern IDENTIFIER_CHAR => qr( (??{ NONDIGIT }) | (??{ DIGIT }) );
+
+	# {{SECTION}} insignificant
+
+	# Tokens that are not significant for parsing
+	token C_COMMENT     => qr( (?> /\*[^*]*\*+(?:[^/*][^*]*\*+)*/ ) );
+	token CPP_COMMENT   => qr( (?> //.*$ ) );
+	token ESCAPED_NL    => qr( (?> \\\n ) );
+	token HORIZONTAL_WS => qr( (?> [^\S\n]+ ) );
+	token NEWLINE       => qr( (?> \n ) );
+	token VERTICAL_WS   => qr( (?> \n+ ) );
+
+	# {{SECTION}} keywords
+
+	# C and C preprocessor keywords
+	keyword AUTO               => q( auto );
+	keyword BREAK              => q( break );
+	keyword CASE               => q( case );
+	keyword CHAR               => q( char );
+	keyword CONST              => q( const );
+	keyword CONTINUE           => q( continue );
+	keyword DEFAULT            => q( default );
+	keyword DO                 => q( do );
+	keyword DOUBLE             => q( double );
+	keyword ELSE               => q( else );
+	keyword ENUM               => q( enum );
+	keyword EXTERN             => q( extern );
+	keyword FLOAT              => q( float );
+	keyword FOR                => q( for );
+	keyword GOTO               => q( goto );
+	keyword IF                 => q( if );
+	keyword INLINE             => q( inline );
+	keyword INT                => q( int );
+	keyword LONG               => q( long );
+	keyword REGISTER           => q( register );
+	keyword RESTRICT           => q( restrict );
+	keyword RETURN             => q( return );
+	keyword SHORT              => q( short );
+	keyword SIGNED             => q( signed );
+	keyword SIZEOF             => q( sizeof );
+	keyword STATIC             => q( static );
+	keyword STRUCT             => q( struct );
+	keyword SWITCH             => q( switch );
+	keyword TYPEDEF            => q( typedef );
+	keyword UNION              => q( union );
+	keyword UNSIGNED           => q( unsigned );
+	keyword VOID               => q( void );
+	keyword VOLATILE           => q( volatile );
+	keyword WHILE              => q( while );
+	keyword _BOOL              => q( _Bool );
+	keyword _COMPLEX           => q( _Complex );
+	keyword _IMAGINARY         => q( _Imaginary );
+
+	# C preprocessor keywords
+	keyword DEFINE             => q( define );
+	keyword DEFINED            => q( defined );
+	keyword ELIF               => q( elif );
+	keyword ENDIF              => q( endif );
+	keyword ERROR              => q( error );
+	keyword IFDEF              => q( ifdef );
+	keyword IFNDEF             => q( ifndef );
+	keyword INCLUDE            => q( include );
+	keyword LINE               => q( line );
+	keyword PRAGMA             => q( pragma );
+	keyword UNDEF              => q( undef );
+	keyword WARNING            => q( warning );
+
+	# C++ preprocessor keywords
+	keyword EXPORT             => q( export );
+	keyword IMPORT             => q( import );
+	keyword MODULE             => q( module );
+
+	# GNU C compiler keywords
+	keyword ATTRIBUTE          => q( __attribute__ );
+	keyword ASM                => q( asm );
+	keyword TYPEOF             => q( typeof );
+
+	# clang keywords
+	keyword EXTENSION          => q( __extension__ );
+
+	# {{SECTION}} operators
+
+	# C and C preprocessor operators
+	# Digraphs: <: :> <% %> %: %:%:
+	token AMPERSAND            => qr( (?> [&] ) );
+	token AMPERSAND_AMPERSAND  => qr( (?> [&][&] ) );
+	token AMPERSAND_EQUAL      => qr( (?> [&][=] ) );
+	token ASTERISK             => qr( (?> [*] ) );
+	token ASTERISK_EQUAL       => qr( (?> [*][=] ) );
+	token CARET                => qr( (?> [\^] ) );
+	token CARET_EQUAL          => qr( (?> [\^][=] ) );
+	token COLON                => qr( (?> [:] ) );
+	token COMMA                => qr( (?> [,] ) );
+	token DOT                  => qr( (?> [.] ) );
+	token ELLIPSIS             => qr( (?> [.][.][.] ) );
+	token EQUAL                => qr( (?> [=] ) );
+	token EQUAL_EQUAL          => qr( (?> [=][=] ) );
+	token EXCLAMATION          => qr( (?> [!] ) );
+	token EXCLAMATION_EQUAL    => qr( (?> [!][=] ) );
+	token GREATER              => qr( (?> [>] ) );
+	token GREATER_EQUAL        => qr( (?> [>][=] ) );
+	token GREATER_GREATER      => qr( (?> [>][>] | [:][>] ) );
+	token GREATER_GREATER_EQUAL=> qr( (?> [>][>][=] ) );
+	token HASH                 => qr( (?> [#] | %: ) );
+	token HASH_HASH            => qr( (?> [#][#] | %:%: ) );
+	token LEFT_BRACE           => qr( (?> [{] | <% ) );
+	token LEFT_BRACKET         => qr( (?> [\[] | <: ) );
+	token LEFT_PAREN           => qr( (?> [(] ) );
+	token LESS                 => qr( (?> [<] ) );
+	token LESS_EQUAL           => qr( (?> [<][=] ) );
+	token LESS_LESS            => qr( (?> [<][<] ) );
+	token LESS_LESS_EQUAL      => qr( (?> [<][<][=] ) );
+	token MINUS                => qr( (?> [-] ) );
+	token MINUS_EQUAL          => qr( (?> [-][=] ) );
+	token MINUS_GREATER        => qr( (?> [-][>] ) );
+	token MINUS_MINUS          => qr( (?> [-][-] ) );
+	token PERCENT              => qr( (?> [%] ) );
+	token PERCENT_EQUAL        => qr( (?> [%][=] ) );
+	token PIPE                 => qr( (?> [|] ) );
+	token PIPE_EQUAL           => qr( (?> [|][=] ) );
+	token PIPE_PIPE            => qr( (?> [|][|] ) );
+	token PLUS                 => qr( (?> [+] ) );
+	token PLUS_EQUAL           => qr( (?> [+][=] ) );
+	token PLUS_PLUS            => qr( (?> [+][+] ) );
+	token QUESTION             => qr( (?> [?] ) );
+	token RIGHT_BRACE          => qr( (?> [}] | %> ) );
+	token RIGHT_BRACKET        => qr( (?> [\]] | :> ) );
+	token RIGHT_PAREN          => qr( (?> [)] ) );
+	token SEMICOLON            => qr( (?> [;] ) );
+	token SLASH                => qr( (?> [/] ) );
+	token SLASH_EQUAL          => qr( (?> [/][=] ) );
+	token TILDE                => qr( (?> [~] ) );
+
+	# {{SECTION}} literal values
+
+	# Literal values including numbers, characters, strings, and identifiers
+	token FLOAT_LITERAL => qr(
+		(?> (?:
+			(??{ DIGIT })+[.](??{ DIGIT })*
+			| [.](??{ DIGIT })+
+		)
+		(?:[eE][+-]?(??{ DIGIT })+)?
+		[fFlL]?
+		)
+	);
+
+	token DECIMAL_LITERAL => qr( (?> [1-9](??{ DIGIT })* ) );
+
+	token OCTAL_LITERAL => qr( (?> 0(??{ OCTALDIGIT })* ) );
+
+	token HEX_LITERAL => qr(
+		(?> 0[xX](??{ HEXDIGIT })+
+		)
+	);
+
+	token CHAR_LITERAL => qr(
+		(?> '
+		(?:
+			[^'\\\n]
+			| \\(?:
+				['"?\\abfnrtv]
+				| [0-7]{1,3}
+				| x(??{ HEXDIGIT })+
+			)
+		)*
+		'
+		)
+	);
+
+	token STRING_LITERAL => qr(
+		(?> "
+		(?:
+			[^"\\\n]
+			| \\(?:
+				['"?\\abfnrtv]
+				| [0-7]{1,3}
+				| x(??{ HEXDIGIT })+
+			)
+		)*
+		"
+		)
+	);
+
+	token IDENTIFIER => qr(
+		(?> (??{ NONDIGIT })(??{ IDENTIFIER_CHAR })* )
+	);
+}

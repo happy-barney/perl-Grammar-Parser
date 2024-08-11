@@ -10,42 +10,6 @@ package CSI::Language::C::Grammar v1.0.0 {
 	use CSI::AST::Token::Comment;
 	use CSI::AST::Token::Whitespace;
 
-	my %keywords = map { $_ => 1 } qw (
-		auto
-		break
-		case
-		char
-		const
-		continue
-		default
-		do
-		double
-		else
-		enum
-		extern
-		float
-		for
-		goto
-		if
-		int
-		long
-		register
-		return
-		short
-		signed
-		sizeof
-		static
-		struct
-		switch
-		typedef
-		union
-		unsigned
-		void
-		volatile
-		while
-	);
-
-
 	my %ast_map = (
 		COMMENT_C       => CSI::AST::Token::Comment::,
 		COMMENT_CPP     => CSI::AST::Token::Comment::,

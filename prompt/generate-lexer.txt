@@ -1,0 +1,136 @@
+
+Create definition of C language tokenizer using Perl language.
+Tokenizer SHOULD match C source including C preprocessor.
+
+Tokenizer is defined in package 'CSI::Language::C::Lexer'.
+Use package block syntax setting package version to v1.0.0.
+Indent level is one tab.
+True value of package required by Perl syntax is inside package block as well.
+Use '__PACKAGE__' for that.
+
+File MUST specify minimal Perl version needed to parse given file.
+Pragmas MUST be specified at the beginning of file.
+File should start with empty line.
+
+All necessary definitions are provided by package 'CSI::Lexer'.
+
+Enforce clean namespace.
+
+Organize token definitions in {{SECTION}}s.
+Within {{SECTION}}, for each definition, first appearance of '=>' operator
+on first line of definition is aligned.
+Alignment is preserved even if expression is on multiple lines,
+You MUST use only spaces for alignment.
+
+Every {{SECTION}} starts with comment describing section, referenced as {{section comment}}
+Every {{SECTION}} definitions SHOULD BE in alphabetical order.
+
+There MUST BE single empty line before and after section.
+
+Line length MUST NOT exceed 90 characters.
+
+When definition contains regular expression, it
+- is always extended regular expression
+- 'qr' syntax is used
+- delimiter characters MUST BE '(' and ')'
+- there MUST be a space between 'qr' and start delimiter character
+- regular expression must specify /x
+- with an exception of 'pattern' declaration, regular expression MUST BE atomic group
+- when regular expression appears on multiple lines
+  - end ')' is on separated line with same indent as line where corresponding start '(' is located
+  - every character '(' starting group increases indent level by one tab
+  - when end group character is not on same line as start group,
+    start group expression must be followed by newline
+  - when regular expression contains alternatives '|' and one of them is on different line
+    every '|' must be first non-whitespace character on their lines.
+  - when sequence of match parts is on multiple lines, every part must be on separated line
+- non-greedy repetion variants MUST be used
+
+When string literal, which is not stringified by '=>' operator, appears in code,
+use 'q' syntax with delimiters '(' and ')' and single space between 'q' and start delimiter, example:
+q (foo)
+
+Include C++ preprocessor keywords and operators used to identify C source.
+
+Include vendor specific keywords and operators:
+- GNU C compiler
+- clang
+
+{{SECTION}} patterns
+
+To avoid code duplication you can define named patterns using format:
+pattern NAME => REGULAR_EXPRESSION;
+
+Pattern can be later referenced using following syntax:
+(??{ PATTERN_NAME })
+
+where PATTERN_NAME is name of declared pattern. From Perl point of view it MUST
+be string.
+
+{{SECTION}} insignificant
+
+Declare every C and C preprocessor tokens which are no significant using format:
+token NAME => REGEXP
+
+- include C++ comments
+- whitespace sequence can contain either horizontal or vertical whitespaces, but not both
+- there can be only one newline per token
+- escaped newlines are token on their own
+
+{{SECTION}} keywords
+
+Define every C and C preprocessor keyword using format:
+keyword UC => KEYWORD;
+
+where UC is uppercased keyword and KEYWORD is string containing keyword text.
+
+C preprocessor keyword DOES NOT include '#' character.
+
+{{SECTION}} operators
+
+Define every C and C preprocessor operator using format:
+token NAME => qr ((?> MATCH_SEQUENCE ));
+
+Generated regular expression should prevent mismatch when one operator is
+part of another operator
+
+NAME is uppercase name of operator with words separated by underline.
+MATCH_SEQUENCE is sequence of space separated operator characters,
+each character within character group containing only this one character,
+for example: [.]
+
+When possible, use operator name.
+For operator '&', use character name.
+
+When two operators have same text representation,
+notify such situation in section comment.
+
+Treat special cases "..." and "##" as operators.
+Treat single "#" as an operator "hash", preventing mismatch applies here as well.
+
+Regular expression should match also corresponding preprocessor digraph,
+when it is defined. Digraphs also follows MATCH_SEQUENCE. Digraps are wrapped in non-capturing group.
+
+Use pattern define digraph.
+
+Include list of digraphs and their meaning in section comment.
+
+{{SECTION}} literal values
+
+Define literal value regular expressions using format
+token NAME => REGEXP;
+
+where NAME is identification of literal value and REGEXP is regular expression to match it.
+NAME is uppercased, underline separated identifier.
+
+Literal values includes:
+- literal float number
+- literal decimal number
+- literal octal number
+- literal hex number
+- literal character
+- literal string
+- identifier
+
+Under NO CIRCUMSTANCES can two regular expressions match positively on same string.
+For this, keywords are not recognized as regular expressions.
