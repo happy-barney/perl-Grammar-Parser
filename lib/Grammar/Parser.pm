@@ -1,0 +1,52 @@
+
+use v5.14;
+use warnings;
+
+package Grammar::Parser v1.0.0 {
+	1;
+};
+
+__END__
+
+=pod
+
+=encoding utf8
+
+=head1 NAME
+
+Grammar::Parser - Unified grammar API
+
+=head1 DESCRIPTION
+
+This module started its life as part of L<< SQL::Admin >> after having
+maintenance issues with L<< Parse::RecDescent >> grammars.
+
+=over
+
+=item it should support multiple backends using unified definition
+
+There are plenty of grammar parsing modules around, each one with its own callbacks,
+grammar definition, features, lifecycle, performance, ...
+
+Having unified API makes easier to change backends (regardless of reason).
+
+=item support related grammars / grammar inheritance
+
+Every SQL database has its own dialect based on one of SQL standards.
+Even every version of same product has different subset.
+
+Maintaining their grammars and/or adding new one will be real pain without
+possibility to reuse common parts.
+
+=back
+
+=head1 AUTHOR
+
+Branislav Zahradník <barney@cpan.org>
+
+=head1 COPYRIGHT AND LICENCE
+
+This file is part of L<< Grammar::Parser >> distribution.
+It can be distributed and/or modified under Artistic license 2.0
+
+=cut
